@@ -1,5 +1,7 @@
 package com.mtdo.haileychemist.model;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -20,6 +22,7 @@ public class Sale implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)

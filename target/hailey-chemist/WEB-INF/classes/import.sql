@@ -17,3 +17,20 @@
 
 -- You can use this file to load seed data into the database using SQL statements
 insert into Member (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') 
+-- products
+insert into product (product_no, name, description, rrp) values('PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)
+insert into product (product_no, name, description, rrp) values('PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27)
+-- sale
+insert into sale (product_id, price, start_date, end_date) values(1, 19.99, '2016-07-24 19:00:00', '2016-08-24 19:00:00')
+insert into sale (product_id, price, start_date, end_date) values(2, 15.27, '2016-07-24 19:00:00', '2016-08-24 19:00:00')
+-- customers
+insert into customer (first_name, last_name, email, phone) values('Tom', 'Do', 'tom.mtdo@gmail.com', '1111111')
+insert into customer (first_name, last_name, email, phone) values('John', 'Smith', 'john.smith@gmail.com', '2222222')
+-- bill address
+insert into bill_address (customer_id, street, suburb, state, postcode, country) values (1, '17 Lovely Street', 'Mill Park', 'VIC', '3082', 'Australia')
+-- ship address
+insert into ship_address (customer_id, street, suburb, state, postcode, country) values (1, '17 Lovely Street', 'Mill Park', 'VIC', '3082', 'Australia')
+-- purchase
+insert into purchase (customer_id, date, status) values(1, '2016-07-24 21:03:00', 'completed')
+-- order_details
+insert into order_details (purchase_id, product_id, quantity, quantity_unit, price_per_unit) values(1, 2, 3, 'each', 15.27)

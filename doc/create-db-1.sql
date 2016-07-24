@@ -47,7 +47,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `hailey`.`purchase` (
   `id` INT NOT NULL COMMENT 'To avoid keyword order',
-  `cutomer_id` INT NULL,
+  `customer_id` INT NULL,
   `staff_id` INT NULL,
   `date` DATETIME NULL,
   `status` ENUM('backorder','processing','completed') NULL,

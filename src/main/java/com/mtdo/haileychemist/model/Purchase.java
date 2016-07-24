@@ -1,5 +1,7 @@
 package com.mtdo.haileychemist.model;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -21,6 +23,7 @@ public class Purchase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -41,7 +44,7 @@ public class Purchase implements Serializable {
 
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
-	@JoinColumn(name="cutomer_id")
+	@JoinColumn(name="customer_id")
 	private Customer customer;
 
 	public Purchase() {

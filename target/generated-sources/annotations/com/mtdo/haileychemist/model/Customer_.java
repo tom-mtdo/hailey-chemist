@@ -11,12 +11,11 @@ public abstract class Customer_ {
 
 	public static volatile SingularAttribute<Customer, String> firstName;
 	public static volatile SingularAttribute<Customer, String> lastName;
+	public static volatile ListAttribute<Customer, BillAddress> billAddresses;
 	public static volatile SingularAttribute<Customer, String> phone;
-	public static volatile ListAttribute<Customer, Purchase> purchases;
-	public static volatile SingularAttribute<Customer, Integer> billAddressId;
 	public static volatile SingularAttribute<Customer, Integer> id;
-	public static volatile SingularAttribute<Customer, Integer> shipAddressId;
 	public static volatile SingularAttribute<Customer, String> email;
+	public static volatile ListAttribute<Customer, ShipAddress> shipAddresses;
 
 }
 

@@ -37,8 +37,6 @@ CREATE TABLE IF NOT EXISTS `hailey`.`customer` (
   `last_name` VARCHAR(25) NULL,
   `email` VARCHAR(45) NOT NULL,
   `phone` VARCHAR(45) NULL,
-  `bill_address_id` INT NULL,
-  `ship_address_id` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB;
@@ -93,24 +91,21 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `hailey`.`address`
+-- Table `hailey`.`bill_address`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hailey`.`address` (
+CREATE TABLE IF NOT EXISTS `hailey`.`bill_address` (
   `id` INT NOT NULL,
+  `customer_id` INT NULL,
   `street` VARCHAR(100) NULL,
   `suburb` VARCHAR(45) NULL,
-  `state` VARCHAR(45) NULL,
-  `postcode` VARCHAR(45) NULL,
+  `state` VARCHAR(25) NULL,
+  `postcode` VARCHAR(15) NULL,
   `country` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_address_customer1`
-    FOREIGN KEY (`id`)
-    REFERENCES `hailey`.`customer` (`bill_address_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_address_customer2`
-    FOREIGN KEY (`id`)
-    REFERENCES `hailey`.`customer` (`ship_address_id`)
+  INDEX `fk_bill_address_customer1_idx` (`customer_id` ASC),
+  CONSTRAINT `fk_bill_address_customer1`
+    FOREIGN KEY (`customer_id`)
+    REFERENCES `hailey`.`customer` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -150,6 +145,27 @@ CREATE TABLE IF NOT EXISTS `hailey`.`sale` (
   CONSTRAINT `fk_sale_product1`
     FOREIGN KEY (`product_id`)
     REFERENCES `hailey`.`product` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hailey`.`ship_address`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hailey`.`ship_address` (
+  `id` INT NOT NULL,
+  `customer_id` INT NULL,
+  `street` VARCHAR(100) NULL,
+  `suburb` VARCHAR(45) NULL,
+  `state` VARCHAR(25) NULL,
+  `postcode` VARCHAR(15) NULL,
+  `country` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_ship_address_customer1_idx` (`customer_id` ASC),
+  CONSTRAINT `fk_ship_address_customer1`
+    FOREIGN KEY (`customer_id`)
+    REFERENCES `hailey`.`customer` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

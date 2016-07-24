@@ -2,6 +2,9 @@ package com.mtdo.haileychemist.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.math.BigDecimal;
 
 
@@ -12,6 +15,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name="order_details")
 @NamedQuery(name="OrderDetail.findAll", query="SELECT o FROM OrderDetail o")
+@JsonIgnoreProperties({"product","purchase"})
 public class OrderDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 

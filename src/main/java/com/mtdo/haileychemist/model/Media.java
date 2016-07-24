@@ -3,6 +3,10 @@ package com.mtdo.haileychemist.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.junit.Ignore;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * The persistent class for the media database table.
@@ -10,6 +14,7 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQuery(name="Media.findAll", query="SELECT m FROM Media m")
+@JsonIgnoreProperties("product")
 public class Media implements Serializable {
 	private static final long serialVersionUID = 1L;
 

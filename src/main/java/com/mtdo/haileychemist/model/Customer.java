@@ -17,9 +17,6 @@ public class Customer implements Serializable {
 	@Id
 	private int id;
 
-	@Column(name="bill_address_id")
-	private int billAddressId;
-
 	private String email;
 
 	@Column(name="first_name")
@@ -30,12 +27,13 @@ public class Customer implements Serializable {
 
 	private String phone;
 
-	@Column(name="ship_address_id")
-	private int shipAddressId;
-
-	//bi-directional many-to-one association to Purchase
+	//bi-directional many-to-one association to BillAddress
 	@OneToMany(mappedBy="customer")
-	private List<Purchase> purchases;
+	private List<BillAddress> billAddresses;
+
+	//bi-directional many-to-one association to ShipAddress
+	@OneToMany(mappedBy="customer")
+	private List<ShipAddress> shipAddresses;
 
 	public Customer() {
 	}
@@ -46,14 +44,6 @@ public class Customer implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getBillAddressId() {
-		return this.billAddressId;
-	}
-
-	public void setBillAddressId(int billAddressId) {
-		this.billAddressId = billAddressId;
 	}
 
 	public String getEmail() {
@@ -88,34 +78,48 @@ public class Customer implements Serializable {
 		this.phone = phone;
 	}
 
-	public int getShipAddressId() {
-		return this.shipAddressId;
+	public List<BillAddress> getBillAddresses() {
+		return this.billAddresses;
 	}
 
-	public void setShipAddressId(int shipAddressId) {
-		this.shipAddressId = shipAddressId;
+	public void setBillAddresses(List<BillAddress> billAddresses) {
+		this.billAddresses = billAddresses;
 	}
 
-	public List<Purchase> getPurchases() {
-		return this.purchases;
+	public BillAddress addBillAddress(BillAddress billAddress) {
+		getBillAddresses().add(billAddress);
+		billAddress.setCustomer(this);
+
+		return billAddress;
 	}
 
-	public void setPurchases(List<Purchase> purchases) {
-		this.purchases = purchases;
+	public BillAddress removeBillAddress(BillAddress billAddress) {
+		getBillAddresses().remove(billAddress);
+		billAddress.setCustomer(null);
+
+		return billAddress;
 	}
 
-	public Purchase addPurchas(Purchase purchas) {
-		getPurchases().add(purchas);
-		purchas.setCustomer(this);
-
-		return purchas;
+	public List<ShipAddress> getShipAddresses() {
+		return this.shipAddresses;
 	}
 
-	public Purchase removePurchas(Purchase purchas) {
-		getPurchases().remove(purchas);
-		purchas.setCustomer(null);
+	public void setShipAddresses(List<ShipAddress> shipAddresses) {
+		this.shipAddresses = shipAddresses;
+	}
 
-		return purchas;
+	public ShipAddress addShipAddress(ShipAddress shipAddress) {
+		getShipAddresses().add(shipAddress);
+		shipAddress.setCustomer(this);
+
+		return shipAddress;
+	}
+
+	public ShipAddress removeShipAddress(ShipAddress shipAddress) {
+		getShipAddresses().remove(shipAddress);
+		shipAddress.setCustomer(null);
+
+		return shipAddress;
 	}
 
 }

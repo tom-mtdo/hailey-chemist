@@ -1,5 +1,7 @@
 package com.mtdo.haileychemist.model;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
@@ -31,15 +33,15 @@ public class Product implements Serializable {
 	private BigDecimal rrp;
 
 	//bi-directional many-to-one association to Media
-	@OneToMany(mappedBy="product")
+	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
 	private List<Media> medias;
 
-	//bi-directional many-to-one association to OrderDetail
-	@OneToMany(mappedBy="product")
-	private List<OrderDetail> orderDetails;
+//	//bi-directional many-to-one association to OrderDetail
+//	@OneToMany(fetch = EAGER, mappedBy="product")
+//	private List<OrderDetail> orderDetails;
 
 	//bi-directional many-to-one association to Sale
-	@OneToMany(mappedBy="product")
+	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
 	private List<Sale> sales;
 
 	public Product() {
@@ -107,27 +109,27 @@ public class Product implements Serializable {
 		return media;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
-		return this.orderDetails;
-	}
+//	public List<OrderDetail> getOrderDetails() {
+//		return this.orderDetails;
+//	}
+//
+//	public void setOrderDetails(List<OrderDetail> orderDetails) {
+//		this.orderDetails = orderDetails;
+//	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
-
-	public OrderDetail addOrderDetail(OrderDetail orderDetail) {
-		getOrderDetails().add(orderDetail);
-		orderDetail.setProduct(this);
-
-		return orderDetail;
-	}
-
-	public OrderDetail removeOrderDetail(OrderDetail orderDetail) {
-		getOrderDetails().remove(orderDetail);
-		orderDetail.setProduct(null);
-
-		return orderDetail;
-	}
+//	public OrderDetail addOrderDetail(OrderDetail orderDetail) {
+//		getOrderDetails().add(orderDetail);
+//		orderDetail.setProduct(this);
+//
+//		return orderDetail;
+//	}
+//
+//	public OrderDetail removeOrderDetail(OrderDetail orderDetail) {
+//		getOrderDetails().remove(orderDetail);
+//		orderDetail.setProduct(null);
+//
+//		return orderDetail;
+//	}
 
 	public List<Sale> getSales() {
 		return this.sales;

@@ -31,6 +31,6 @@ insert into bill_address (customer_id, street, suburb, state, postcode, country)
 -- ship address
 insert into ship_address (customer_id, street, suburb, state, postcode, country) values (1, '17 Lovely Street', 'Mill Park', 'VIC', '3082', 'Australia')
 -- purchase
-insert into purchase (customer_id, date, status) values(1, '2016-07-24 21:03:00', 'completed')
+insert into purchase (customer_id, staff_id, date, status) values(1, 1, '2016-07-24 21:03:00', 'completed')
 -- order_details
 insert into order_details (purchase_id, product_id, quantity, quantity_unit, price_per_unit) values(1, 2, 3, 'each', 15.27)

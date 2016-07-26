@@ -1,5 +1,7 @@
 package com.mtdo.haileychemist.model;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
@@ -31,11 +33,11 @@ public class Customer implements Serializable {
 	private String phone;
 
 	//bi-directional many-to-one association to BillAddress
-	@OneToMany(mappedBy="customer")
+	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="customer")
 	private List<BillAddress> billAddresses;
 
 	//bi-directional many-to-one association to ShipAddress
-	@OneToMany(mappedBy="customer")
+	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="customer")
 	private List<ShipAddress> shipAddresses;
 
 	public Customer() {

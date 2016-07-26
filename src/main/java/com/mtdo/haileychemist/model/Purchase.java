@@ -1,15 +1,27 @@
 package com.mtdo.haileychemist.model;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.CascadeType.ALL;
+
 
 import java.io.Serializable;
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
@@ -18,7 +30,7 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Purchase.findAll", query="SELECT p FROM Purchase p")
-@JsonIgnoreProperties("customer")
+//@JsonIgnoreProperties("customer")
 public class Purchase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -39,7 +51,7 @@ public class Purchase implements Serializable {
 	private BigDecimal total;
 
 	//bi-directional many-to-one association to OrderDetail
-	@OneToMany(mappedBy="purchase")
+	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="purchase")
 	private List<OrderDetail> orderDetails;
 
 	//bi-directional many-to-one association to Customer

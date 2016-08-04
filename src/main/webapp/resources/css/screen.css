@@ -1,5 +1,17 @@
 @charset "UTF-8";
 
+/* =================== Tom added ======================*/
+.border1 {
+  border-radius: 0;
+  border-style: solid;
+  border: 2px;
+  border-color: #ff0000 #0000ff;
+  margin: 0;
+  padding: 0;
+}
+/* =================== End Tom added ==================*/
+
+
 /* Core styles for the page */
 
 body {
@@ -132,7 +144,7 @@ footer {
 }
 
 #logo .wrap {
-    background: url(../img/banner.png) no-repeat scroll 0 0 transparent;
+/*     background: url(../img/banner.png) no-repeat scroll 0 0 transparent; */
     height: 90px;
     margin: 0 auto 0px;
     padding: 0;
@@ -147,7 +159,7 @@ footer {
     margin: 0 auto;
     border: 0px;
     background: url(../img/bg-dark.png) repeat-x center bottom #5f5f5f;
-    padding-top: 0px;
+    padding-top: 100px;
     background-size: auto;
     width: auto;
 }

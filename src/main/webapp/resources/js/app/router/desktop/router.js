@@ -19,24 +19,24 @@ define("router", [
        utilities.applyTemplate($('body'), MainTemplate)
     })
     
-//    var Router = Backbone.Router.extend({
-//        initialize: function() {
-//            //Begin dispatching routes
-//            Backbone.history.start();
-//        },
-//        routes:{
-//            "":"home",
-//        },
-//        
-//        home:function () {
-//                utilities.viewManager.showView(new HomeView({el:$("#content")}));
-//        }
-//
-//    });
-//    
-//	// Create a router instance
-//	var router = new Router();
-//	
-//	return router;
+    var Router = Backbone.Router.extend({
+        initialize: function() {
+            //Begin dispatching routes
+            Backbone.history.start();
+        },
+        routes:{
+            "":"home",
+        },
+        
+        home:function () {
+                utilities.viewManager.showView(new HomeView({el:$("#content")}));
+        }
+
+    });
+    
+	// Create a router instance
+	var router = new Router();
+	
+	return router;
 
 });

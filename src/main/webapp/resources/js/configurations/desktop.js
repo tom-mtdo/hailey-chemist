@@ -21,12 +21,17 @@ requirejs.config({
             exports: 'Backbone'
         },
         
+        'bootstrap': {
+        	deps: ['jquery'],
+        	exports: 'Bootstrap'
+        },
+        
         'underscore': {
         	exports: '_'
         }
     }
 });
-
+	
 define("initializer", ["jquery"], function ($) {
     // Configure jQuery to append timestamps to requests, to bypass browser caches
     // Important for MSIE

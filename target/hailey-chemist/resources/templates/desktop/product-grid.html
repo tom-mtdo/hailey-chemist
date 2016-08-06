@@ -1,11 +1,7 @@
 <table class="table">
 	<caption>Featured Products</caption>
 	<tbody>
-		<% 	var products = [{partNumber:'p1', name:'fish oil'},
-							{partNumber:'p2', name:'Multiple vitamin'},
-							{partNumber:'p3', name:'Aloe'},
-							{partNumber:'p4', name:'Milk'}];
-			var gridProducts = [];
+		<% 	var gridProducts = [];
 			while(products.length){
 				gridProducts.push(products.splice(0,3));
 			}

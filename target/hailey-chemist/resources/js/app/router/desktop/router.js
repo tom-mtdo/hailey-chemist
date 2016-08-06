@@ -27,9 +27,15 @@ define("router", [
         routes:{
             "":"home",
         },
-        
+
         home:function () {
-                utilities.viewManager.showView(new HomeView({el:$("#content")}));
+//	            var products=[{name:"Fish oil"},
+//	                          {name:"Aloe"},
+//	                          {name:"Multiple vitamins"},
+//	                          {name:"Ensure Milk"}];
+//
+//                utilities.viewManager.showView(new HomeView({el:$("#content"), model:products}));
+                utilities.viewManager.showView(new HomeView({el:$("#content")}));                
         }
 
     });

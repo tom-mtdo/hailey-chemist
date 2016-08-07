@@ -9,6 +9,13 @@
   margin: 0;
   padding: 0;
 }
+.carousel-caption h5 {
+    color: #ce4240;
+    font-size: 22px;
+    text-shadow: 0 2px 2px #000;
+    font-family: 'Rokkitt', serif;
+    font-weight: normal;
+}
 /* =================== End Tom added ==================*/
 
 

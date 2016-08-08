@@ -13,8 +13,18 @@
 		<%			
 						_.each(lineProducts, function(product){
 		%>
-							<td><%=product.name%></td>						
-		<%				})
+							<td><%=product.name%>						
+		<%					if(product.medias){
+		%>
+								<div>
+									<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">
+								</div>
+		<%								
+							}
+		%>							
+							</td>
+		<%							
+						})
 		%>
 					</tr>
 		<%

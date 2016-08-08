@@ -18,12 +18,19 @@
 -- You can use this file to load seed data into the database using SQL statements
 insert into Member (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') 
 -- products
+--insert into product (product_no, name, description, rrp) values('PRD003', 'Swisse Women''s Ultivite 120 Tablets', 'Swisse Women''s Ultivite Formula 1 contains 50 premium quality vitamins, minerals, antioxidants and herbs to help support women''s nutritional needs and maintain general wellbeing.', 69.95)
 insert into product (product_no, name, description, rrp) values('PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)
 insert into product (product_no, name, description, rrp) values('PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27)
-insert into product (product_no, name, description, rrp) values('PRD003', 'Swisse Women''s Ultivite 120 Tablets', 'Swisse Women''s Ultivite Formula 1 contains 50 premium quality vitamins, minerals, antioxidants and herbs to help support women''s nutritional needs and maintain general wellbeing.', 69.95)
-insert into product (product_no, name, description, rrp) values('PRD004', 'Swisse Ultiboost Sleep 100 Tablets', 'Swisse Ultiboost Sleep contains premium quality ingredients shown to help minimise sleep challenges.', 36.95)
+insert into product (product_no, name, description, rrp) values('PRD003', 'Aloe', 'Aloe vera cream', 13.27)
+insert into product (product_no, name, description, rrp) values('PRD004', 'Swisse Cranberry', 'Swisse Cranberry', 36.95)
 insert into product (product_no, name, description, rrp) values('PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99)
 
+-- media
+insert into media (type, url, product_id) values('image', './resources/img/product/fish-oil.png', 1)
+insert into media (type, url, product_id) values('image', './resources/img/product/multiple-vitamins.png', 2)
+insert into media (type, url, product_id) values('image', './resources/img/product/aloe.png', 3)
+insert into media (type, url, product_id) values('image', './resources/img/product/swisse-cranberry.png', 4)
+insert into media (type, url, product_id) values('image', './resources/img/product/grape-seed.png', 5)
 
 -- sale
 insert into sale (product_id, price, start_date, end_date) values(1, 19.99, '2016-07-24 19:00:00', '2016-08-24 19:00:00')

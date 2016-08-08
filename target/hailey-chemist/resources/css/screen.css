@@ -16,6 +16,10 @@
     font-family: 'Rokkitt', serif;
     font-weight: normal;
 }
+.grid-product-image img
+{
+	width:30px;
+}
 /* =================== End Tom added ==================*/
 
 

@@ -7,12 +7,14 @@ define("router", [
     'configuration',
     'utilities',
     'app/views/desktop/home',
+    'app/views/desktop/product-details',
     'text!../templates/desktop/main.html'
 ],function ($,
             _,
             config,
             utilities,
             HomeView,
+            ProductDetailView,
             MainTemplate) {
 
     $(document).ready(new function() {
@@ -26,6 +28,7 @@ define("router", [
         },
         routes:{
             "":"home",
+            "productDetails":"productDetails"
         },
 
         home:function () {
@@ -36,6 +39,10 @@ define("router", [
 //
 //                utilities.viewManager.showView(new HomeView({el:$("#content"), model:products}));
                 utilities.viewManager.showView(new HomeView({el:$("#content")}));                
+        },
+        
+        productDetails:function () {
+        	utilities.viewManager.showView(new ProductDetailView( {el:$("#content")} ));
         }
 
     });

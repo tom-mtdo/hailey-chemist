@@ -1,0 +1,11 @@
+<h3>Product details</h3>
+<div class="well">
+
+<%	if (product){ %>
+		<span><%=product.name%></span>
+		<br><img alt="Product photo" src="<%=product.medias[0].url%>">
+		<br><span><%=product.description%></span>
+<%	} else { %>
+		<span>No product selected</span>
+<%	} %>
+</div>

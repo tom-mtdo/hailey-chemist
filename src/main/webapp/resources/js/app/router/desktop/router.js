@@ -8,6 +8,7 @@ define("router", [
     'utilities',
     'app/views/desktop/home',
     'app/views/desktop/product-details',
+    'app/views/desktop/cart',
     'text!../templates/desktop/main.html'
 ],function ($,
             _,
@@ -15,6 +16,7 @@ define("router", [
             utilities,
             HomeView,
             ProductDetailView,
+            CartView,
             MainTemplate) {
 
     $(document).ready(new function() {
@@ -28,7 +30,8 @@ define("router", [
         },
         routes:{
             "":"home",
-            "productDetails":"productDetails"
+            "productDetails":"productDetails",
+            "cart":"cart"
         },
 
         home:function () {
@@ -43,8 +46,11 @@ define("router", [
         
         productDetails:function () {
         	utilities.viewManager.showView(new ProductDetailView( {el:$("#content")} ));
+        },
+        
+        cart:function () {
+        	utilities.viewManager.showView( new CartView( {el:$("#content")} ));
         }
-
     });
     
 	// Create a router instance

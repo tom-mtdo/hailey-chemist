@@ -6,6 +6,8 @@ define("router", [
     'underscore',
     'configuration',
     'utilities',
+    'app/models/product',
+    'app/collections/products',
     'app/views/desktop/home',
     'app/views/desktop/product-details',
     'app/views/desktop/cart',
@@ -14,6 +16,8 @@ define("router", [
             _,
             config,
             utilities,
+            Product,
+            Products,
             HomeView,
             ProductDetailView,
             CartView,
@@ -30,7 +34,7 @@ define("router", [
         },
         routes:{
             "":"home",
-            "productDetails":"productDetails",
+            "products/:id":"productDetail",
             "cart":"cart"
         },
 
@@ -44,8 +48,20 @@ define("router", [
                 utilities.viewManager.showView(new HomeView({el:$("#content")}));                
         },
         
-        productDetails:function () {
-        	utilities.viewManager.showView(new ProductDetailView( {el:$("#content")} ));
+        productDetail:function (id) {
+//        	var product={"id":id,"description":"Black more oidless fish oil, 400 caples, 1000mg",
+//	    		"name":"Fish oil","productNo":"PRD001","rrp":29.99,
+//	    		"medias":[{"id":1,"itemSerial":null,"type":"image","url":"./resources/img/product/fish-oil.png"}],
+//	    		"sales":[{"id":1,"endDate":1472029200000,"itemSerialNo":null,"price":19.99,"startDate":1469350800000}]};
+//        	utilities.viewManager.showView(new ProductDetailView( {model:product, el:$("#content")} ));
+        	
+        	this.product = new Product({ id:id });
+ 			this.product.fetch();
+	        this.product.on("change", 
+	        		function () {
+	        			utilities.viewManager.showView(new ProductDetailView( {model:this.product, el:$("#content")} ));
+	        		}, 
+	        		this);
         },
         
         cart:function () {

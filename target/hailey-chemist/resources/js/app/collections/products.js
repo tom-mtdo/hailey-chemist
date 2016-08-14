@@ -13,7 +13,7 @@ define([
      */
     var Products = Backbone.Collection.extend({
     	model: Product,
-    	url:'http://localhost:8080/hailey-chemist/rest/products'
+    	url:'rest/products'
 //    	url: config.baseUrl + "rest/products", // the URL for performing CRUD operations
 //        id:"id" // the 'id' property of the model is the identifier
     }); 

@@ -4,6 +4,7 @@
 <%	if (product){ %>
 		<br><span><%=product.get("id")%></span>
 		<br><span><%=product.get("name")%></span>
+		<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" />
 		<br><span><%=product.get("description")%></span>
 <%	} else { %>
 		<span>No product selected</span>

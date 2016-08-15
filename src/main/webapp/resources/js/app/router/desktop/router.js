@@ -3,6 +3,7 @@
  */
 define("router", [
     'jquery',
+    'jquerycookie',
     'underscore',
     'configuration',
     'utilities',
@@ -13,6 +14,7 @@ define("router", [
     'app/views/desktop/cart',
     'text!../templates/desktop/main.html'
 ],function ($,
+			jquerycookie,
             _,
             config,
             utilities,

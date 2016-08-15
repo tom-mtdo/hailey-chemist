@@ -6,6 +6,8 @@
 		<br><span><%=product.get("name")%></span>
 		<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" />
 		<br><span><%=product.get("description")%></span>
+		<br><button name="addToCart" class="btn btn-primary">Add To Cart</button>
+		<!-- <br><button name="addToCart" class="btn btn-primary" onclick="alert('Add to cart!');">Add To Cart</button> -->
 <%	} else { %>
 		<span>No product selected</span>
 <%	} %>

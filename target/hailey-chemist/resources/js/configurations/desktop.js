@@ -7,6 +7,7 @@ requirejs.config({
     baseUrl: "resources/js",
     paths: {
         jquery:'libs/jquery-2.0.3',
+        jquerycookie:'libs/jquery.cookie-1.4.1',
         underscore:'libs/underscore',
         text:'libs/text',
         bootstrap: 'libs/bootstrap',
@@ -16,6 +17,11 @@ requirejs.config({
     },
     // We shim Backbone.js and Underscore.js since they don't declare AMD modules
     shim: {
+    	'jquerycookie': {
+    		deps: ['jquery'],
+    		exports: 'Jquerycookie'
+    	},
+    	
         'backbone': {
             deps: ['jquery', 'underscore'],
             exports: 'Backbone'

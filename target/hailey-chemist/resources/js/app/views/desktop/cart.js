@@ -20,7 +20,8 @@ define([
 //            		"name":"Fish oil","productNo":"PRD001","rrp":29.99,
 //            		"medias":[{"id":1,"itemSerial":null,"type":"image","url":"./resources/img/product/fish-oil.png"}],
 //            		"sales":[{"id":1,"endDate":1472029200000,"itemSerialNo":null,"price":19.99,"startDate":1469350800000}]};
-            utilities.applyTemplate($(this.el), cartTemplate,{cart:{}});
+            var cart = utilities.getCookie("cart");
+        	utilities.applyTemplate($(this.el), cartTemplate,{cart:cart});
 // ********************************************************************************************************            
 //            this.model is a parameter, router, or anything else init this view, will need put in
 //            a view have 2 default parameter: el & model

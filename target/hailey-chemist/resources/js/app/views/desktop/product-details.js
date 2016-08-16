@@ -40,10 +40,14 @@ define([
         },
     	
     	addToCart:function(){
-//    		cart is an array of {productId:quantity} of type{String:number}
-    		var cart = [[1, "Fish Oil", 3],
-    		            [2, "Aloe", 5],
+//    		cart is an array of {productId:quantity} of type{String:number}    		
+//    		var cart = [[1, "Fish Oil", 3],
+//    		            [2, "Aloe", 5],
+//    		            [3, "Multiple Vitamin", 1]];
+    		var quantity = $("input[name='quantity']").val();
+    		var cart = [[this.model.get("id"), this.model.get("name"), quantity],
     		            [3, "Multiple Vitamin", 1]];
+
     		var strCart = JSON.stringify(cart);
     		utilities.setCookie( "cart", strCart, 10);
     		alert('Added to cart!');

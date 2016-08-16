@@ -1,10 +1,13 @@
 <h3>Shopping cart</h3>
 <div class="well">
 
-<%	if (cart){ %>
+<%	if (cart){ 
+%>
 		<span>Cart Details</span>
-		<br><span><%=cart%></span>
-<%	} else { %>
+<%		_.each(cart, function(line){	%>
+			<br><span>Product: <%=line[1]%>, quantity <%=line[2]%></span>
+<%		});
+	} else { %>
 		<span>Cart is empty</span>
 <%	} %>
 </div>

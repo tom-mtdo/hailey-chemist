@@ -40,7 +40,12 @@ define([
         },
     	
     	addToCart:function(){
-    		utilities.setCookie( "cart", this.model.get("id"), 10);
+//    		cart is an array of {productId:quantity} of type{String:number}
+    		var cart = [[1, "Fish Oil", 3],
+    		            [2, "Aloe", 5],
+    		            [3, "Multiple Vitamin", 1]];
+    		var strCart = JSON.stringify(cart);
+    		utilities.setCookie( "cart", strCart, 10);
     		alert('Added to cart!');
 //    		$.cookie.raw = true;
 //    		$.cookie( "pId", this.model.get("id"), {expires:10, path: "/"} );

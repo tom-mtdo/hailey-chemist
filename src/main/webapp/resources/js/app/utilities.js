@@ -111,8 +111,38 @@ define(['underscore', 'backbone'], function (_, Backbone) {
         },
         
         addToCart:function(cartLine){
-    		var cart = [cartLine];  
-    		var strCart = JSON.stringify(cart);
+//        	get cart from cookie
+        	var strCart = this.getCookie("cart");
+//        	if cart is null or empty then init cart with cartLine (input)
+            if(!strCart){
+            	alert("cart empty");
+            	cart = [cartLine];
+            } else{
+//            	convert to array of objects
+                var cart = JSON.parse(strCart);
+            	alert("cart:" + cart);                
+//        	if cart is not empty then            
+//        		check if product exit in cart
+                var found = false;
+            	_.each(cart, function(line){
+//        		if exist then increase/add quantity
+            		alert("line.productId: " + line.productId + ", cartLine.productId: " + cartLine.productId);
+            		if ( line.productId == cartLine.productId ){
+            			line.quantity = Number(line.quantity) + Number(cartLine.quantity);
+            			found = true;
+                    	alert("new quantity in cart" + line.quantity);
+            		}
+            	});            		
+//        		if not exist then add line to cart
+            	if (!found) {
+            		cart.push(cartLine);
+            		alert("not in cart");
+            	}
+            }
+              
+//    		convert cart to string to put to cookie
+            var strCart = JSON.stringify(cart);
+        	alert("new cart:" + strCart);
     		this.setCookie( "cart", strCart, 10);
         }
 

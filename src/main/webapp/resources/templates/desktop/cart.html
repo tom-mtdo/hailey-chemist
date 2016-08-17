@@ -4,7 +4,6 @@
 <%	if (cart){ 
 %>
 		<span>Cart Details</span>
-		<br><span><%=cart%></span>
 <%		_.each(cart, function(line){	%>
 			<br><span>Product: <%=line.productName%>, quantity <%=line.quantity%></span>
 <%		});

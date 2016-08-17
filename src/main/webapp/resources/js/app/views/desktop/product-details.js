@@ -40,16 +40,19 @@ define([
         },
     	
     	addToCart:function(){
-//    		cart is an array of {productId:quantity} of type{String:number}    		
-//    		var cart = [[1, "Fish Oil", 3],
-//    		            [2, "Aloe", 5],
-//    		            [3, "Multiple Vitamin", 1]];
-    		var quantity = $("input[name='quantity']").val();
-    		var cart = [[this.model.get("id"), this.model.get("name"), quantity],
-    		            [3, "Multiple Vitamin", 1]];
+//    		cart is an array of id, name, quantity    		
 
-    		var strCart = JSON.stringify(cart);
-    		utilities.setCookie( "cart", strCart, 10);
+//    		var quantity = $("input[name='quantity']").val();
+//    		var cart = [[this.model.get("id"), this.model.get("name"), quantity],
+//    		            [3, "Multiple Vitamin", 1]];
+//    		var strCart = JSON.stringify(cart);
+//    		utilities.setCookie( "cart", strCart, 10);
+
+    		// a line in cart
+    		var quantity = $("input[name='quantity']").val();    		
+    		var cartLine = [this.model.get("id"), this.model.get("name"), quantity];
+    		utilities.addToCart(cartLine);
+    		
     		alert('Added to cart!');
 //    		$.cookie.raw = true;
 //    		$.cookie( "pId", this.model.get("id"), {expires:10, path: "/"} );

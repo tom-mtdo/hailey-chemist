@@ -108,6 +108,12 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                 }
             }
             return "";
+        },
+        
+        addToCart:function(cartLine){
+    		var cart = [cartLine];  
+    		var strCart = JSON.stringify(cart);
+    		this.setCookie( "cart", strCart, 10);
         }
 
     };

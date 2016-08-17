@@ -50,7 +50,7 @@ define([
 
     		// a line in cart
     		var quantity = $("input[name='quantity']").val();    		
-    		var cartLine = [this.model.get("id"), this.model.get("name"), quantity];
+    		var cartLine = {"productId":this.model.get("id"), "productName":this.model.get("name"), "quantity":quantity};
     		utilities.addToCart(cartLine);
     		
     		alert('Added to cart!');

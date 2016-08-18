@@ -8,6 +8,7 @@ import static javax.persistence.CascadeType.ALL;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @NamedQuery(name="Purchase.findAll", query="SELECT p FROM Purchase p")
-//@JsonIgnoreProperties("customer")
+//@JsonIgnoreProperties("customer")`
 public class Purchase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -53,7 +54,7 @@ public class Purchase implements Serializable {
 
 	//bi-directional many-to-one association to OrderDetail
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="purchase")
-	private Set<OrderDetail> orderDetails;
+	private Set<OrderDetail> orderDetails = new HashSet<OrderDetail>();
 
 	//bi-directional many-to-one association to Customer
 	@ManyToOne

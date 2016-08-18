@@ -26,27 +26,35 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPurchase(PurchaseRequest purchaseRequest){
 ////		load customer
-//		Customer customer = getCustomerByEmail(purchaseRequest.getEmail());
-		Customer customer = getEntityManager().find(Customer.class, 2);
+		Customer customer = getCustomerByEmail(purchaseRequest.getEmail());
+//		Customer customer = getEntityManager().find(Customer.class, 2);
 		
 		// init purchase with customer
 		Purchase purchase = new Purchase();
 		purchase.setCustomer(customer);
 
-//		// fill in order detail		
-//		for ( OrderDetailRequest orderDetailRequest : purchaseRequest.getPurchaseDetails() ){
-//			OrderDetail orderDetail = new OrderDetail();
-//			Product product = getEntityManager().find(Product.class, orderDetailRequest.getProductId());
-//			orderDetail.setProduct(product);
-//			orderDetail.setQuantity(orderDetailRequest.getQuantity());
-//
-//			// add to purchase
-//			purchase.getOrderDetails().add(orderDetail);
-//		}
-//		
-////		persistent
+//		OrderDetail orderDetail = new OrderDetail();
+//		Product product = getEntityManager().find(Product.class, 1 );
+//		orderDetail.setProduct(product);
+//		orderDetail.setQuantity(1.0f);
+//		orderDetail.setPurchase(purchase);
+//		purchase.getOrderDetails().add(orderDetail);
+
+		// fill in order detail		
+		for ( OrderDetailRequest orderDetailRequest : purchaseRequest.getOrderDetailRequests() ){
+			OrderDetail orderDetail = new OrderDetail();
+			Product product = getEntityManager().find(Product.class, orderDetailRequest.getProductId());
+			orderDetail.setProduct(product);
+			orderDetail.setQuantity(orderDetailRequest.getQuantity());
+			orderDetail.setPurchase(purchase);
+
+			// add to purchase
+			purchase.getOrderDetails().add(orderDetail);
+		}
+		
+//		persistent
 		getEntityManager().persist(purchase);
-				
+						
 		return Response.ok().entity(purchase).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 

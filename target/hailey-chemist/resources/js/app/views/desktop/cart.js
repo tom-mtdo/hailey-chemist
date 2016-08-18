@@ -44,10 +44,21 @@ define([
         },
     	
     	save: function(){
+    		
+//          get cart from cookie
+    		var strCart = utilities.getCookie("cart");
+            var aCart = JSON.parse(strCart);
+    		
+//            put each line into request
     		var purchaseRequest = {orderDetailRequests:[]};
-    		purchaseRequest.orderDetailRequests.push({productId:1, quantity: 3});
-    		purchaseRequest.orderDetailRequests.push({productId:3, quantity: 2});
-    		purchaseRequest.email = "john.smith@gmail.com";
+    		_.each(aCart, function(line) {
+    			purchaseRequest.orderDetailRequests.push(
+    					{productId: line.productId, quantity: line.quantity});
+    		});    		
+
+//    		purchaseRequest.orderDetailRequests.push({productId: 1, quantity: 3});
+//			User email
+    		purchaseRequest.email = $("#email").val();
     		
             $.ajax({url: (config.baseUrl + "rest/purchases"),
                 data:JSON.stringify(purchaseRequest),

@@ -51,9 +51,9 @@ define([
     		// a line in cart
     		var quantity = $("input[name='quantity']").val();    		
     		var cartLine = {"productId":this.model.get("id"), "productName":this.model.get("name"), "quantity":quantity};
-    		utilities.addToCart(cartLine);
+    		utilities.addToCart(cartLine);    		
+    		alert('Added to cart!');
     		
-//    		alert('Added to cart!');
 //    		$.cookie.raw = true;
 //    		$.cookie( "pId", this.model.get("id"), {expires:10, path: "/"} );
 //    		$.cookie( "pquantity", 1, {expires:10, path: "/"} );

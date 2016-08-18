@@ -25,5 +25,7 @@ com/mtdo/haileychemist/model/BillAddress_.class
 com/mtdo/haileychemist/model/Member.class
 com/mtdo/haileychemist/model/Product.class
 com/mtdo/haileychemist/service/MemberRegistration.class
+com/mtdo/haileychemist/rest/PurchaseRequest.class
 com/mtdo/haileychemist/controller/MemberController.class
 com/mtdo/haileychemist/model/Customer.class
+com/mtdo/haileychemist/rest/OrderDetailRequest.class

@@ -14,8 +14,11 @@ define([
 		cartTemplate) {
 
     var CartView = Backbone.View.extend({
+    	events: {
+    		"click button[name='checkout']" : "save"
+    	},
+    	
         render:function () {
-
             var strCart = utilities.getCookie("cart");
             var aCart = JSON.parse(strCart);
         	utilities.applyTemplate($(this.el), cartTemplate,{cart:aCart});
@@ -38,7 +41,23 @@ define([
 //            })
             
             return this;
-        }
+        },
+    	
+    	save: function(){
+    		var purchaseRequest = {orderDetailRequests:[]};
+    		purchaseRequest.orderDetailRequests.push({productId:1, quantity: 3});
+    		purchaseRequest.orderDetailRequests.push({productId:3, quantity: 2});
+    		purchaseRequest.email = "john.smith@gmail.com";
+    		
+            $.ajax({url: (config.baseUrl + "rest/purchases"),
+                data:JSON.stringify(purchaseRequest),
+                type:"POST",
+                dataType:"json",
+                contentType:"application/json",
+                success:function (purchase) {
+                }}).error(function (error) {
+                })
+    	}
     });
 
     return CartView;

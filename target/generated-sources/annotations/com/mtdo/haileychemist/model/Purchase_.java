@@ -3,7 +3,7 @@ package com.mtdo.haileychemist.model;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.annotation.Generated;
-import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -12,7 +12,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Purchase_ {
 
 	public static volatile SingularAttribute<Purchase, Date> date;
-	public static volatile ListAttribute<Purchase, OrderDetail> orderDetails;
+	public static volatile SetAttribute<Purchase, OrderDetail> orderDetails;
 	public static volatile SingularAttribute<Purchase, BigDecimal> total;
 	public static volatile SingularAttribute<Purchase, String> notes;
 	public static volatile SingularAttribute<Purchase, Integer> id;

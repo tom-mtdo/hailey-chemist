@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,7 +53,7 @@ public class Purchase implements Serializable {
 
 	//bi-directional many-to-one association to OrderDetail
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="purchase")
-	private List<OrderDetail> orderDetails;
+	private Set<OrderDetail> orderDetails;
 
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
@@ -110,11 +111,11 @@ public class Purchase implements Serializable {
 		this.total = total;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
+	public Set<OrderDetail> getOrderDetails() {
 		return this.orderDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
+	public void setOrderDetails(Set<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 

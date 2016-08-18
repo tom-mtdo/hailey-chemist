@@ -1,5 +1,7 @@
 package com.mtdo.haileychemist.rest;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -62,9 +64,21 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 	// need fix: if found customer return id
 	// if not found create a customer, return id
 	public Customer getCustomerByEmail(String email){
-        Customer customer = (Customer) getEntityManager()
+		Customer customer = null;
+        List<Customer> customers = (List<Customer>) getEntityManager()
                 .createQuery("select c from Customer c where c.email = :email", Customer.class)
-                .setParameter("email", email).getSingleResult();
+                .setParameter("email", email).setMaxResults(1).getResultList();
+        
+        if ( customers == null || customers.isEmpty() ) {
+        	customer = new Customer();
+        	customer.setEmail(email);
+        	getEntityManager().persist(customer);
+        	// to get make sure get the auto generated id
+        	getEntityManager().flush();
+        } else {
+        	customer = customers.get(0);
+        }
+ 
         return customer;
 	}
 }

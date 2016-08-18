@@ -66,6 +66,8 @@ define([
                 dataType:"json",
                 contentType:"application/json",
                 success:function (purchase) {
+//                	prompt succeed
+//                	clear cart in cookie
                 }}).error(function (error) {
                 })
     	}

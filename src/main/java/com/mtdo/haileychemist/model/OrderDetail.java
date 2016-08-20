@@ -14,10 +14,11 @@ import java.math.BigDecimal;
  * The persistent class for the order_details database table.
  * 
  */
+//@JsonIgnoreProperties({"product","purchase"})
 @Entity
 @Table(name="order_details")
 @NamedQuery(name="OrderDetail.findAll", query="SELECT o FROM OrderDetail o")
-@JsonIgnoreProperties({"product","purchase"})
+@JsonIgnoreProperties({"purchase"})
 public class OrderDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,0 +1,12 @@
+<div>
+	<h3>Purchase confirmaton</h3>
+	<div class="well">
+<%		if(purchase){	%>
+			<span><%=purchase.id%></span>
+			<br><span><%=purchase.customer.email%></span>
+<%		} else {	%>
+			<span>System error</span>
+<%		}%>
+		
+	</div>	
+</div>

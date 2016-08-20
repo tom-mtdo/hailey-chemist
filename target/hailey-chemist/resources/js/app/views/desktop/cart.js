@@ -6,12 +6,14 @@ define([
     'jquery',
     'bootstrap',
     'configuration',
-    'text!../../../../templates/desktop/cart.html'
+    'text!../../../../templates/desktop/cart.html',
+    'text!../../../../templates/desktop/purchase-confirmation.html'
 ], function (utilities,
 		jquery,
 		bootstrap,
 		config,
-		cartTemplate) {
+		cartTemplate,
+		purchaseConfirmationTemplate) {
 
     var CartView = Backbone.View.extend({
     	events: {
@@ -44,6 +46,10 @@ define([
         },
     	
     	save: function(){
+//			===============================================================
+//			store current context so can change page content using self.el
+    		var self = this;
+//			===============================================================
     		
 //          get cart from cookie
     		var strCart = utilities.getCookie("cart");
@@ -67,8 +73,11 @@ define([
                 contentType:"application/json",
                 success:function (purchase) {
 //                	prompt succeed
-//                	clear cart in cookie
+//                	clear cart in cookie                	
+                	utilities.applyTemplate($(self.el), purchaseConfirmationTemplate, {purchase:purchase});
+                	alert("checkout success!");
                 }}).error(function (error) {
+                	alert("checkout error");
                 })
     	}
     });

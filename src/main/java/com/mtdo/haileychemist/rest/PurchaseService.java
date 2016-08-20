@@ -27,9 +27,8 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPurchase(PurchaseRequest purchaseRequest){
-////		load customer
+//		load customer
 		Customer customer = getCustomerByEmail(purchaseRequest.getEmail());
-//		Customer customer = getEntityManager().find(Customer.class, 2);
 		
 		// init purchase with customer
 		Purchase purchase = new Purchase();
@@ -61,14 +60,14 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 	}
 
 	
-	// need fix: if found customer return id
-	// if not found create a customer, return id
 	public Customer getCustomerByEmail(String email){
 		Customer customer = null;
-        List<Customer> customers = (List<Customer>) getEntityManager()
+        // check if customer exist
+		List<Customer> customers = (List<Customer>) getEntityManager()
                 .createQuery("select c from Customer c where c.email = :email", Customer.class)
                 .setParameter("email", email).setMaxResults(1).getResultList();
         
+//		if customer not exist then create new customer
         if ( customers == null || customers.isEmpty() ) {
         	customer = new Customer();
         	customer.setEmail(email);

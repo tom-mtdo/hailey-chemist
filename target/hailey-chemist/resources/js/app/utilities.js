@@ -109,6 +109,10 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             }
             return "";
         },
+
+        clearCookie:function (cname) {
+            document.cookie = cname + "={};expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        },
         
         addToCart:function(cartLine){
 //        	get cart from cookie

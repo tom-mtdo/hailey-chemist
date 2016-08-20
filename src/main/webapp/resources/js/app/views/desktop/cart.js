@@ -22,7 +22,11 @@ define([
     	
         render:function () {
             var strCart = utilities.getCookie("cart");
-            var aCart = JSON.parse(strCart);
+            if (strCart && (strCart.trim().length>0) ){
+                var aCart = JSON.parse(strCart);            	
+            } else{
+            	var aCart={};
+            }
         	utilities.applyTemplate($(this.el), cartTemplate,{cart:aCart});
 
 //          var product={"id":1,"description":"Black more oidless fish oil, 400 caples, 1000mg",
@@ -73,7 +77,8 @@ define([
                 contentType:"application/json",
                 success:function (purchase) {
 //                	prompt succeed
-//                	clear cart in cookie                	
+//                	clear cart in cookie       
+                	utilities.clearCookie("cart");
                 	utilities.applyTemplate($(self.el), purchaseConfirmationTemplate, {purchase:purchase});
                 	alert("checkout success!");
                 }}).error(function (error) {

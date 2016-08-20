@@ -1,7 +1,7 @@
 <h3>Shopping cart</h3>
 <div class="well">
 
-<%	if (cart){ 
+<%	if (cart && (cart.length > 0) ){ 
 %>
 		<span>Cart Details</span>
 <%		_.each(cart, function(line){	%>

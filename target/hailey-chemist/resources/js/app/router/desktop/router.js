@@ -77,7 +77,7 @@ define("router", [
         productPagination:function(first, maxResult){
         	// alert("Pagination - first: " + first + ", last: " + last);
 //        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
-        	var pagination = {"pageNo":1, "pageSize":4, "count":5};
+        	var pagination = {"pageNo":0, "pageSize":4, "count":5};
         	var productGridModel = {};
         	productGridModel.pagination = pagination;
         	
@@ -90,6 +90,8 @@ define("router", [
         },
         
         productGrid:function(){
+        	var hasNextPage = utilities.pagination.isHasNextPage(0,3,5);
+        	alert("Have next page: " + hasNextPage);
         	this.productPagination(1,3);
         }
     });

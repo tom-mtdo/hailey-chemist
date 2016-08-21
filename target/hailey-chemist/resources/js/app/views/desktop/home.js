@@ -34,11 +34,13 @@ define([
             // http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
             // should convert to             
             // http://localhost:8080/hailey-chemist/rest/products/:first/:maxResults
-        	var pagination = {"pageNo":1, "pageSize":4, "count":5};
+        	var pagination = {"pageNo":0, "pageSize":4, "count":5};
         	var productGridModel = {};
         	productGridModel.pagination = pagination;
-        	var first = 1;
-        	var maxResult = 3;
+//        	var first = 1;
+//        	var maxResult = 3;
+        	var first = utilities.pagination.getPageFirstItem(pagination.pageNo, pagination.pageSize);
+        	var maxResult = pagination.pageSize;
             
         	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
             $.getJSON(strUrl, function(products){

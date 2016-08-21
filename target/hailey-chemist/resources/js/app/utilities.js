@@ -143,6 +143,34 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             var strCart = JSON.stringify(cart);
 //        	alert("new cart:" + strCart);
     		this.setCookie( "cart", strCart, 10);
+        },
+        
+        pagination:{
+            getPageFirstItem:function (pageNo, pageSize) {
+            	return pageNo*pageSize;
+            },
+            
+            getPageLastItem:function (pageNo, pageSize, count) {
+            	 
+            	var i = this.getPageFirstItem(pageNo,pageSize) + pageSize -1;
+                var count = count - 1;
+                if (i > count) {
+                    i = count;
+                }
+                if (i < 0) {
+                    i = 0;
+                }
+
+                return i;            	
+            },
+            
+            isHasNextPage:function(pageNo, pageSize, count){
+            	return (pageNo+1)*pageSize+1 <= count;
+            },
+            
+            isHasPreviousPage:function(pageNo){
+            	return pageNo > 0;
+            }
         }
 
     };

@@ -1,6 +1,19 @@
 @charset "UTF-8";
 
 /* =================== Tom added ======================*/
+
+.homeSlideItem {
+	width: auto;
+	height: 150px;
+	max-height: 150px;
+}
+.homeSlideItem img{
+	width: auto;
+	height: 150px;
+	max-height: 150px;
+	margin: auto;
+}
+
 .border1 {
   border-radius: 0;
   border-style: solid;
@@ -9,6 +22,7 @@
   margin: 0;
   padding: 0;
 }
+
 .carousel-caption h5 {
     color: #ce4240;
     font-size: 22px;

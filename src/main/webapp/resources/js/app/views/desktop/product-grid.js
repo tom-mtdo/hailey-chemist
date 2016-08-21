@@ -17,7 +17,6 @@ define([
 
     var ProductGridView = Backbone.View.extend({
     	events:{
-    		"click a":"sayHi"
     	},
     	
         render:function () {
@@ -37,11 +36,8 @@ define([
 //            	utilities.applyTemplate($('#featuredProducts'), productGrid, {products:products})
 //            })            
             return this;
-        },
-        
-        sayHi:function(){
-        	alert("Hi!!!");
         }
+        
     });
 
     return ProductGridView;

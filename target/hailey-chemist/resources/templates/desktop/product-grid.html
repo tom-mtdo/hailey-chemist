@@ -1,36 +1,39 @@
-<table class="table">
-	<caption>Products</caption>
-	<tbody>
-		<% 	var gridProducts = [];
-			while(products.length){
-				gridProducts.push(products.splice(0,3));
-			}
-		
-			if (gridProducts.length > 0) {
-				_.each(gridProducts, function(lineProducts){
-		%>
-					<tr>
-		<%			
-						_.each(lineProducts, function(product){
-		%>
-							<td>
-								<a href="#products/<%=product.id%>"><%=product.name%></a>						
-			<%					if(product.medias){
+<div  class="well">
+	<!-- can have a div here as a caption and take data input --> 
+	<table class="table">
+		<caption>Products</caption>
+		<tbody>
+			<% 	var gridProducts = [];
+				while(products.length){
+					gridProducts.push(products.splice(0,3));
+				}
+			
+				if (gridProducts.length > 0) {
+					_.each(gridProducts, function(lineProducts){
 			%>
-									<div>
-										<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">
-									</div>
-			<%								
-								}
-		%>							
-							</td>
-		<%							
-						})
-		%>
-					</tr>
-		<%
-				})	
-			}
-		%>
-	</tbody>
-</table>
+						<tr>
+			<%			
+							_.each(lineProducts, function(product){
+			%>
+								<td>
+									<a href="#products/<%=product.id%>"><%=product.name%></a>						
+				<%					if(product.medias){
+				%>
+										<div>
+											<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">
+										</div>
+				<%								
+									}
+			%>							
+								</td>
+			<%							
+							})
+			%>
+						</tr>
+			<%
+					})	
+				}
+			%>
+		</tbody>
+	</table>
+</div>

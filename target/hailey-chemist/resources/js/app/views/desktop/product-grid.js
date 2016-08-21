@@ -4,24 +4,28 @@
 define([
     'utilities',
     'jquery',
+    'jquerycookie',
     'bootstrap',
     'configuration',
-    'app/views/desktop/product-grid',
-    'text!../../../../templates/desktop/home.html',
     'text!../../../../templates/desktop/product-grid.html'
 ], function (utilities,
 		jquery,
+		jquerycookie,
 		bootstrap,
 		config,
-		ProductGridView,
-		homeTemplate,
 		productGridTemplate) {
 
-    var HomeView = Backbone.View.extend({
+    var ProductGridView = Backbone.View.extend({
+    	events:{
+    		"click a":"sayHi"
+    	},
+    	
         render:function () {
-        	var self = this;
-            utilities.applyTemplate($(this.el),homeTemplate,{});
-            $('.carousel').carousel();
+//            var product={"id":1,"description":"Black more oidless fish oil, 400 caples, 1000mg",
+//            		"name":"Fish oil","productNo":"PRD001","rrp":29.99,
+//            		"medias":[{"id":1,"itemSerial":null,"type":"image","url":"./resources/img/product/fish-oil.png"}],
+//            		"sales":[{"id":1,"endDate":1472029200000,"itemSerialNo":null,"price":19.99,"startDate":1469350800000}]};
+            utilities.applyTemplate($(this.el), productGridTemplate,{products:this.model});
 // ********************************************************************************************************            
 //            this.model is a parameter, router, or anything else init this view, will need put in
 //            a view have 2 default parameter: el & model
@@ -29,21 +33,16 @@ define([
 //            utilities.applyTemplate($('#featuredProducts'), productGrid, {products:this.model})
 //            see router to see more details
 // ********************************************************************************************************            
-
-            // pagination
-            // http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
-            // should convert to             
-            // http://localhost:8080/hailey-chemist/rest/products/:first/:maxResults
-            
-            $.getJSON(config.baseUrl + "rest/products", function(products){
-            	self.productGridView = new ProductGridView({ el:$('#featuredProducts'), model:products });
-            	self.productGridView.render();
-//            	utilities.applyTemplate($('#featuredProducts'), productGridTemplate, {products:products})
-            })
-            
+//            $.getJSON(config.baseUrl + "rest/products", function(products){
+//            	utilities.applyTemplate($('#featuredProducts'), productGrid, {products:products})
+//            })            
             return this;
+        },
+        
+        sayHi:function(){
+        	alert("Hi!!!");
         }
     });
 
-    return HomeView;
+    return ProductGridView;
 });

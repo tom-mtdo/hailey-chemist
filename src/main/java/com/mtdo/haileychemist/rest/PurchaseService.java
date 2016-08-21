@@ -65,7 +65,7 @@ public class PurchaseService extends BaseEntityService<Purchase>{
         // check if customer exist
 		List<Customer> customers = (List<Customer>) getEntityManager()
                 .createQuery("select c from Customer c where c.email = :email", Customer.class)
-                .setParameter("email", email).setMaxResults(1).getResultList();
+                .setParameter("email", email).setMaxResults(7).setFirstResult(7).getResultList();
         
 //		if customer not exist then create new customer
         if ( customers == null || customers.isEmpty() ) {

@@ -11,6 +11,7 @@ define("router", [
     'app/collections/products',
     'app/views/desktop/home',
     'app/views/desktop/product-details',
+    'app/views/desktop/product-grid',
     'app/views/desktop/cart',
     'text!../templates/desktop/main.html'
 ],function ($,
@@ -22,6 +23,7 @@ define("router", [
             Products,
             HomeView,
             ProductDetailView,
+            ProductGridView,
             CartView,
             MainTemplate) {
 
@@ -37,6 +39,8 @@ define("router", [
         routes:{
             "":"home",
             "products/:id":"productDetail",
+            "products/:first/:last":"productPagination",
+            "productsGrid":"productGrid",
             "cart":"cart"
         },
 
@@ -68,6 +72,16 @@ define("router", [
         
         cart:function () {
         	utilities.viewManager.showView( new CartView( {el:$("#content")} ));
+        },
+        
+        productPagination:function(first, last){
+        	alert("Pagination - first: " + first + ", last: " + last);
+        },
+        
+        productGrid:function(){        	
+            $.getJSON(config.baseUrl + "rest/products", function(products){
+            	utilities.viewManager.showView(new ProductGridView( {model:products, el:$("#content")} ));
+            })
         }
     });
     

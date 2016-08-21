@@ -1,5 +1,6 @@
 /**
- * The landing view (or home view) set
+ * brow product - grid view
+ * input model: page, hasNext, count, products
  */
 define([
     'utilities',
@@ -17,6 +18,9 @@ define([
 
     var ProductGridView = Backbone.View.extend({
     	events:{
+    	},
+    	
+    	initialize: function(){    		
     	},
     	
         render:function () {

@@ -39,7 +39,7 @@ define("router", [
         routes:{
             "":"home",
             "products/:id":"productDetail",
-            "products/:first/:last":"productPagination",
+            "products/:first/:maxResult":"productPagination",
             "productsGrid":"productGrid",
             "cart":"cart"
         },
@@ -74,14 +74,17 @@ define("router", [
         	utilities.viewManager.showView( new CartView( {el:$("#content")} ));
         },
         
-        productPagination:function(first, last){
-        	alert("Pagination - first: " + first + ", last: " + last);
+        productPagination:function(first, maxResult){
+        	// alert("Pagination - first: " + first + ", last: " + last);
+//        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
+        	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
+            $.getJSON(strUrl, function(products){
+            	utilities.viewManager.showView(new ProductGridView( {model:products, el:$("#content")} ));
+            });
         },
         
-        productGrid:function(){        	
-            $.getJSON(config.baseUrl + "rest/products", function(products){
-            	utilities.viewManager.showView(new ProductGridView( {model:products, el:$("#content")} ));
-            })
+        productGrid:function(){
+        	this.productPagination(1,3);
         }
     });
     

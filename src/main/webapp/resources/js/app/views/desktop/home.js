@@ -34,9 +34,16 @@ define([
             // http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
             // should convert to             
             // http://localhost:8080/hailey-chemist/rest/products/:first/:maxResults
+        	var pagination = {"pageNo":1, "pageSize":4, "count":5};
+        	var productGridModel = {};
+        	productGridModel.pagination = pagination;
+        	var first = 1;
+        	var maxResult = 3;
             
-            $.getJSON(config.baseUrl + "rest/products", function(products){
-            	self.productGridView = new ProductGridView({ el:$('#featuredProducts'), model:products });
+        	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
+            $.getJSON(strUrl, function(products){
+            	productGridModel.products = products;
+            	self.productGridView = new ProductGridView({ el:$('#featuredProducts'), model:productGridModel });
             	self.productGridView.render();
 //            	utilities.applyTemplate($('#featuredProducts'), productGridTemplate, {products:products})
             })

@@ -77,9 +77,15 @@ define("router", [
         productPagination:function(first, maxResult){
         	// alert("Pagination - first: " + first + ", last: " + last);
 //        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
+        	var pagination = {"pageNo":1, "pageSize":4, "count":5};
+        	var productGridModel = {};
+        	productGridModel.pagination = pagination;
+        	
         	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
             $.getJSON(strUrl, function(products){
-            	utilities.viewManager.showView(new ProductGridView( {model:products, el:$("#content")} ));
+            	// need to get count from DB
+            	productGridModel.products = products;
+            	utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
             });
         },
         

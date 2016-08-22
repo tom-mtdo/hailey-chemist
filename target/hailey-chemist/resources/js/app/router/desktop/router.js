@@ -39,7 +39,7 @@ define("router", [
         routes:{
             "":"home",
             "products/:id":"productDetail",
-            "products/:first/:maxResult":"productPagination",
+            "products/:pageNo/:pageSize":"productPagination",
             "productsGrid":"productGrid",
             "cart":"cart"
         },
@@ -74,24 +74,48 @@ define("router", [
         	utilities.viewManager.showView( new CartView( {el:$("#content")} ));
         },
         
-        productPagination:function(first, maxResult){
-        	// alert("Pagination - first: " + first + ", last: " + last);
+        productPagination:function(pageNo, pageSize){
 //        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
-        	var pagination = {"pageNo":0, "pageSize":4, "count":5};
+        	var first = utilities.pagination.getPageFirstItem(pageNo, pageSize);
+        	var maxResult = pageSize;
+        	var count = 0;
+        	var pagination = {"pageNo":pageNo, "pageSize":pageSize};
         	var productGridModel = {};
         	productGridModel.pagination = pagination;
         	
+        	var gotCount = false;
+        	var gotProducts = false;
+
+//        	get count from DB, http://localhost:8080/hailey-chemist/rest/products/count
+        	var strUrl = config.baseUrl + "rest/products/count";
+//	======================================================================
+//        	code in getJSON, fetch will be perform later when the data arrive
+//        	======================================================================        	
+        	$.getJSON(strUrl, function(result){
+        		$.each( result, function( key, val ) {
+        			if(key == "count"){
+        				productGridModel.pagination.count = val;
+        				gotCount = true;
+                    	if(gotProducts && gotCount){
+                    		utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
+                    	}        				
+        			}
+        		});
+        	});
+        	
+//        	return page no & page size
+        	
         	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
             $.getJSON(strUrl, function(products){
-            	// need to get count from DB
             	productGridModel.products = products;
-            	utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
+            	gotProducts = true;
+            	if(gotProducts && gotCount){
+            		utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
+            	}
             });
         },
         
         productGrid:function(){
-        	var hasNextPage = utilities.pagination.isHasNextPage(0,3,5);
-        	alert("Have next page: " + hasNextPage);
         	this.productPagination(1,3);
         }
     });

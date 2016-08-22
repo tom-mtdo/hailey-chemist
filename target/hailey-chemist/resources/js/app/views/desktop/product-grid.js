@@ -19,45 +19,64 @@ define([
     var ProductGridView = Backbone.View.extend({
     	
     	events:{
+    		"click #previous":"goPrevious",
+    		"click #next":"goNext"
     	},
     	
     	initialize: function(){
     	},
-    	
+    	    	
         render:function () {
         	var self = this;
         	var first = utilities.pagination.getPageFirstItem(self.model.pagination.pageNo, self.model.pagination.pageSize);
-        	var maxResults = self.model.pagination.pageSize;
-        	
+
+        	// var maxResults = self.model.pagination.pageSize;        	
         	// to check if get result from all services (get count and products)
         	var gotCount = false;
         	var gotProducts = false;
+        	
+        	productGridModel = {};
+        	productGridModel.first = first;
+        	productGridModel.hasPreviousPage = utilities.pagination.isHasPreviousPage(self.model.pagination.pageNo);
+			if ( !productGridModel.hasPreviousPage ) {
+				$("#previous").attr('disabled', true);
+			} else {
+				$("#previous").removeAttr('disabled');
+			}
 
-//			self.model.pagination.count = 5;
-        	var strUrl = config.baseUrl + "rest/products/count";
-//	======================================================================
+//  ==========================================================================
 //        	code in getJSON, fetch will be perform later when the data arrive
-//  ======================================================================        	
+//  ==========================================================================        	
+        	var strUrl = config.baseUrl + "rest/products/count";
         	$.getJSON(strUrl, function(result){
         		$.each( result, function( key, val ) {
         			if(key == "count"){
-        				self.model.pagination.count = val;
+        				self.model.pagination.count = val; 
+        				productGridModel.last = utilities.pagination.getPageLastItem(self.model.pagination.pageNo, self.model.pagination.pageSize, self.model.pagination.count);        				
+        				productGridModel.hasNextPage = utilities.pagination.isHasNextPage(self.model.pagination.pageNo, self.model.pagination.pageSize, self.model.pagination.count);
+        				productGridModel.count = val;
         				gotCount = true;
 //        				if got all data then display the page
         				if(gotProducts && gotCount){
-        					utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:self.model});
+        					utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:productGridModel});
+            				if ( !productGridModel.hasNextPage ) {
+            					$("#next").attr('disabled', true);
+            				} else {
+            					$("#next").removeAttr('disabled');
+            				}
                     	}        				
         			}
         		});
         	});
         	
 //        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
-        	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResults;
+        	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + self.model.pagination.pageSize;
             $.getJSON(strUrl, function(products){
             	self.model.products = products;
+            	productGridModel.products = products;            	
             	gotProducts = true;
             	if(gotProducts && gotCount){
-            		utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:self.model});
+            		utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:productGridModel});
             	}
             });
         	
@@ -73,7 +92,22 @@ define([
 //            	utilities.applyTemplate($('#featuredProducts'), productGrid, {products:products})
 //            })            
             return self;
-        }
+        },
+        
+        goPrevious:function(){
+        	var self = this;
+
+        	self.model.pagination.pageNo = parseInt(self.model.pagination.pageNo) - 1;
+        	self.render();
+        },
+
+        goNext:function(){
+        	var self = this;
+
+        	self.model.pagination.pageNo = parseInt(self.model.pagination.pageNo) + 1;
+        	self.render();
+        },
+        
         
     });
 

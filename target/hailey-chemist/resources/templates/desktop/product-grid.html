@@ -1,8 +1,9 @@
 <div  class="well">
 	<!-- can have a div here as a caption and take data input --> 
 	<table class="table">
-		<caption>Product array: <%=productGridModel.products.length%>, count <%=productGridModel.pagination.count%> 
-		page no: <%=productGridModel.pagination.pageNo%>, page size: <%=productGridModel.pagination.pageSize%></caption>
+		<caption>
+			<%=productGridModel.first%>..<%=productGridModel.last%> of <%=productGridModel.count%> | <button id="previous">Previous</button> | <button id="next">Next</button>
+		</caption>
 		<tbody>
 			<% 	var gridProducts = [];
 				while(productGridModel.products.length){

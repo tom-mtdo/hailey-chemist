@@ -151,8 +151,7 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             },
             
             getPageLastItem:function (pageNo, pageSize, count) {
-            	 
-            	var i = this.getPageFirstItem(pageNo,pageSize) + pageSize -1;
+            	var i = parseInt(this.getPageFirstItem(pageNo,pageSize)) + parseInt(pageSize) - 1;
                 var count = count - 1;
                 if (i > count) {
                     i = count;
@@ -165,11 +164,11 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             },
             
             isHasNextPage:function(pageNo, pageSize, count){
-            	return (pageNo+1)*pageSize+1 <= count;
+            	return parseInt( (pageNo+1)*pageSize ) + 1 <= parseInt(count);
             },
             
             isHasPreviousPage:function(pageNo){
-            	return pageNo > 0;
+            	return parseInt( pageNo ) > 0;
             }
         }
 

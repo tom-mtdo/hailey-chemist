@@ -76,47 +76,54 @@ define("router", [
         
         productPagination:function(pageNo, pageSize){
 //        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
-        	var first = utilities.pagination.getPageFirstItem(pageNo, pageSize);
-        	var maxResult = pageSize;
-        	var count = 0;
         	var pagination = {"pageNo":pageNo, "pageSize":pageSize};
         	var productGridModel = {};
+        	var products = {};
         	productGridModel.pagination = pagination;
-        	
-        	var gotCount = false;
-        	var gotProducts = false;
+        	productGridModel.products = products;
 
-//        	get count from DB, http://localhost:8080/hailey-chemist/rest/products/count
-        	var strUrl = config.baseUrl + "rest/products/count";
-//	======================================================================
-//        	code in getJSON, fetch will be perform later when the data arrive
-//        	======================================================================        	
-        	$.getJSON(strUrl, function(result){
-        		$.each( result, function( key, val ) {
-        			if(key == "count"){
-        				productGridModel.pagination.count = val;
-        				gotCount = true;
-                    	if(gotProducts && gotCount){
-                    		utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
-                    	}        				
-        			}
-        		});
-        	});
-        	
-//        	return page no & page size
-        	
-        	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
-            $.getJSON(strUrl, function(products){
-            	productGridModel.products = products;
-            	gotProducts = true;
-            	if(gotProducts && gotCount){
-            		utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
-            	}
-            });
+        	utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
+//        	var first = utilities.pagination.getPageFirstItem(pageNo, pageSize);
+//        	var maxResult = pageSize;
+//        	var pagination = {"pageNo":pageNo, "pageSize":pageSize};
+//        	var productGridModel = {};
+//        	productGridModel.pagination = pagination;
+//        	
+//        	// to check if get result from all services (get count and products)
+//        	var gotCount = false;
+//        	var gotProducts = false;
+//
+//        	var strUrl = config.baseUrl + "rest/products/count";
+////	======================================================================
+////        	code in getJSON, fetch will be perform later when the data arrive
+////  ======================================================================        	
+//        	$.getJSON(strUrl, function(result){
+//        		$.each( result, function( key, val ) {
+//        			if(key == "count"){
+//        				productGridModel.pagination.count = val;
+//        				gotCount = true;
+////        				if got all data then display the page
+//        				if(gotProducts && gotCount){
+//                    		utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
+//                    	}        				
+//        			}
+//        		});
+//        	});
+//        	
+////        	return page no & page size
+//        	
+//        	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + maxResult;
+//            $.getJSON(strUrl, function(products){
+//            	productGridModel.products = products;
+//            	gotProducts = true;
+//            	if(gotProducts && gotCount){
+//            		utilities.viewManager.showView(new ProductGridView( {model:productGridModel, el:$("#content")} ));
+//            	}
+//            });
         },
         
         productGrid:function(){
-        	this.productPagination(1,3);
+        	this.productPagination(0,4);
         }
     });
     

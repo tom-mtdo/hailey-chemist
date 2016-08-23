@@ -2,7 +2,7 @@
 	<!-- can have a div here as a caption and take data input --> 
 	<table class="table">
 		<caption>
-			<%=productGridModel.first%>..<%=productGridModel.last%> of <%=productGridModel.count%> | <button id="previous">Previous</button> | <button id="next">Next</button>
+			<%=productGridModel.first%>..<%=productGridModel.last%> of <%=productGridModel.count%> | <button id="previous">Previous</button> | <button id="next" render>Next</button>
 		</caption>
 		<tbody>
 			<% 	var gridProducts = [];

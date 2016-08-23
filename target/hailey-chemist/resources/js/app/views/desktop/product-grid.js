@@ -35,14 +35,14 @@ define([
         	var gotCount = false;
         	var gotProducts = false;
         	
-        	productGridModel = {};
-        	productGridModel.first = first;
-        	productGridModel.hasPreviousPage = utilities.pagination.isHasPreviousPage(self.model.pagination.pageNo);
-			if ( !productGridModel.hasPreviousPage ) {
-				$("#previous").attr('disabled', true);
-			} else {
-				$("#previous").removeAttr('disabled');
-			}
+        	self.productGridModel = {};
+        	self.productGridModel.first = first;
+        	self.productGridModel.hasPreviousPage = utilities.pagination.isHasPreviousPage(self.model.pagination.pageNo);
+//			if ( !productGridModel.hasPreviousPage ) {
+//				$("#previous").attr('disabled', true);
+//			} else {
+//				$("#previous").removeAttr('disabled');
+//			}
 
 //  ==========================================================================
 //        	code in getJSON, fetch will be perform later when the data arrive
@@ -52,18 +52,32 @@ define([
         		$.each( result, function( key, val ) {
         			if(key == "count"){
         				self.model.pagination.count = val; 
-        				productGridModel.last = utilities.pagination.getPageLastItem(self.model.pagination.pageNo, self.model.pagination.pageSize, self.model.pagination.count);        				
-        				productGridModel.hasNextPage = utilities.pagination.isHasNextPage(self.model.pagination.pageNo, self.model.pagination.pageSize, self.model.pagination.count);
-        				productGridModel.count = val;
+        				self.productGridModel.last = utilities.pagination.getPageLastItem(self.model.pagination.pageNo, self.model.pagination.pageSize, self.model.pagination.count);        				
+        				self.productGridModel.hasNextPage = utilities.pagination.isHasNextPage(self.model.pagination.pageNo, self.model.pagination.pageSize, self.model.pagination.count);
+        				self.productGridModel.count = val;
         				gotCount = true;
 //        				if got all data then display the page
         				if(gotProducts && gotCount){
-        					utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:productGridModel});
-            				if ( !productGridModel.hasNextPage ) {
-            					$("#next").attr('disabled', true);
-            				} else {
-            					$("#next").removeAttr('disabled');
-            				}
+        					utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:self.productGridModel});
+        		        	if ( !self.productGridModel.hasPreviousPage ) {
+        						$("#previous").attr('disabled', true);
+        					} else {
+        						$("#previous").removeAttr('disabled');
+        					}
+
+        					if ( !self.productGridModel.hasNextPage ) {
+        						$("#next").attr('disabled', true);
+        					} else {
+        						$("#next").removeAttr('disabled');
+        					}        	
+        					        					
+//        					self.updateView();
+//        					utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:productGridModel});
+//            				if ( !productGridModel.hasNextPage ) {
+//            					$("#next").attr('disabled', true);
+//            				} else {
+//            					$("#next").removeAttr('disabled');
+//            				}
                     	}        				
         			}
         		});
@@ -73,10 +87,24 @@ define([
         	var strUrl = config.baseUrl + "rest/products?first=" + first + "&maxResults=" + self.model.pagination.pageSize;
             $.getJSON(strUrl, function(products){
             	self.model.products = products;
-            	productGridModel.products = products;            	
+            	self.productGridModel.products = products;            	
             	gotProducts = true;
             	if(gotProducts && gotCount){
-            		utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:productGridModel});
+        			utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:self.productGridModel});
+                	if ( !self.productGridModel.hasPreviousPage ) {
+        				$("#previous").attr('disabled', true);
+        			} else {
+        				$("#previous").removeAttr('disabled');
+        			}
+
+        			if ( !self.productGridModel.hasNextPage ) {
+        				$("#next").attr('disabled', true);
+        			} else {
+        				$("#next").removeAttr('disabled');
+        			}        	
+
+//            		self.updateView();
+//            		utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:self.productGridModel});
             	}
             });
         	
@@ -92,6 +120,21 @@ define([
 //            	utilities.applyTemplate($('#featuredProducts'), productGrid, {products:products})
 //            })            
             return self;
+        },
+        
+        updateView:function(){
+			utilities.applyTemplate($(self.el),productGridTemplate,{productGridModel:self.productGridModel});
+        	if ( !self.productGridModel.hasPreviousPage ) {
+				$("#previous").attr('disabled', true);
+			} else {
+				$("#previous").removeAttr('disabled');
+			}
+
+			if ( !self.productGridModel.hasNextPage ) {
+				$("#next").attr('disabled', true);
+			} else {
+				$("#next").removeAttr('disabled');
+			}        	
         },
         
         goPrevious:function(){

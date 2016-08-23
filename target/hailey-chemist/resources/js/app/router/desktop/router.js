@@ -12,7 +12,8 @@ define("router", [
     'app/views/desktop/home',
     'app/views/desktop/product-details',
     'app/views/desktop/product-grid',
-    'app/views/desktop/cart',
+    'app/views/desktop/product-pagination',
+    'app/views/desktop/cart',    
     'text!../templates/desktop/main.html'
 ],function ($,
 			jquerycookie,
@@ -24,6 +25,7 @@ define("router", [
             HomeView,
             ProductDetailView,
             ProductGridView,
+            productPagination,
             CartView,
             MainTemplate) {
 
@@ -41,6 +43,7 @@ define("router", [
             "products/:id":"productDetail",
             "products/:pageNo/:pageSize":"productPagination",
             "productsGrid":"productGrid",
+            "products":"products",
             "cart":"cart"
         },
 
@@ -124,6 +127,15 @@ define("router", [
         
         productGrid:function(){
         	this.productPagination(0,4);
+        },
+        
+        products:function(){
+        	var paginationModel={};
+        	paginationModel.pageNo = 0;
+        	paginationModel.pageSize = 2;
+        	paginationModel.count = 5;
+        	
+        	utilities.viewManager.showView( new productPagination( {model:paginationModel, el:$("#content")} ));     	
         }
     });
     

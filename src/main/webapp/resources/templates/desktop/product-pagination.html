@@ -1,6 +1,8 @@
 <div class="well">
 	<div id="divPagination">
-		<span>PageNo: <%=pagination.pageNo%>, page size <%=pagination.pageSize%>, count <%=pagination.count%> </span>| <button id="previous">Previous</button> | <button id="next">Next</button>	
+		<span><%=pagination.first + 1%>..<%=pagination.last + 1%> of <%=pagination.count%> </span> 
+		<span>Page size<input type="number" id="inpPageSize" placeholder="Page Size" value="<%=pagination.pageSize%>"/></span>
+		<button id="previous">Previous</button> <button id="next">Next</button>	
 	</div>
 	<div id="divProductPage">
 	</div>

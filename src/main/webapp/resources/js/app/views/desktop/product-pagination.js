@@ -23,7 +23,8 @@ define([
     	
     	events:{
     		"click #previous":"goPrevious",
-    		"click #next":"goNext"
+    		"click #next":"goNext",
+    		"change #inpPageSize":"updatePageSize"
     	},
     	
     	initialize: function(){
@@ -51,6 +52,7 @@ define([
 //        				check if has next page
         				self.model.hasNextPage = utilities.pagination.isHasNextPage(
         					self.model.pageNo, self.model.pageSize, self.model.count);
+        				
 //        				render
         	        	utilities.applyTemplate( $(self.el), productPaginationTemplate, 
         	        		{pagination:self.model} );
@@ -109,6 +111,10 @@ define([
         	self.render();
         },
         
+        updatePageSize:function(){
+        	this.model.pageSize=$("#inpPageSize").val();
+        	this.render();
+        }
         
     });
 

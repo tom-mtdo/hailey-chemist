@@ -133,7 +133,7 @@ define("router", [
         	var paginationModel={};
         	paginationModel.pageNo = 0;
         	paginationModel.pageSize = 2;
-        	paginationModel.count = 5;
+//        	paginationModel.count = 5;
         	
         	utilities.viewManager.showView( new productPagination( {model:paginationModel, el:$("#content")} ));     	
         }

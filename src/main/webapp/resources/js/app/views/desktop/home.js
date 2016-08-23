@@ -6,16 +6,14 @@ define([
     'jquery',
     'bootstrap',
     'configuration',
-    'app/views/desktop/product-grid',
-    'text!../../../../templates/desktop/home.html',
-    'text!../../../../templates/desktop/product-grid.html'
+    'app/views/desktop/product-pagination',
+    'text!../../../../templates/desktop/home.html'
 ], function (utilities,
 		jquery,
 		bootstrap,
 		config,
-		ProductGridView,
-		homeTemplate,
-		productGridTemplate) {
+		ProductPaginationView,
+		homeTemplate		) {
 
     var HomeView = Backbone.View.extend({
         render:function () {
@@ -32,13 +30,9 @@ define([
  
             // http://localhost:8080/hailey-chemist/rest/products/:first/:maxResults            
         	var pagination = {"pageNo":0, "pageSize":4};
-        	var productGridModel = {};
-        	var products = {};
-        	productGridModel.pagination = pagination;
-        	productGridModel.products = products;
-        	var productGridView = new ProductGridView( {model:productGridModel, el:$("#featuredProducts")} );
-        	productGridView.render();
-
+        	var productPaginationView = new ProductPaginationView( {model:pagination, el:$("#featuredProducts")} );
+        	productPaginationView.render();
+        	
             return self;
         }
     });

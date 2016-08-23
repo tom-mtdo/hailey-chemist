@@ -16,6 +16,7 @@ define([
 		config,
 		productPageTemplate) {
 
+//	input model: products
     var ProductPageView = Backbone.View.extend({
     	events:{
     	},

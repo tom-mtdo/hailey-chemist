@@ -112,7 +112,14 @@ define([
         },
         
         updatePageSize:function(){
-        	this.model.pageSize=$("#inpPageSize").val();
+        	var i =$("#inpPageSize").val();
+        	if ( i < 1){
+        		this.model.pageSize = 1
+        	} else if ( i > 300 ) {
+        		this.model.pageSize = 300;
+        	} else {
+        		this.model.pageSize = i;
+        	}
         	this.render();
         }
         

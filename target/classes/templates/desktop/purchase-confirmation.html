@@ -1,0 +1,21 @@
+<div>
+	<h3>Purchase confirmation</h3>
+	<div class="well">
+<%		if(purchase){	%>
+			<span>purchase id: <%=purchase.id%></span>
+			<br><span>customer email: <%=purchase.customer.email%></span>
+<%			$.each( purchase.orderDetails, function(i, orderDetail){	%>
+				<br><span>Product: <%=orderDetail.product.name%></span>
+				<br><span>Quantity: <%=orderDetail.quantity%></span>				
+<%			} );	
+		} else {	%>
+			<span>System error</span>
+<%		}	%>		
+	</div>	
+	<div style = "padding:30px;">
+		<a href="#">Home</a>
+		&nbsp;<span>Print</span>
+		&nbsp;<span>Email</span>
+		&nbsp;<span>Download</span>
+	</div>
+</div>

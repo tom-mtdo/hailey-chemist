@@ -1,0 +1,17 @@
+<h3>Product details</h3>
+<div class="well">
+
+<%	if (product){ %>
+		<br><span><%=product.get("id")%></span>
+		<br><span><%=product.get("name")%></span>
+		<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" />
+		<br><span><%=product.get("description")%></span>
+		<br><input type="number" name="quantity" placeholder="Quantity"/>
+		<br><button name="addToCart" class="btn btn-primary">Add To Cart</button>
+<%	} else { %>
+		<span>No product selected</span>
+<%	} %>
+	<div style="padding-bottom:30px;">
+	    <a href="#">Home</a>
+	</div>
+</div>

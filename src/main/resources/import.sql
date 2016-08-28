@@ -17,6 +17,20 @@
 
 -- You can use this file to load seed data into the database using SQL statements
 insert into Member (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') 
+
+-- Categories
+INSERT INTO nested_category (category_id, name, lft, rgt) VALUES(1,'ELECTRONICS',1,20), 
+	VALUES(1,'ELECTRONICS',1,20),
+		(2,'TELEVISIONS',2,9),
+		(3,'TUBE',3,4),  
+		(4,'LCD',5,6),
+		(5,'PLASMA',7,8),
+		(6,'PORTABLE ELECTRONICS',10,19),
+		(7,'MP3 PLAYERS',11,14),
+		(8,'FLASH',12,13),  
+		(9,'CD PLAYERS',15,16),
+		(10,'2 WAY RADIOS',17,18);
+
 -- products
 --insert into product (product_no, name, description, rrp) values('PRD003', 'Swisse Women''s Ultivite 120 Tablets', 'Swisse Women''s Ultivite Formula 1 contains 50 premium quality vitamins, minerals, antioxidants and herbs to help support women''s nutritional needs and maintain general wellbeing.', 69.95)
 insert into product (product_no, name, description, rrp) values('PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)

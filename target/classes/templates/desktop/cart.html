@@ -1,0 +1,15 @@
+<h3>Shopping cart</h3>
+<div class="well">
+
+<%	if (cart && (cart.length > 0) ){ 
+%>
+		<span>Cart Details</span>
+<%		_.each(cart, function(line){	%>
+			<br><span>Product: <%=line.productName%>, quantity <%=line.quantity%></span>
+<%		});
+	} else { %>
+		<span>Cart is empty</span>
+<%	} %>
+	<br><input id="email" type="email" placeholder="Email" required/>
+	<br><button name="checkout" class="btn btn-primary">Checkout</button>
+</div>

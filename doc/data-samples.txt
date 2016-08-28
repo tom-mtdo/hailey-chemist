@@ -1,0 +1,9 @@
+1)											1-ConsumingChemist-26
+2)		2-Vitamin-13 										|		 					14-BathShower-25
+3)	3-MenVitamin-6, 		7-WomenVitamin-12				| 			15-BodyWash-20			, 21-HairCare-24
+4)	4-MultipleVitamin-5, 8-MultipleVitamin-9 10-Boost-11, 	| 16-HoneySoap-17 18-CoconutSoap-19	, 22-VitaminEConditioner-23
+
+ConsumingChemist
+Vitamin | BathShower | SkinCared
+MenVitamin, WomenVitamin, KidsVitamin, General | BodyWash, HairCare, Toothpast | OutsideApply
+MultipleVitamin, MultipleVitamin, GummyVitamin, Glucosamine | HoneySoap CoconutSoap, VitaminEConditioner, ColgatePower ColgateTriple | VitaminECream CoconutBodyLotion

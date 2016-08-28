@@ -1,0 +1,36 @@
+CREATE TABLE nested_category (
+        category_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(20) NOT NULL,
+        description VARCHAR(100),
+        lft INT NOT NULL,
+        rgt INT NOT NULL
+);
+
+INSERT INTO nested_category (category_id, name, lft, rgt) 
+	VALUES(1,'ELECTRONICS',1,20),
+		(2,'TELEVISIONS',2,9),
+		(3,'TUBE',3,4),  
+		(4,'LCD',5,6),
+		(5,'PLASMA',7,8),
+		(6,'PORTABLE ELECTRONICS',10,19),
+		(7,'MP3 PLAYERS',11,14),
+		(8,'FLASH',12,13),  
+		(9,'CD PLAYERS',15,16),
+		(10,'2 WAY RADIOS',17,18);
+
+-- -----------------------------------------------------
+-- Add category to product table
+-- -----------------------------------------------------
+ALTER TABLE product ADD category_id int;
+
+INSERT INTO product(id, product_no, name, category_id) VALUES
+	(1, 'p1', '20" TV',3),
+	(2, 'p2', '36" TV',3), 
+	(3, 'p3', 'Super-LCD 42"',4),
+	(4, 'p4', 'Ultra-Plasma 62"',5),
+	(5, 'p5', 'Value Plasma 38"',5), 
+	(6, 'p6', 'Power-MP3 5gb',7),
+	(7, 'p7', 'Super-Player 1gb',8),
+	(8, 'p8', 'Porta CD',9),
+	(9, 'p9', 'CD To go!',9), 
+	(10,'p10', 'Family Talk 360',10);

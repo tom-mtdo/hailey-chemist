@@ -1,0 +1,29 @@
+-- Insert sample categories
+INSERT INTO category (id, name, lft, rgt) VALUES(1,'ConsumingChemist',1,26)
+INSERT INTO category (id, name, lft, rgt) VALUES(2,'Vitamin',2,13)
+INSERT INTO category (id, name, lft, rgt) VALUES(3,'BathShower',14,25)
+INSERT INTO category (id, name, lft, rgt) VALUES(4,'MenVitamin',3,6)
+INSERT INTO category (id, name, lft, rgt) VALUES(5,'WomenVitamin',7,12)
+INSERT INTO category (id, name, lft, rgt) VALUES(6,'BodyWash',15,20)
+INSERT INTO category (id, name, lft, rgt) VALUES(7,'HairCare',21,24)
+
+-- Get full tree with indends
+SELECT CONCAT( REPEAT(' ', COUNT(parent.name) - 1), node.name) AS name
+FROM category AS node,
+        category AS parent
+WHERE node.lft BETWEEN parent.lft AND parent.rgt
+GROUP BY node.name
+ORDER BY node.lft
+
+-- Get all leaf nodes
+SELECT name
+FROM category
+WHERE rgt = lft + 1;
+
+-- get a path to BodyWash
+SELECT parent.name
+FROM category AS node,
+        category AS parent
+WHERE node.lft BETWEEN parent.lft AND parent.rgt
+        AND node.name = 'BodyWash'
+ORDER BY parent.lft;

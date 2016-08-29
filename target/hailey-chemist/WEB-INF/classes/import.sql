@@ -17,13 +17,35 @@
 
 -- You can use this file to load seed data into the database using SQL statements
 insert into Member (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') 
+
+-- Categories
+INSERT INTO category (id, name, lft, rgt) VALUES(1,'ConsumingChemist',1,14)
+INSERT INTO category (id, name, lft, rgt) VALUES(2,'Vitamin',2,7)
+INSERT INTO category (id, name, lft, rgt) VALUES(3,'BathShower',8,13)
+INSERT INTO category (id, name, lft, rgt) VALUES(4,'MenVitamin',3,4)
+INSERT INTO category (id, name, lft, rgt) VALUES(5,'WomenVitamin',5,6)
+INSERT INTO category (id, name, lft, rgt) VALUES(6,'BodyWash',9,10)
+INSERT INTO category (id, name, lft, rgt) VALUES(7,'HairCare',11,12)
+--INSERT INTO category (id, name, lft, rgt) VALUES(4,'MultipleVitamin',5)
+--INSERT INTO category (id, name, lft, rgt) VALUES(8,'MultipleVitamin',9)
+--INSERT INTO category (id, name, lft, rgt) VALUES(10,'Boost',11)
+--INSERT INTO category (id, name, lft, rgt) VALUES(16,'HoneySoap',17)
+--INSERT INTO category (id, name, lft, rgt) VALUES(18,'CoconutSoap',19)
+--INSERT INTO category (id, name, lft, rgt) VALUES(22,'VitaminEConditioner',23)
+
+--1)											1-ConsumingChemist-26
+--2)		2,'Vitamin',13 										|		 					14,'BathShower',25
+--3)	3,'MenVitamin',6, 		7,'WomenVitamin',12				| 			15,'BodyWash',20			, 21,'HairCare',24
+--4)	4,'MultipleVitamin',5, 8',MultipleVitamin',9 10',Boost',11, 	| 16',HoneySoap,'17 18,'CoconutSoap',19	, 22,'VitaminEConditioner',23
+
 -- products
 --insert into product (product_no, name, description, rrp) values('PRD003', 'Swisse Women''s Ultivite 120 Tablets', 'Swisse Women''s Ultivite Formula 1 contains 50 premium quality vitamins, minerals, antioxidants and herbs to help support women''s nutritional needs and maintain general wellbeing.', 69.95)
-insert into product (product_no, name, description, rrp) values('PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)
-insert into product (product_no, name, description, rrp) values('PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27)
-insert into product (product_no, name, description, rrp) values('PRD003', 'Aloe', 'Aloe vera cream', 13.27)
-insert into product (product_no, name, description, rrp) values('PRD004', 'Swisse Cranberry', 'Swisse Cranberry', 36.95)
-insert into product (product_no, name, description, rrp) values('PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99)
+insert into product (id, product_no, name, description, rrp) values(1, 'PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)
+insert into product (id, product_no, name, description, rrp) values(2, 'PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27)
+insert into product (id, product_no, name, description, rrp) values(3, 'PRD003', 'Aloe Shampo', 'Aloe vera cream', 13.27)
+insert into product (id, product_no, name, description, rrp) values(4, 'PRD004', 'Women Swisse Cranberry', 'Swisse Cranberry', 36.95)
+insert into product (id, product_no, name, description, rrp) values(5, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99)
+insert into product (id, product_no, name, description, rrp) values(6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35)
 
 -- media
 insert into media (type, url, product_id) values('image', './resources/img/product/fish-oil.png', 1)

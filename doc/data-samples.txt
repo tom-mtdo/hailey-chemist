@@ -1,7 +1,8 @@
-1)											1-ConsumingChemist-26
-2)		2-Vitamin-13 										|		 					14-BathShower-25
-3)	3-MenVitamin-6, 		7-WomenVitamin-12				| 			15-BodyWash-20			, 21-HairCare-24
-4)	4-MultipleVitamin-5, 8-MultipleVitamin-9 10-Boost-11, 	| 16-HoneySoap-17 18-CoconutSoap-19	, 22-VitaminEConditioner-23
+1)											1,1-ConsumingChemist-14
+2)		2,2-Vitamin-7 										|		 					3,8-BathShower-13
+3)	4,3-MenVitamin-4, 		5,5-WomenVitamin-6				| 			6,9-BodyWash-10			, 7,11-HairCare-12
+
+-- 4)	4-MultipleVitamin-5, 8-MultipleVitamin-9 10-Boost-11, 	| 16-HoneySoap-17 18-CoconutSoap-19	, 22-VitaminEConditioner-23
 
 ConsumingChemist
 Vitamin | BathShower | SkinCared

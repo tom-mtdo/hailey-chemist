@@ -8,6 +8,7 @@ com/mtdo/haileychemist/rest/MemberResourceRESTService.class
 com/mtdo/haileychemist/data/MemberRepository.class
 com/mtdo/haileychemist/model/BillAddress.class
 com/mtdo/haileychemist/rest/JaxRsActivator.class
+com/mtdo/haileychemist/model/Category.class
 com/mtdo/haileychemist/model/Sale.class
 com/mtdo/haileychemist/util/Resources.class
 com/mtdo/haileychemist/model/Member_.class
@@ -18,6 +19,7 @@ com/mtdo/haileychemist/model/Product_.class
 com/mtdo/haileychemist/model/ShipAddress_.class
 com/mtdo/haileychemist/data/MemberListProducer.class
 com/mtdo/haileychemist/model/Sale_.class
+com/mtdo/haileychemist/model/Category_.class
 com/mtdo/haileychemist/model/Purchase_.class
 com/mtdo/haileychemist/model/Purchase.class
 com/mtdo/haileychemist/model/Media.class

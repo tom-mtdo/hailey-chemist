@@ -10,6 +10,7 @@
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Member.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Purchase.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/controller/MemberController.java
+/Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Category.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/data/MemberRepository.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Sale.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/MemberResourceRESTService.java

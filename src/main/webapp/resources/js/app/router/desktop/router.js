@@ -11,7 +11,6 @@ define("router", [
     'app/collections/products',
     'app/views/desktop/home',
     'app/views/desktop/product-details',
-    'app/views/desktop/product-grid',
     'app/views/desktop/product-pagination',
     'app/views/desktop/cart',    
     'text!../templates/desktop/main.html'
@@ -24,7 +23,6 @@ define("router", [
             Products,
             HomeView,
             ProductDetailView,
-            ProductGridView,
             ProductPaginationView,
             CartView,
             MainTemplate) {

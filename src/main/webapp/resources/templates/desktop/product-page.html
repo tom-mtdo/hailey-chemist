@@ -15,7 +15,7 @@
 		%>
 							<td>
 								<a href="#products/<%=product.id%>"><%=product.name%></a>						
-			<%					if(product.medias){
+			<%					if(product.medias.length > 0){
 			%>
 									<div>
 										<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">

@@ -16,7 +16,7 @@ define([
     var Search = Backbone.View.extend({
         render:function () {
         	var self = this;
-            utilities.applyTemplate($(self.el),searchTemplate,{});
+            utilities.applyTemplate($(self.el),searchTemplate,{searchModel:self.model});
         }
     });
     

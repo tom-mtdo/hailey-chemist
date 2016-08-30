@@ -44,7 +44,7 @@ define("router", [
             "products/:pageNo/:pageSize":"productPagination",
             "products":"products",
             "cart":"cart",
-            "search":"search",
+            "search/:keyWord":"search",
         },
 //        cart
         home:function () {
@@ -52,8 +52,6 @@ define("router", [
 //	                          {name:"Aloe"},
 //	                          {name:"Multiple vitamins"},
 //	                          {name:"Ensure Milk"}];
-//
-//                utilities.viewManager.showView(new HomeView({el:$("#content"), model:products}));
                 utilities.viewManager.showView(new HomeView({el:$("#content")}));                
         },
         
@@ -88,9 +86,10 @@ define("router", [
         	this.productPagination(0,3);
         },
         
-        search:function () {
-        	alert("Search product!");       
-        	searchView = new SearchView( {el:$("#content")} )
+        search:function (keyWord) {
+        	var searchModel = {};
+        	searchModel.keyWord = keyWord;
+        	searchView = new SearchView( {model:searchModel, el:$("#content")} )
         	utilities.viewManager.showView( searchView );
         }
     });

@@ -5,10 +5,16 @@ import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 /**
  * The persistent class for the product database table.
@@ -44,6 +50,10 @@ public class Product implements Serializable {
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
 	private List<Sale> sales;
 
+	//one-directional many-to-one association to Product
+	@ManyToOne
+	private Category category;
+	
 	public Product() {
 	}
 
@@ -109,28 +119,6 @@ public class Product implements Serializable {
 		return media;
 	}
 
-//	public List<OrderDetail> getOrderDetails() {
-//		return this.orderDetails;
-//	}
-//
-//	public void setOrderDetails(List<OrderDetail> orderDetails) {
-//		this.orderDetails = orderDetails;
-//	}
-
-//	public OrderDetail addOrderDetail(OrderDetail orderDetail) {
-//		getOrderDetails().add(orderDetail);
-//		orderDetail.setProduct(this);
-//
-//		return orderDetail;
-//	}
-//
-//	public OrderDetail removeOrderDetail(OrderDetail orderDetail) {
-//		getOrderDetails().remove(orderDetail);
-//		orderDetail.setProduct(null);
-//
-//		return orderDetail;
-//	}
-
 	public List<Sale> getSales() {
 		return this.sales;
 	}
@@ -149,8 +137,17 @@ public class Product implements Serializable {
 	public Sale removeSale(Sale sale) {
 		getSales().remove(sale);
 		sale.setProduct(null);
-
+		
 		return sale;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	
 }

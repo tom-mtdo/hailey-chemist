@@ -16,6 +16,10 @@ define([
 		homeTemplate		) {
 
     var HomeView = Backbone.View.extend({
+    	events: {
+    		"click #quickSearchLink":"searchProducts"
+    	},
+    	
         render:function () {
         	var self = this;
             utilities.applyTemplate($(self.el),homeTemplate,{});
@@ -34,6 +38,9 @@ define([
         	productPaginationView.render();
         	
             return self;
+        },
+        
+        searchProducts: function () {        	
         }
     });
 

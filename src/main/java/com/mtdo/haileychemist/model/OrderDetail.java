@@ -37,7 +37,7 @@ public class OrderDetail implements Serializable {
 	@Column(name="quantity_unit")
 	private String quantityUnit;
 
-	//bi-directional many-to-one association to Product
+	//one-directional many-to-one association to Product
 	@ManyToOne
 	private Product product;
 

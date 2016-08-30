@@ -12,7 +12,8 @@ define("router", [
     'app/views/desktop/home',
     'app/views/desktop/product-details',
     'app/views/desktop/product-pagination',
-    'app/views/desktop/cart',    
+    'app/views/desktop/cart',
+    'app/views/desktop/search',
     'text!../templates/desktop/main.html'
 ],function ($,
 			jquerycookie,
@@ -25,6 +26,7 @@ define("router", [
             ProductDetailView,
             ProductPaginationView,
             CartView,
+            SearchView,
             MainTemplate) {
 
     $(document).ready(new function() {
@@ -41,9 +43,10 @@ define("router", [
             "products/:id":"productDetail",
             "products/:pageNo/:pageSize":"productPagination",
             "products":"products",
-            "cart":"cart"
+            "cart":"cart",
+            "search":"search",
         },
-
+//        cart
         home:function () {
 //	            var products=[{name:"Fish oil"},
 //	                          {name:"Aloe"},
@@ -83,6 +86,12 @@ define("router", [
         
         products:function(){
         	this.productPagination(0,3);
+        },
+        
+        search:function () {
+        	alert("Search product!");       
+        	searchView = new SearchView( {el:$("#content")} )
+        	utilities.viewManager.showView( searchView );
         }
     });
     

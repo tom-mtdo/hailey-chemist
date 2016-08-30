@@ -27,3 +27,13 @@ FROM category AS node,
 WHERE node.lft BETWEEN parent.lft AND parent.rgt
         AND node.name = 'BodyWash'
 ORDER BY parent.lft;
+
+-- count product for each category
+SELECT parent.name, COUNT(product.name)
+FROM category AS node ,
+        category AS parent,
+        product
+WHERE node.lft BETWEEN parent.lft AND parent.rgt
+        AND node.id = product.category_id
+GROUP BY parent.name
+ORDER BY parent.lft;

@@ -104,11 +104,11 @@ public abstract class BaseEntityService<T> {
         Root<T> root = criteriaQuery.from(entityClass);
 
 //        tom
-//        Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);
-        Predicate predicate = extractPredicate(queryParameters, criteriaBuilder, root);
+        Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);
+//        Predicate predicate = extractPredicate(queryParameters, criteriaBuilder, root);
         
-//        criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
-        criteriaQuery.select(criteriaQuery.getSelection()).where(predicate);
+        criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
+//        criteriaQuery.select(criteriaQuery.getSelection()).where(predicate);
         criteriaQuery.orderBy(criteriaBuilder.asc(root.get("id")));
         TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
         if (queryParameters.containsKey("first")) {
@@ -160,9 +160,9 @@ public abstract class BaseEntityService<T> {
         return new Predicate[]{};
     }
 
-    protected Predicate extractPredicate(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<T> root) {
-        return null;
-    }
+//    protected Predicate extractPredicate(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<T> root) {
+//        return null;
+//    }
     
     /**
      * <p>

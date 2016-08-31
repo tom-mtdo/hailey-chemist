@@ -1,5 +1,6 @@
 package com.mtdo.haileychemist.rest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
@@ -48,20 +49,28 @@ public class CategoryService extends BaseEntityService<Category>{
 		CriteriaBuilder cb = em.getCriteriaBuilder();		
 		CriteriaQuery<Tuple> cq = cb.createTupleQuery();		
 		Root<Category> node = cq.from(Category.class);
-		Predicate predicate = cb.equal( node.get("id"), categoryId );
-		cq.where( predicate );
+		Root<Category> parent = cq.from(Category.class);
+//		Predicate predicate = cb.equal( node.get("id"), categoryId );
+		Predicate[] predicates = new Predicate[]{
+//				cb.like( node.<String>get("name"), "%" )
+				cb.between( node.<Integer>get("lft"), parent.<Integer>get("lft"), parent.<Integer>get("rgt")),
+				cb.equal( node.get("id"), categoryId )
+				};
+		cq.where( predicates );
 		cq.multiselect(
-				node.get("id"),
-				node.get("name") );
+				parent.get("id"),
+				parent.get("name") );
+		cq.orderBy( cb.asc(parent.get("lft")) );
 				
 		TypedQuery<Tuple> tq = em.createQuery(cq);
-		Tuple qResult = tq.getSingleResult();
-		
-		int id = qResult.get(0, Integer.class);
-		String name = qResult.get(1, String.class);
-		
+		List<Tuple> qResult = tq.getResultList();
 		Map<Integer, String> result = new HashMap<Integer, String>();
-		result.put(id, name);
+		
+		for (Tuple tuple: qResult){
+			int id = tuple.get(0, Integer.class);
+			String name = tuple.get(1, String.class);
+			result.put(id, name);
+		}
 		
 		return result;
 		

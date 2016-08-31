@@ -15,6 +15,7 @@
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Sale.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/MemberResourceRESTService.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/data/MemberListProducer.java
+/Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/CategoryService.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/service/MemberRegistration.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/OrderDetailRequest.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/ProductService.java

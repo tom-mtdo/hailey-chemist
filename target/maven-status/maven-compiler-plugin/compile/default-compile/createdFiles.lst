@@ -11,6 +11,7 @@ com/mtdo/haileychemist/rest/JaxRsActivator.class
 com/mtdo/haileychemist/model/Category.class
 com/mtdo/haileychemist/model/Sale.class
 com/mtdo/haileychemist/util/Resources.class
+com/mtdo/haileychemist/rest/CategoryService.class
 com/mtdo/haileychemist/model/Member_.class
 com/mtdo/haileychemist/model/Customer_.class
 com/mtdo/haileychemist/rest/PurchaseService.class

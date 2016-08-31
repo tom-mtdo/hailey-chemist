@@ -10,8 +10,6 @@ import javax.persistence.criteria.Root;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.http.impl.io.SocketOutputBuffer;
-
 import com.mtdo.haileychemist.model.Product;
 
 @Path("/products")

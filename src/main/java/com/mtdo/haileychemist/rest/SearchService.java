@@ -1,6 +1,7 @@
 package com.mtdo.haileychemist.rest;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
@@ -24,45 +25,51 @@ public class SearchService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Product> searchProducts(@Context UriInfo uriInfo) {
+	public Map<Integer, String> searchProducts(@Context UriInfo uriInfo) {
 		//	public SearchResult searchProducts(@Context UriInfo uriInfo) {
-//		String result = "";
+		//		String result = "";
 		//		Get parameter
-		//		http://localhost:8080/hailey-chemist/rest/search?categoryId=2&keyWord=abc
 		MultivaluedMap<String, String> paras = uriInfo.getQueryParameters();
-//		result = result + "Paras: categoryId=" + paras.getFirst("categoryId") + 
-//				", keyWord=" + paras.getFirst("keyWord");
+		//		result = result + "Paras: categoryId=" + paras.getFirst("categoryId") + 
+		//				", keyWord=" + paras.getFirst("keyWord");
 		// ------------------------------------------------
 		//		use this to use service search products by keyword
+		//		http://docs.oracle.com/javaee/7/tutorial/jaxrs-client002.htm
+
+		//		http://localhost:8080/hailey-chemist/rest/search?categoryId=2&keyWord=abc
 		Client client = ClientBuilder.newClient();
-//		String pUrl = "http://localhost:8080/hailey-chemist/rest/products?keyWord=oil";
-//		List<Product> products = (List<Product>) client.target(pUrl).request(MediaType.APPLICATION_JSON).get(Product.class);
+		//		http://localhost:8080/hailey-chemist/rest/products?keyWord=oi
+
+		List<Product> products =
+				client.target("http://localhost:8080/hailey-chemist/rest/products")
+				.property("keyWord", "oil")
+				.request(MediaType.APPLICATION_JSON)
+				.get(new GenericType<List<Product>>() {
+				});
 		
-		
-//	    List<Customer> customers =
-//	            client.target("http://localhost:8080/customer/webapi/Customer")
-//	            .path("all")
-//	            .request(MediaType.APPLICATION_XML)
-//	            .get(new GenericType<List<Customer>>() {
-//	            });
-//	    return customers;
-//		client.target("http://localhost:8080/hailey-chemist/rest/products?keyWord=oil")
-	    List<Product> products =
-	            client.target("http://localhost:8080/hailey-chemist/rest/products")
-	            .property("keyWord", "oil")
-	            .request(MediaType.APPLICATION_JSON)
-	            .get(new GenericType<List<Product>>() {
-	            });
-	    
-	
+		//		also work
+		//		String strUrl = "http://localhost:8080/hailey-chemist/rest/products?keyWord=" + "oi" ;
+		//		List<Product> products =
+		//				client.target(strUrl)
+		//				.request(MediaType.APPLICATION_JSON)
+		//				.get(new GenericType<List<Product>>() {
+		//				});
+
+		Map<Integer, String> catPath =
+				client.target("http://localhost:8080/hailey-chemist/rest/categories/path")
+				.path("3")
+				.request(MediaType.APPLICATION_JSON)
+				.get(new GenericType<Map<Integer, String>>() {
+				});
 
 		
-		//		http://docs.oracle.com/javaee/7/tutorial/jaxrs-client002.htm
 		// ------------------------------------------------
 		//		then use category service to get path
 		//		then create result to return
 		// ------------------------------------------------
-		return products;
+
+
+		return catPath;
 	}
 
 

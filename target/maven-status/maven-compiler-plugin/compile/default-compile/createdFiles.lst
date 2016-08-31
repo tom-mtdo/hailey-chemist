@@ -18,6 +18,7 @@ com/mtdo/haileychemist/model/Member_.class
 com/mtdo/haileychemist/model/Customer_.class
 com/mtdo/haileychemist/rest/SearchService.class
 com/mtdo/haileychemist/rest/PurchaseService.class
+com/mtdo/haileychemist/rest/SearchService$2.class
 com/mtdo/haileychemist/rest/SearchResult.class
 com/mtdo/haileychemist/model/Media_.class
 com/mtdo/haileychemist/model/Product_.class

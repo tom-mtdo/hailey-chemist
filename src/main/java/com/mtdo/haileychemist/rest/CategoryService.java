@@ -1,10 +1,10 @@
 package com.mtdo.haileychemist.rest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -40,23 +40,58 @@ public class CategoryService extends BaseEntityService<Category>{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 //	public Map<Integer, String> getPath(@PathParam("categoryId") int categoryId){
-	public List<Category> getPath(@PathParam("categoryId") int categoryId){
-		Map<Integer, String> result = new HashMap<Integer, String>();
-		result.put(categoryId, "geting category path");
-//
-		EntityManager em = getEntityManager();
-		final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();		
-		final CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
-		Root<Category> node = criteriaQuery.from(Category.class);
-//		Root<Category> parent = criteriaQuery.from(Category.class);
+	public Map<Integer, String> getPath(@PathParam("categoryId") int categoryId){
 
-		Predicate[] predicates = new Predicate[]{};
-		criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
+//		List<Predicate> lstPredicates = new ArrayList<Predicate>();
 		
-		TypedQuery<Category> query = em.createQuery(criteriaQuery);
-		return query.getResultList();
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();		
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();		
+		Root<Category> node = cq.from(Category.class);
+		Predicate predicate = cb.equal( node.get("id"), categoryId );
+		cq.where( predicate );
+		cq.multiselect(
+				node.get("id"),
+				node.get("name") );
+				
+		TypedQuery<Tuple> tq = em.createQuery(cq);
+		Tuple qResult = tq.getSingleResult();
+		
+		int id = qResult.get(0, Integer.class);
+		String name = qResult.get(1, String.class);
+		
+		Map<Integer, String> result = new HashMap<Integer, String>();
+		result.put(id, name);
+		
+		return result;
+		
+		
+////		Map<Integer, String> result = new HashMap<Integer, String>();
+//		List<Predicate> lstPredicates = new ArrayList<Predicate>();
 //		
-//		return result;
+////		result.put(categoryId, "geting category path");
+//
+//		EntityManager em = getEntityManager();
+//		final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();		
+//		final CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
+//		Root<Category> node = criteriaQuery.from(Category.class);
+////		Root<Category> parent = criteriaQuery.from(Category.class);
+//		
+//		
+//		
+//		Predicate predicate = criteriaBuilder.equal( node.get("id"), categoryId );
+//		lstPredicates.add(predicate);
+//		Predicate[] arrPredicates = ((List<Predicate>)lstPredicates).toArray(new Predicate[lstPredicates.size()]);
+//		
+////		Predicate[] predicates = new Predicate[]{};
+//		criteriaQuery.select( criteriaBuilder.construct( Category.class, node.get("id"), node.get("name")) );
+////		criteriaQuery.select(criteriaQuery.getSelection()).where(arrPredicates);
+//		criteriaQuery.where(arrPredicates);
+//		
+//		TypedQuery<Category> query = em.createQuery(criteriaQuery);
+//		return query.getResultList();
+////		
+////		return result;
 	}
 	
 	

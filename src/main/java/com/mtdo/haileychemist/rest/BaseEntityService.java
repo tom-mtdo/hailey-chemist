@@ -102,8 +102,13 @@ public abstract class BaseEntityService<T> {
         final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         final CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
         Root<T> root = criteriaQuery.from(entityClass);
-        Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);
-        criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
+
+//        tom
+//        Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);
+        Predicate predicate = extractPredicate(queryParameters, criteriaBuilder, root);
+        
+//        criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
+        criteriaQuery.select(criteriaQuery.getSelection()).where(predicate);
         criteriaQuery.orderBy(criteriaBuilder.asc(root.get("id")));
         TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
         if (queryParameters.containsKey("first")) {
@@ -155,6 +160,10 @@ public abstract class BaseEntityService<T> {
         return new Predicate[]{};
     }
 
+    protected Predicate extractPredicate(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<T> root) {
+        return null;
+    }
+    
     /**
      * <p>
      *     A method for retrieving individual entity instances.

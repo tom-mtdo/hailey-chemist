@@ -12,11 +12,16 @@ define([
 		config,
 		searchTemplate) {
 
-//	input model has: pageNo, pageSize
+//	input model has: keyWord
+//	Render add products to its model
     var Search = Backbone.View.extend({
         render:function () {
         	var self = this;
-            utilities.applyTemplate($(self.el),searchTemplate,{searchModel:self.model});
+        	var strUrl = "rest/products?keyWord=" + self.model.keyWord;
+        	$.getJSON(strUrl, function( products ) {
+        		self.model.products = products;
+                utilities.applyTemplate($(self.el),searchTemplate,{searchModel:self.model});
+        	})
         }
     });
     

@@ -1,4 +1,8 @@
 <div class="well">
 	<h3>Hi from search</h3>
 	<span>Key word: <%=searchModel.keyWord%></span>
+	
+<% 	if (searchModel.products && (searchModel.products.length>0) ) {	%>
+		 <br><span>CategoryId: <%=searchModel.products[0].category.id%>, product name: <%=searchModel.products[0].name%> </span>
+<%	} %>
 </div>

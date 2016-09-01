@@ -33,18 +33,24 @@ public class ProductSearchService {
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
 		//		client.property doesnt work
-		String strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+		String strUrl = "";
+		if (categoryId > 0) {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+		} else {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products";
+		}
 		List<Product> products =
 				client.target(strUrl)
 				.request(MediaType.APPLICATION_JSON)
 				.get(new GenericType<List<Product>>() {
 				});
-		System.out.println( "Number found: " + products.size() );
-		
+//		System.out.println( "Number found: " + products.size() );
+
 		return products;
 	}
 
 	//	get products belong to all categories
+	//	NOT IN USE
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Product> searchProducts(@Context UriInfo uriInfo) {

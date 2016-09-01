@@ -34,10 +34,19 @@ public class ProductService extends BaseEntityService<Product>{
 	@Override
 	protected Predicate[] extractPredicates(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<Product> product) {
 		List<Predicate> predicates =  new ArrayList<Predicate>();
+		
 		//		http://localhost:8080/hailey-chemist/rest/products?keyWord=oi
 		if (queryParameters.containsKey("keyWord")) {
 			System.out.println( "Key word: " + queryParameters.getFirst("keyWord") );
 			Predicate predicate = criteriaBuilder.like( product.<String>get("name"), "%" + queryParameters.getFirst("keyWord") + "%" );
+			predicates.add(predicate);        	
+		}
+
+		//		get product belong to a category
+		//		http://localhost:8080/hailey-chemist/rest/products?categoryId=4
+		if ( queryParameters.containsKey("categoryId") ) {
+			System.out.println( "CategoryId: " + queryParameters.getFirst("categoryId") );
+			Predicate predicate = criteriaBuilder.equal( product.get("category").get("id"), queryParameters.getFirst("categoryId") );
 			predicates.add(predicate);        	
 		}
 

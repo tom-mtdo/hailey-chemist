@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -23,9 +24,30 @@ import com.mtdo.haileychemist.model.Product;
 @Stateless
 public class ProductSearchService {
 
+	//	get products belong to a category
+	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
+	@Path("/{categoryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<Integer, String> searchProducts(@Context UriInfo uriInfo) {
+	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId ){
+		//		consumes products rest service
+		Client client = ClientBuilder.newClient();
+		//		client.property doesnt work
+		String strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+		List<Product> products =
+				client.target(strUrl)
+				.request(MediaType.APPLICATION_JSON)
+				.get(new GenericType<List<Product>>() {
+				});
+		System.out.println( "Number found: " + products.size() );
+		
+		return products;
+	}
+
+	//	get products belong to all categories
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Product> searchProducts(@Context UriInfo uriInfo) {
 		//	public SearchResult searchProducts(@Context UriInfo uriInfo) {
 		//		String result = "";
 		//		Get parameter
@@ -40,20 +62,12 @@ public class ProductSearchService {
 		Client client = ClientBuilder.newClient();
 		//		http://localhost:8080/hailey-chemist/rest/products?keyWord=oi
 
+		String strUrl = "http://localhost:8080/hailey-chemist/rest/products?keyWord=" + "oi" ;
 		List<Product> products =
-				client.target("http://localhost:8080/hailey-chemist/rest/products")
-				.property("keyWord", "oil")
+				client.target(strUrl)
 				.request(MediaType.APPLICATION_JSON)
 				.get(new GenericType<List<Product>>() {
 				});
-		
-		//		also work
-		//		String strUrl = "http://localhost:8080/hailey-chemist/rest/products?keyWord=" + "oi" ;
-		//		List<Product> products =
-		//				client.target(strUrl)
-		//				.request(MediaType.APPLICATION_JSON)
-		//				.get(new GenericType<List<Product>>() {
-		//				});
 
 		Map<Integer, String> catPath =
 				client.target("http://localhost:8080/hailey-chemist/rest/categories/path")
@@ -62,14 +76,14 @@ public class ProductSearchService {
 				.get(new GenericType<Map<Integer, String>>() {
 				});
 
-		
+
 		// ------------------------------------------------
 		//		then use category service to get path
 		//		then create result to return
 		// ------------------------------------------------
 
 
-		return catPath;
+		return products;
 	}
 
 

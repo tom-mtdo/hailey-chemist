@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mtdo.haileychemist.model.Product;
 
-public class SearchResult {
+public class ProductSearchResult {
 	private List<Product> products;
 	private List<ProductCountByCategory> counts;
 	

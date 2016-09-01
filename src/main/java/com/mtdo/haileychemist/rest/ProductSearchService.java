@@ -19,9 +19,9 @@ import com.mtdo.haileychemist.model.Product;
 
 // parameters: categoryId, keyWord
 // if category id < 0 -> mean all category
-@Path("/search")
+@Path("/product-search")
 @Stateless
-public class SearchService {
+public class ProductSearchService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

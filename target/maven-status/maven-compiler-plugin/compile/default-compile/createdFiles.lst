@@ -1,4 +1,3 @@
-com/mtdo/haileychemist/rest/SearchService$1.class
 com/mtdo/haileychemist/rest/BaseEntityService.class
 com/mtdo/haileychemist/model/OrderDetail.class
 com/mtdo/haileychemist/model/OrderDetail_.class
@@ -15,13 +14,12 @@ com/mtdo/haileychemist/model/Sale.class
 com/mtdo/haileychemist/util/Resources.class
 com/mtdo/haileychemist/rest/CategoryService.class
 com/mtdo/haileychemist/model/Member_.class
+com/mtdo/haileychemist/rest/ProductSearchService.class
 com/mtdo/haileychemist/model/Customer_.class
-com/mtdo/haileychemist/rest/SearchService.class
 com/mtdo/haileychemist/rest/PurchaseService.class
-com/mtdo/haileychemist/rest/SearchService$2.class
-com/mtdo/haileychemist/rest/SearchResult.class
 com/mtdo/haileychemist/model/Media_.class
 com/mtdo/haileychemist/model/Product_.class
+com/mtdo/haileychemist/rest/ProductSearchService$1.class
 com/mtdo/haileychemist/model/ShipAddress_.class
 com/mtdo/haileychemist/data/MemberListProducer.class
 com/mtdo/haileychemist/model/Sale_.class
@@ -32,8 +30,10 @@ com/mtdo/haileychemist/model/Media.class
 com/mtdo/haileychemist/model/BillAddress_.class
 com/mtdo/haileychemist/model/Member.class
 com/mtdo/haileychemist/model/Product.class
+com/mtdo/haileychemist/rest/ProductSearchResult.class
 com/mtdo/haileychemist/service/MemberRegistration.class
 com/mtdo/haileychemist/rest/PurchaseRequest.class
 com/mtdo/haileychemist/controller/MemberController.class
 com/mtdo/haileychemist/model/Customer.class
 com/mtdo/haileychemist/rest/OrderDetailRequest.class
+com/mtdo/haileychemist/rest/ProductSearchService$2.class

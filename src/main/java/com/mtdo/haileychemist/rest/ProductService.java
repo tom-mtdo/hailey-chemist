@@ -60,12 +60,16 @@ public class ProductService extends BaseEntityService<Product>{
 	protected Order[] createOrderBy(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<Product> product) {
 		Order[] orders = new Order[]{};
 		Order order = null;
+		String strColumn = "";
+		String strOrderType = "";
+		
 		if ( queryParameters.containsKey("orderBy") ) {
-			String strColumn = queryParameters.getFirst("orderBy");
-			String strOrderType = queryParameters.getFirst("orderType");
+			System.out.println("found ordebBy para");
+			strColumn = queryParameters.getFirst("orderBy");
+			if ( queryParameters.containsKey("orderType") ) {strOrderType = queryParameters.getFirst("orderType");}
 //			if order by categoryid - this is odd, need to redesign
 			if ( strColumn.trim().equalsIgnoreCase("categoryId") ){
-				if ( strOrderType.trim().equalsIgnoreCase("Desc") ) {
+				if ( (strOrderType.trim().length()>0) && (strOrderType.trim().equalsIgnoreCase("Desc")) ) {
 					order = criteriaBuilder.desc(product.get("category").get("id"));
 				} else {
 					order = criteriaBuilder.asc(product.get("category").get("id"));

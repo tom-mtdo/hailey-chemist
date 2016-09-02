@@ -64,7 +64,6 @@ public class ProductService extends BaseEntityService<Product>{
 		String strOrderType = "";
 		
 		if ( queryParameters.containsKey("orderBy") ) {
-			System.out.println("found ordebBy para");
 			strColumn = queryParameters.getFirst("orderBy");
 			if ( queryParameters.containsKey("orderType") ) {strOrderType = queryParameters.getFirst("orderType");}
 //			if order by categoryid - this is odd, need to redesign

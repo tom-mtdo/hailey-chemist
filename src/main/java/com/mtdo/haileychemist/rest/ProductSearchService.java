@@ -1,5 +1,6 @@
 package com.mtdo.haileychemist.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,22 +38,42 @@ public class ProductSearchService {
 		if (categoryId > 0) {
 			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
 		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products";
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
 		}
 		List<Product> products =
 				client.target(strUrl)
 				.request(MediaType.APPLICATION_JSON)
 				.get(new GenericType<List<Product>>() {
 				});
-//		System.out.println( "Number found: " + products.size() );
+
+//		requirement: input product list must be sorted by categoryId
+		//		System.out.println( "Number found: " + products.size() );
 //		init result
 		ProductSearchResult result = new ProductSearchResult();
 		result.setProducts(products);
+		List<ProductCountByCategory> lstPCount = new ArrayList<ProductCountByCategory>();
 		ProductCountByCategory pCount = new ProductCountByCategory();
+//		set first categoryId to be current
+//		int currentCategoryId = products.get(0).getCategory().getId();
+//		start from category of the first product
+//		pCount.setCategoryId(products.get(0).getCategory().getId());
+		int intPCount = 0;
 		
+//		WORKING HERE
 		// count product for each category
 		for ( Product product: products ) {
+//			store category id
+//			if same category then increase count
+			if ( pCount.getCategoryId() == product.getCategory().getId() ){
+				intPCount = intPCount + 1;
+			} else { // else store count for current category then reset to count for new category	
+				pCount.setProductCount(intPCount);
+				pCount.setCategoryId(products.get(0).getCategory().getId());
+				String cPath = "";
+			}
+//			get category path then store
 			
+//			count number of products
 		}
 
 		return products;

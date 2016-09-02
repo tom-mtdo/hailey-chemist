@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.Path;
@@ -53,5 +54,29 @@ public class ProductService extends BaseEntityService<Product>{
 		Predicate[] result = ((List<Predicate>)predicates).toArray(new Predicate[predicates.size()]);
 		return result;
 	}
+	
+//	orders =  new Order[]{criteriaBuilder.asc(product.get("category").get("id")), criteriaBuilder.asc(product.get("id"))};
+	@Override
+	protected Order[] createOrderBy(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<Product> product) {
+		Order[] orders = new Order[]{};
+		Order order = null;
+		if ( queryParameters.containsKey("orderBy") ) {
+			String strColumn = queryParameters.getFirst("orderBy");
+			String strOrderType = queryParameters.getFirst("orderType");
+//			if order by categoryid - this is odd, need to redesign
+			if ( strColumn.trim().equalsIgnoreCase("categoryId") ){
+				if ( strOrderType.trim().equalsIgnoreCase("Desc") ) {
+					order = criteriaBuilder.desc(product.get("category").get("id"));
+				} else {
+					order = criteriaBuilder.asc(product.get("category").get("id"));
+				}
+				orders = new Order[]{order, criteriaBuilder.asc(product.get("id"))};
+			}
+		}
+		
+		return orders;
+	}
+
+
 
 }

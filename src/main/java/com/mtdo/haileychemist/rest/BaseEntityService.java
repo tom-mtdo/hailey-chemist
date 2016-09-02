@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.GET;
@@ -105,7 +106,17 @@ public abstract class BaseEntityService<T> {
 
 		Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);        
 		criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
-		criteriaQuery.orderBy(criteriaBuilder.asc(root.get("id")));
+				
+//		Order[] orders =  {criteriaBuilder.asc(root.get("category").get("id")), criteriaBuilder.asc(root.get("id"))};
+//		criteriaQuery.orderBy(orders);
+		
+		Order[] orders = createOrderBy(queryParameters, criteriaBuilder, root);
+		if ( (orders==null) || (orders.length<1) ) {
+			criteriaQuery.orderBy(criteriaBuilder.asc(root.get("id")));
+		} else {
+			criteriaQuery.orderBy(orders);
+		}
+			
 		TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
 		if (queryParameters.containsKey("first")) {
 			// original
@@ -155,6 +166,10 @@ public abstract class BaseEntityService<T> {
 	 */
 	protected Predicate[] extractPredicates(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<T> root) {
 		return new Predicate[]{};
+	}
+
+	protected Order[] createOrderBy(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<T> root) {
+		return new Order[]{};
 	}
 
 	/**

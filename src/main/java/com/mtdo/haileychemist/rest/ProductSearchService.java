@@ -45,6 +45,15 @@ public class ProductSearchService {
 				.get(new GenericType<List<Product>>() {
 				});
 //		System.out.println( "Number found: " + products.size() );
+//		init result
+		ProductSearchResult result = new ProductSearchResult();
+		result.setProducts(products);
+		ProductCountByCategory pCount = new ProductCountByCategory();
+		
+		// count product for each category
+		for ( Product product: products ) {
+			
+		}
 
 		return products;
 	}

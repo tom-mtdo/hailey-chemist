@@ -6,7 +6,7 @@ import com.mtdo.haileychemist.model.Product;
 
 public class ProductSearchResult {
 	private List<Product> products;
-	private List<ProductCountByCategory> counts;
+	private List<ProductCountByCategory> pCountByCategory;
 	
 	public List<Product> getProducts() {
 		return products;
@@ -15,10 +15,10 @@ public class ProductSearchResult {
 		this.products = products;
 	}
 	public List<ProductCountByCategory> getCounts() {
-		return counts;
+		return pCountByCategory;
 	}
 	public void setCounts(List<ProductCountByCategory> counts) {
-		this.counts = counts;
+		this.pCountByCategory = counts;
 	}
 	
 }

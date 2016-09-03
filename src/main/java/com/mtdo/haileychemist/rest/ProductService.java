@@ -32,10 +32,11 @@ public class ProductService extends BaseEntityService<Product>{
 	//		return predicate;
 	//    }
 
+	//	where clause
 	@Override
 	protected Predicate[] extractPredicates(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<Product> product) {
 		List<Predicate> predicates =  new ArrayList<Predicate>();
-		
+
 		//		http://localhost:8080/hailey-chemist/rest/products?keyWord=oi
 		if (queryParameters.containsKey("keyWord")) {
 			System.out.println( "Key word: " + queryParameters.getFirst("keyWord") );
@@ -54,19 +55,20 @@ public class ProductService extends BaseEntityService<Product>{
 		Predicate[] result = ((List<Predicate>)predicates).toArray(new Predicate[predicates.size()]);
 		return result;
 	}
-	
-//	orders =  new Order[]{criteriaBuilder.asc(product.get("category").get("id")), criteriaBuilder.asc(product.get("id"))};
+
+	//	order clause
+	//	orders =  new Order[]{criteriaBuilder.asc(product.get("category").get("id")), criteriaBuilder.asc(product.get("id"))};
 	@Override
 	protected Order[] createOrderBy(MultivaluedMap<String, String> queryParameters, CriteriaBuilder criteriaBuilder, Root<Product> product) {
 		Order[] orders = new Order[]{};
 		Order order = null;
 		String strColumn = "";
 		String strOrderType = "";
-		
+
 		if ( queryParameters.containsKey("orderBy") ) {
 			strColumn = queryParameters.getFirst("orderBy");
 			if ( queryParameters.containsKey("orderType") ) {strOrderType = queryParameters.getFirst("orderType");}
-//			if order by categoryid - this is odd, need to redesign
+			//			if order by categoryid - this is odd, need to redesign
 			if ( strColumn.trim().equalsIgnoreCase("categoryId") ){
 				if ( (strOrderType.trim().length()>0) && (strOrderType.trim().equalsIgnoreCase("Desc")) ) {
 					order = criteriaBuilder.desc(product.get("category").get("id"));
@@ -76,7 +78,7 @@ public class ProductService extends BaseEntityService<Product>{
 				orders = new Order[]{order, criteriaBuilder.asc(product.get("id"))};
 			}
 		}
-		
+
 		return orders;
 	}
 

@@ -26,11 +26,13 @@ import com.mtdo.haileychemist.model.Product;
 public class ProductSearchService {
 
 	//	get products belong to a category
+	//		Input: product list which must be sorted by categoryId
+	//	can be extended to deal with query parameters.
 	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
 	@Path("/{categoryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId ){
+	public ProductSearchResult productByCategory(  @PathParam("categoryId") int categoryId ){
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
 		//		client.property doesnt work
@@ -46,37 +48,63 @@ public class ProductSearchService {
 				.get(new GenericType<List<Product>>() {
 				});
 
-//		requirement: input product list must be sorted by categoryId
-		//		System.out.println( "Number found: " + products.size() );
-//		init result
+		//		Count product for each category
 		ProductSearchResult result = new ProductSearchResult();
-		result.setProducts(products);
-		List<ProductCountByCategory> lstPCount = new ArrayList<ProductCountByCategory>();
-		ProductCountByCategory pCount = new ProductCountByCategory();
-//		set first categoryId to be current
-//		int currentCategoryId = products.get(0).getCategory().getId();
-//		start from category of the first product
-//		pCount.setCategoryId(products.get(0).getCategory().getId());
-		int intPCount = 0;
-		
-//		WORKING HERE
-		// count product for each category
-		for ( Product product: products ) {
-//			store category id
-//			if same category then increase count
-			if ( pCount.getCategoryId() == product.getCategory().getId() ){
-				intPCount = intPCount + 1;
-			} else { // else store count for current category then reset to count for new category	
-				pCount.setProductCount(intPCount);
-				pCount.setCategoryId(products.get(0).getCategory().getId());
-				String cPath = "";
+		if ( products.size() > 0 ) {
+			//	init result						
+			result.setProducts(products);
+
+			ProductCountByCategory pCount = new ProductCountByCategory();
+			//		set first categoryId to be current
+			//		start from category of the first product
+			//		pCount.setCategoryId(products.get(0).getCategory().getId());
+			int currentCategoryId = products.get(0).getCategory().getId(); 
+			int intPCount = 0;
+
+			//		WORKING HERE
+			for ( Product product: products ) {
+				//			store category id
+				//			if same category then increase count
+				if ( currentCategoryId == product.getCategory().getId() ){
+					intPCount = intPCount + 1;
+				} else { // else store count for current category then reset to count for new category	
+					pCount.setProductCount(intPCount);
+					pCount.setCategoryId(currentCategoryId);
+					pCount.setPath( getCategoryPath( currentCategoryId ) );
+
+					//	store count then reset current category and count
+					result.getCounts().add(pCount);
+					pCount = new ProductCountByCategory();
+					currentCategoryId = product.getCategory().getId();
+					intPCount = 1;
+				}
 			}
-//			get category path then store
-			
-//			count number of products
 		}
 
-		return products;
+		return result;
+	}
+
+	//	get path from service:
+	//	http://localhost:8080/hailey-chemist/rest/categories/path/3
+	public String getCategoryPath( int categoryId ){
+		String result = "";
+
+		Client client = ClientBuilder.newClient();
+		//		client.property doesnt work
+		String strUrl = "";
+		if (categoryId > 0) {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/categories/path/" + categoryId;
+			Map<Integer, String> cPath =
+					client.target(strUrl)
+					.request(MediaType.APPLICATION_JSON)
+					.get(new GenericType<Map<Integer, String>>() {
+					});
+			if ( cPath.containsKey(categoryId) ){
+				result = cPath.get(categoryId);
+			}
+		} 
+
+		return result;
 	}
 
 	//	get products belong to all categories

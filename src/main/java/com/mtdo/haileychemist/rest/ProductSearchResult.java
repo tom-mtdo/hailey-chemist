@@ -1,12 +1,13 @@
 package com.mtdo.haileychemist.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mtdo.haileychemist.model.Product;
 
 public class ProductSearchResult {
-	private List<Product> products;
-	private List<ProductCountByCategory> pCountByCategory;
+	private List<Product> products = new ArrayList<Product>();
+	private List<ProductCountByCategory> pCountByCategory = new ArrayList<ProductCountByCategory>();
 	
 	public List<Product> getProducts() {
 		return products;

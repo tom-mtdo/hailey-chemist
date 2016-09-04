@@ -1,6 +1,6 @@
 /**
- * brow product - grid view
- * input model: page, hasNext, count, products
+ * browse product - grid view
+ * 
  */
 define([
     'utilities',

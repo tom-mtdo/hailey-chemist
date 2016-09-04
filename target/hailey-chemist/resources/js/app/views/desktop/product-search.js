@@ -7,12 +7,15 @@ define([
     'jquery',
     'bootstrap',
     'configuration',
+    'app/views/desktop/product-page',
     'text!../../../../templates/desktop/product-search.html',
-    'text!../../../../templates/desktop/product-count-by-category.html'
+    'text!../../../../templates/desktop/product-count-by-category.html',
+    
 ], function (utilities,
 		jquery,
 		bootstrap,
 		config,
+		ProductPageView,
 		productSearchTemplate,
 		productCountByCategoryTemplate) {
 	
@@ -26,6 +29,10 @@ define([
 				utilities.applyTemplate( $(self.el), productSearchTemplate, {} );
 				self.productCountByCategoryView = new ProductCountByCategoryView({model:productSearchResult.counts, el:$("#divProductCountByCategory") });
 				self.productCountByCategoryView.render();
+				
+	        	self.productPageView = new ProductPageView( {model:productSearchResult.products, el:$("#divSearchProductPagination")} );
+	        	self.productPageView.render();
+
 			});
 			
 			return self;

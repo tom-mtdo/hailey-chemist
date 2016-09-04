@@ -4,7 +4,6 @@ com/mtdo/haileychemist/model/OrderDetail_.class
 com/mtdo/haileychemist/model/ShipAddress.class
 com/mtdo/haileychemist/rest/ProductService.class
 com/mtdo/haileychemist/rest/CustomerService.class
-com/mtdo/haileychemist/rest/ProductSearchService$4.class
 com/mtdo/haileychemist/rest/MemberResourceRESTService.class
 com/mtdo/haileychemist/rest/ProductCountByCategory.class
 com/mtdo/haileychemist/data/MemberRepository.class
@@ -20,7 +19,6 @@ com/mtdo/haileychemist/model/Customer_.class
 com/mtdo/haileychemist/rest/PurchaseService.class
 com/mtdo/haileychemist/model/Media_.class
 com/mtdo/haileychemist/model/Product_.class
-com/mtdo/haileychemist/rest/ProductSearchService$3.class
 com/mtdo/haileychemist/rest/ProductSearchService$1.class
 com/mtdo/haileychemist/model/ShipAddress_.class
 com/mtdo/haileychemist/data/MemberListProducer.class

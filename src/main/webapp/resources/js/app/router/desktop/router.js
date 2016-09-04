@@ -40,9 +40,9 @@ define("router", [
         },
         routes:{
             "":"home",
+            "products":"products",
             "products/:id":"productDetail",
             "products/:pageNo/:pageSize":"productPagination",
-            "products":"products",
             "cart":"cart",
             "search/:keyWord":"search",
         },

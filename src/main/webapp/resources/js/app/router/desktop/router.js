@@ -82,6 +82,7 @@ define("router", [
         	var paginationModel={};
         	paginationModel.pageNo = pageNo;
         	paginationModel.pageSize = pageSize;
+        	paginationModel.dataSource=config.baseUrl + "rest/products/count";
         	
         	utilities.viewManager.showView( new ProductPaginationView( {model:paginationModel, el:$("#content")} ));     	
         },
@@ -99,12 +100,12 @@ define("router", [
         },
         
         productSearch:function (  ){
-        	var productSearchModel = {};
-        	productSearchModel.categoryId = -1;
-        	productSearchModel.pageNo = 0;
-        	productSearchModel.pageSize = 2;
+        	var paginationModel = {};
+        	paginationModel.pageNo = 0;
+        	paginationModel.pageSize = 2;
+        	paginationModel.dataSource=config.baseUrl + "rest/products/count";
         	
-        	var productSearchView = new ProductSearchView({ model:productSearchModel, el:$("#content") });
+        	var productSearchView = new ProductSearchView({ model:paginationModel, el:$("#content") });
         	utilities.viewManager.showView( productSearchView );
         },
         

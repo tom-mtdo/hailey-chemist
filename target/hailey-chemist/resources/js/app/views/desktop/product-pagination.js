@@ -41,7 +41,7 @@ define([
         	self.model.hasPreviousPage = utilities.pagination.
         		isHasPreviousPage(self.model.pageNo);        	
 //        	count total products
-        	var strUrl = config.baseUrl + "rest/products/count";
+        	var strUrl = self.model.dataSource; //config.baseUrl + "rest/products/count";
         	$.getJSON(strUrl, function(result){
         		$.each( result, function( key, val ) {
         			if(key == "count"){

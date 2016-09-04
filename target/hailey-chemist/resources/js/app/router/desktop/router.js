@@ -14,6 +14,7 @@ define("router", [
     'app/views/desktop/product-pagination',
     'app/views/desktop/cart',
     'app/views/desktop/search',
+    'app/views/desktop/product-search',
     'text!../templates/desktop/main.html'
 ],function ($,
 			jquerycookie,
@@ -27,6 +28,7 @@ define("router", [
             ProductPaginationView,
             CartView,
             SearchView,
+            ProductSearchView,
             MainTemplate) {
 
     $(document).ready(new function() {
@@ -43,6 +45,7 @@ define("router", [
             "products":"products",
             "products/:id":"productDetail",
             "products/:pageNo/:pageSize":"productPagination",
+            "product-search":"productSearch",
             "cart":"cart",
             "search/:keyWord":"search",
         },
@@ -86,12 +89,19 @@ define("router", [
         	this.productPagination(0,3);
         },
         
+//        will be not in used
         search:function (keyWord) {
         	var searchModel = {};
         	searchModel.keyWord = keyWord;
         	searchView = new SearchView( {model:searchModel, el:$("#content")} )
         	utilities.viewManager.showView( searchView );
+        },
+        
+        productSearch:function (  ){
+        	var productSearchView = new ProductSearchView({ el:$("#content") });
+        	utilities.viewManager.showView( productSearchView );
         }
+        
     });
     
 	// Create a router instance

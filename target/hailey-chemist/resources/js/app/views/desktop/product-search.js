@@ -1,5 +1,5 @@
 /**
- * 
+ * input: productSearchModel{categoryId, pageNo, pageSize}
  */
 
 define([
@@ -19,9 +19,15 @@ define([
 	var ProductSearchView = Backbone.View.extend({
 		render:function(){
 			var self = this;
-			utilities.applyTemplate( $(self.el), productSearchTemplate, {} );
-			self.productCountByCategoryView = new ProductCountByCategoryView({model:{}, el:$("#divProductCountByCategory") });
-			self.productCountByCategoryView.render();
+//			get data
+			var strUrl="http://localhost:8080/hailey-chemist/rest/product-search";
+			$.getJSON(strUrl, function( productSearchResult ){
+// working on this +++++++++++++++++++				
+				utilities.applyTemplate( $(self.el), productSearchTemplate, {} );
+				self.productCountByCategoryView = new ProductCountByCategoryView({model:productSearchResult.counts, el:$("#divProductCountByCategory") });
+				self.productCountByCategoryView.render();
+			});
+			
 			return self;
 		}
 	});
@@ -29,7 +35,7 @@ define([
 	var ProductCountByCategoryView = Backbone.View.extend({
 		render:function(){
 			var self = this;
-			utilities.applyTemplate( $(self.el), productCountByCategoryTemplate, {} );
+			utilities.applyTemplate( $(self.el), productCountByCategoryTemplate, {productCountByCategories: self.model} );
 			return self;
 		}
 	});

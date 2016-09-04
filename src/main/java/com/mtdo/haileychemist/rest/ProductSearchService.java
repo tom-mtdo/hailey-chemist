@@ -42,7 +42,39 @@ public class ProductSearchService {
 		return result;
 	}
 
+	//	get products belong to a category
+	@Path("/{categoryId}/count")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public long productByCategoryCount(  @PathParam("categoryId") int categoryId ){
+		long result = searchProductByCategoryCount( categoryId );
+		return result;
+	}
 
+	public long searchProductByCategoryCount( int categoryId ){
+		long result = 0;
+		//		consumes products rest service
+		Client client = ClientBuilder.newClient();
+		//		client.property doesnt work
+		String strUrl = "";
+		if (categoryId > 0) {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId;
+		} else {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count";
+		}
+		Map<String, Long> mapCount =
+				client.target(strUrl)
+				.request(MediaType.APPLICATION_JSON)
+				.get(new GenericType<Map<String, Long>>() {
+				});
+		
+		if ( mapCount.containsKey("count") ) {
+			result = mapCount.get("count");
+		}
+		
+		return result;
+	}
+	
 	//	input: categoryId
 	//	if category < 0 -> all categories
 	//	product list must be sorted by categoryId

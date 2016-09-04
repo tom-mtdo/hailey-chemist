@@ -51,32 +51,38 @@ public class ProductSearchService {
 		//		Count product for each category
 		ProductSearchResult result = new ProductSearchResult();
 		if ( products.size() > 0 ) {
-			//	init result						
-			result.setProducts(products);
-
+			//	init result					
 			ProductCountByCategory pCount = new ProductCountByCategory();
 			//		set first categoryId to be current
 			//		start from category of the first product
 			//		pCount.setCategoryId(products.get(0).getCategory().getId());
-			int currentCategoryId = products.get(0).getCategory().getId(); 
-			int intPCount = 0;
-
+			result.setProducts(products);
+			int currentCategoryId = products.get(0).getCategory().getId();
+			pCount.setCategoryId(currentCategoryId);
+			pCount.setPath( getCategoryPath( currentCategoryId ) );
+//			int intPCount = 0;
+			pCount.setProductCount( 0 );
+			result.getCounts().add(pCount);
+//			pCount and pCount in result point to the same object
+			
 			//		WORKING HERE
 			for ( Product product: products ) {
 				//			store category id
 				//			if same category then increase count
 				if ( currentCategoryId == product.getCategory().getId() ){
-					intPCount = intPCount + 1;
-				} else { // else store count for current category then reset to count for new category	
-					pCount.setProductCount(intPCount);
-					pCount.setCategoryId(currentCategoryId);
-					pCount.setPath( getCategoryPath( currentCategoryId ) );
-
-					//	store count then reset current category and count
-					result.getCounts().add(pCount);
+					pCount.setProductCount( pCount.getProductCount() + 1 );
+//					intPCount = intPCount + 1;
+				} else { // else store count for current category then reset to count for new category
+//					init count for new category
 					pCount = new ProductCountByCategory();
+//					pCount.setProductCount(intPCount);
+					pCount.setCategoryId( product.getCategory().getId() );
+					pCount.setPath( getCategoryPath( product.getCategory().getId() ) );
+					pCount.setProductCount( 1 );
+
+					//	store count and reset current category
+					result.getCounts().add(pCount);
 					currentCategoryId = product.getCategory().getId();
-					intPCount = 1;
 				}
 			}
 		}

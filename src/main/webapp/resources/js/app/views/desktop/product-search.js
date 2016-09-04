@@ -25,10 +25,11 @@ define([
 //			get data
 			var strUrl="http://localhost:8080/hailey-chemist/rest/product-search";
 			$.getJSON(strUrl, function( productSearchResult ){
-// working on this +++++++++++++++++++				
+				
 				utilities.applyTemplate( $(self.el), productSearchTemplate, {} );
 				self.productCountByCategoryView = new ProductCountByCategoryView({model:productSearchResult.counts, el:$("#divProductCountByCategory") });
 				self.productCountByCategoryView.render();
+// working on this +++++++++++++++++++
 				
 	        	self.productPageView = new ProductPageView( {model:productSearchResult.products, el:$("#divSearchProductPagination")} );
 	        	self.productPageView.render();

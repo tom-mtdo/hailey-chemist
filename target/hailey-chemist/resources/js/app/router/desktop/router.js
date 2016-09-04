@@ -82,7 +82,8 @@ define("router", [
         	var paginationModel={};
         	paginationModel.pageNo = pageNo;
         	paginationModel.pageSize = pageSize;
-        	paginationModel.dataSource=config.baseUrl + "rest/products/count";
+        	paginationModel.dataSource=config.baseUrl + "rest/products";
+        	paginationModel.dataSourceCount=config.baseUrl + "rest/products/count";
         	
         	utilities.viewManager.showView( new ProductPaginationView( {model:paginationModel, el:$("#content")} ));     	
         },

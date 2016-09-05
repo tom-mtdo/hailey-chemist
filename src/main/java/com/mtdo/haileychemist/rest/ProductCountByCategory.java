@@ -4,6 +4,7 @@ public class ProductCountByCategory {
 
 	
 	private int categoryId;
+	private String categoryName;
 	//		path from top category
 	private String path;
 	//	number of product in this category
@@ -22,6 +23,13 @@ public class ProductCountByCategory {
 		this.productCount = productCount;
 	}
 	
+	public ProductCountByCategory(int categoryId, String categoryName, String path, int productCount) {
+		super();
+		this.categoryId = categoryId;
+		this.categoryName = categoryName;
+		this.path = path;
+		this.productCount = productCount;
+	}
 	public int getCategoryId() {
 		return categoryId;
 	}
@@ -40,4 +48,11 @@ public class ProductCountByCategory {
 	public void setProductCount(int productCount) {
 		this.productCount = productCount;
 	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	
 }

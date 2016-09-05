@@ -11,12 +11,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
 
+import com.mtdo.haileychemist.model.Category;
 import com.mtdo.haileychemist.model.Product;
 
 // parameters: categoryId, keyWord
@@ -26,6 +24,7 @@ import com.mtdo.haileychemist.model.Product;
 public class ProductSearchService {
 
 	//	get products belong to a category
+//	return product list
 	@Path("/{categoryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -34,7 +33,19 @@ public class ProductSearchService {
 		return result;
 	}
 
+//	return product count by category: 
+//	a list of categoryId, categoryName, categoryPath, productCount 
+	@Path("/{categoryId}/parthCount")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId ){
+		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
+				result = searchCategoryPathCount( categoryId );
+		return result;
+	}
+
 	//	get products belong to all categories
+//	 not in use
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ProductSearchResult searchProducts() {
@@ -51,6 +62,68 @@ public class ProductSearchService {
 		return result;
 	}
 
+// SHOULD USE SQL GROUP BY AND COUNT TO COUNT
+	public List<ProductCountByCategory> searchCategoryPathCount( int categoryId ){
+		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
+		//		consumes products rest service
+		Client client = ClientBuilder.newClient();
+		//		client.property doesnt work
+		String strUrl = "";
+		if (categoryId > 0) {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+		} else {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
+		}
+		List<Product> products =
+				client.target(strUrl)
+				.request(MediaType.APPLICATION_JSON)
+				.get(new GenericType<List<Product>>() {
+				});
+
+		//		Count product for each category
+//		ProductSearchResult result = new ProductSearchResult();
+		if ( products.size() > 0 ) {
+			//	init result					
+			ProductCountByCategory pCount = new ProductCountByCategory();
+			//		set first categoryId to be current
+			//		start from category of the first product
+			//		pCount.setCategoryId(products.get(0).getCategory().getId());
+//			result.setProducts(products);
+			int currentCategoryId = products.get(0).getCategory().getId();
+			pCount.setCategoryId(currentCategoryId);
+			pCount.setCategoryName( getCategoryName(currentCategoryId) );
+			pCount.setPath( getCategoryPath( currentCategoryId ) );
+			pCount.setProductCount( 0 );
+			result.add(pCount);
+			//			pCount and pCount in result point to the same object
+
+//			++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
+//			++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			for ( Product product: products ) {
+				//			store category id
+				//			if same category then increase count
+				if ( currentCategoryId == product.getCategory().getId() ){
+					pCount.setProductCount( pCount.getProductCount() + 1 );
+					//					intPCount = intPCount + 1;
+				} else { // else store count for current category then reset to count for new category
+					//					init count for new category
+					pCount = new ProductCountByCategory();
+					//					pCount.setProductCount(intPCount);
+					currentCategoryId = product.getCategory().getId();
+					pCount.setCategoryId( currentCategoryId );
+					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
+					pCount.setPath( getCategoryPath( currentCategoryId ) );
+					pCount.setProductCount( 1 );
+					//	store count and reset current category
+					result.add(pCount);
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	public long searchProductByCategoryCount( int categoryId ){
 		long result = 0;
 		//		consumes products rest service
@@ -113,7 +186,9 @@ public class ProductSearchService {
 			result.getCounts().add(pCount);
 			//			pCount and pCount in result point to the same object
 
-			//		WORKING HERE
+//			++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
+//			++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			for ( Product product: products ) {
 				//			store category id
 				//			if same category then increase count
@@ -160,5 +235,27 @@ public class ProductSearchService {
 
 		return result;
 	}
+	
+	public String getCategoryName( int categoryId ){
+		String result = "";
+
+		Client client = ClientBuilder.newClient();
+		//		client.property doesnt work
+		String strUrl = "";
+		if (categoryId > 0) {
+			strUrl = "http://localhost:8080/hailey-chemist/rest/categories/" + categoryId;
+			Category category =
+					client.target(strUrl)
+					.request(MediaType.APPLICATION_JSON)
+					.get(new GenericType<Category>() {
+					});
+			if ( category != null ){
+				result = category.getName();
+			}
+		} 
+
+		return result;
+	}
+
 
 }

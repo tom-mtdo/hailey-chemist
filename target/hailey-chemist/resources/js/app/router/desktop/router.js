@@ -104,7 +104,7 @@ define("router", [
         	var paginationModel = {};
         	paginationModel.pageNo = 0;
         	paginationModel.pageSize = 2;
-        	paginationModel.dataSource=config.baseUrl + "rest/products/count";
+//        	paginationModel.dataSource=config.baseUrl + "rest/products/count";
         	
         	var productSearchView = new ProductSearchView({ model:paginationModel, el:$("#content") });
         	utilities.viewManager.showView( productSearchView );

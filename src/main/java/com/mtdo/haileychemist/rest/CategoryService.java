@@ -77,13 +77,17 @@ public class CategoryService extends BaseEntityService<Category>{
 
 		//		convert tuples to a desired type
 		String path ="";
+		int count = 1;
 		for (Tuple tuple: qResult){
-			//			int id = tuple.get(0, Integer.class);
-			//			if first then no need comma
-			if ( path.trim().length() < 1){
-				path = tuple.get(1, String.class);
-			} else {
-				path = path + ">" + tuple.get(1, String.class);	
+			if ( count < qResult.size() ) {
+				//			int id = tuple.get(0, Integer.class);
+				//			if first then no need comma
+				if ( path.trim().length() < 1){
+					path = tuple.get(1, String.class);
+				} else {
+					path = path + ">" + tuple.get(1, String.class);	
+				}
+				count++;
 			}
 		}
 		result.put(categoryId, path);

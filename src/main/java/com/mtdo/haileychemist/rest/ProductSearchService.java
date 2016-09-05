@@ -66,7 +66,7 @@ public class ProductSearchService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Long> productByCategoryCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-		Map<String, Long> result = searchProductByCategoryCount( categoryId );
+		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
 		return result;
 	}
 
@@ -128,15 +128,16 @@ public class ProductSearchService {
 		return result;
 	}
 
-	public Map<String, Long> searchProductByCategoryCount( int categoryId ){
+	public Map<String, Long> searchProductByCategoryCount( int categoryId, MultivaluedMap<String, String> queryParameters ){
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
+		String uriParameters = buildUriParameter( queryParameters );
 		//		client.property doesnt work
 		String strUrl = "";
 		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId;
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId + "&" + uriParameters;
 		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count";
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count" + "?" + uriParameters;
 		}
 		Map<String, Long> result =
 				client.target(strUrl)

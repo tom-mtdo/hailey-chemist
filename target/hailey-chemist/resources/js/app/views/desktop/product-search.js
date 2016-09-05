@@ -37,7 +37,7 @@ define([
 				//				Show list of product as search result
 	        	var paginationModel={};
 	        	paginationModel.pageNo = 0;
-	        	paginationModel.pageSize = 2;
+	        	paginationModel.pageSize = 3;
 //	        	get all product for now
 	        	paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/-1";
 	        	paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/-1/count";

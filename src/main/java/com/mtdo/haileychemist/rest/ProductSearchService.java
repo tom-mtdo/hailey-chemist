@@ -28,7 +28,7 @@ import com.mtdo.haileychemist.model.Product;
 public class ProductSearchService {
 
 	//	get products belong to a category
-//	http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount
+	//	http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount
 	@Path("/{categoryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -38,37 +38,39 @@ public class ProductSearchService {
 		return result;
 	}
 
-//	return product count by category: 
-//	a list of categoryId, categoryName, categoryPath, productCount 
+	//	return product count by category: 
+	//	a list of categoryId, categoryName, categoryPath, productCount 
 	@Path("/{categoryId}/pathCount")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId ){
+	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
+		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
-				result = searchCategoryPathCount( categoryId );
+		result = searchCategoryPathCount( categoryId );
 		return result;
 	}
 
-//	//	get products belong to all categories
-////	 not in use
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public ProductSearchResult searchProducts() {
-//		ProductSearchResult result = searchProductByCategory( -1 );
-//		return result;
-//	}
+	//	//	get products belong to all categories
+	////	 not in use
+	//	@GET
+	//	@Produces(MediaType.APPLICATION_JSON)
+	//	public ProductSearchResult searchProducts() {
+	//		ProductSearchResult result = searchProductByCategory( -1 );
+	//		return result;
+	//	}
 
 	//	get products belong to a category
-//	for pagination
+	//	for pagination
 	@Path("/{categoryId}/count")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Long> productByCategoryCount(  @PathParam("categoryId") int categoryId ){
+	public Map<String, Long> productByCategoryCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
+		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		Map<String, Long> result = searchProductByCategoryCount( categoryId );
 		return result;
 	}
 
-// SHOULD USE SQL GROUP BY AND COUNT TO COUNT
+	// SHOULD USE SQL GROUP BY AND COUNT TO COUNT
 	public List<ProductCountByCategory> searchCategoryPathCount( int categoryId ){
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
 		//		consumes products rest service
@@ -87,35 +89,28 @@ public class ProductSearchService {
 				});
 
 		//		Count product for each category
-//		ProductSearchResult result = new ProductSearchResult();
 		if ( products.size() > 0 ) {
 			//	init result					
 			ProductCountByCategory pCount = new ProductCountByCategory();
 			//		set first categoryId to be current
 			//		start from category of the first product
-			//		pCount.setCategoryId(products.get(0).getCategory().getId());
-//			result.setProducts(products);
 			int currentCategoryId = products.get(0).getCategory().getId();
 			pCount.setCategoryId(currentCategoryId);
 			pCount.setCategoryName( getCategoryName(currentCategoryId) );
 			pCount.setPath( getCategoryPath( currentCategoryId ) );
 			pCount.setProductCount( 0 );
 			result.add(pCount);
-			//			pCount and pCount in result point to the same object
-
-//			++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			//		pCount and pCount in result point to the same object
+			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
-//			++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			for ( Product product: products ) {
 				//			store category id
 				//			if same category then increase count
 				if ( currentCategoryId == product.getCategory().getId() ){
 					pCount.setProductCount( pCount.getProductCount() + 1 );
-					//					intPCount = intPCount + 1;
 				} else { // else store count for current category then reset to count for new category
-					//					init count for new category
 					pCount = new ProductCountByCategory();
-					//					pCount.setProductCount(intPCount);
 					currentCategoryId = product.getCategory().getId();
 					pCount.setCategoryId( currentCategoryId );
 					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
@@ -126,10 +121,10 @@ public class ProductSearchService {
 				}
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	public Map<String, Long> searchProductByCategoryCount( int categoryId ){
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
@@ -145,10 +140,10 @@ public class ProductSearchService {
 				.request(MediaType.APPLICATION_JSON)
 				.get(new GenericType<Map<String, Long>>() {
 				});		
-		
+
 		return result;
 	}
-	
+
 	//	input: categoryId
 	//	if category < 0 -> all categories
 	//	product list must be sorted by categoryId
@@ -158,16 +153,16 @@ public class ProductSearchService {
 
 		String parameters = "";
 		Iterator<String> it = queryParameters.keySet().iterator();
-        while(it.hasNext()){
-	      String theKey = (String)it.next();
-	      String theValue = queryParameters.getFirst(theKey);
-	      if ( parameters.trim().length() < 1 ){
-	    	  parameters = theKey + "=" + theValue;
-	      } else {
-	    	  parameters = parameters + "&" + theKey + "=" + theValue;
-	      }          
-        }
-        
+		while(it.hasNext()){
+			String theKey = (String)it.next();
+			String theValue = queryParameters.getFirst(theKey);
+			if ( parameters.trim().length() < 1 ){
+				parameters = theKey + "=" + theValue;
+			} else {
+				parameters = parameters + "&" + theKey + "=" + theValue;
+			}          
+		}
+
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
 		//		client.property doesnt work
@@ -208,7 +203,7 @@ public class ProductSearchService {
 
 		return result;
 	}
-	
+
 	public String getCategoryName( int categoryId ){
 		String result = "";
 

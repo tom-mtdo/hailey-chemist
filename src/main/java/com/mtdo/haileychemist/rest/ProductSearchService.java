@@ -151,17 +151,18 @@ public class ProductSearchService {
 	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
 	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
 
-		String parameters = "";
-		Iterator<String> it = queryParameters.keySet().iterator();
-		while(it.hasNext()){
-			String theKey = (String)it.next();
-			String theValue = queryParameters.getFirst(theKey);
-			if ( parameters.trim().length() < 1 ){
-				parameters = theKey + "=" + theValue;
-			} else {
-				parameters = parameters + "&" + theKey + "=" + theValue;
-			}          
-		}
+		String parameters = buildUriParameter( queryParameters );
+//		String parameters = "";
+//		Iterator<String> it = queryParameters.keySet().iterator();
+//		while(it.hasNext()){
+//			String theKey = (String)it.next();
+//			String theValue = queryParameters.getFirst(theKey);
+//			if ( parameters.trim().length() < 1 ){
+//				parameters = theKey + "=" + theValue;
+//			} else {
+//				parameters = parameters + "&" + theKey + "=" + theValue;
+//			}          
+//		}
 
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
@@ -179,6 +180,25 @@ public class ProductSearchService {
 				});
 
 		return products;
+	}
+	
+	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
+		String result = "";
+
+		String parameters = "";
+		Iterator<String> it = queryParameters.keySet().iterator();
+		while(it.hasNext()){
+			String theKey = (String)it.next();
+			String theValue = queryParameters.getFirst(theKey);
+			if ( parameters.trim().length() < 1 ){
+				parameters = theKey + "=" + theValue;
+			} else {
+				parameters = parameters + "&" + theKey + "=" + theValue;
+			}          
+		}
+		
+		result = parameters;
+		return result;
 	}
 
 	//	get path from service:

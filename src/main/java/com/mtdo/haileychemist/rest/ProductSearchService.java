@@ -1,6 +1,7 @@
 package com.mtdo.haileychemist.rest;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 import com.mtdo.haileychemist.model.Category;
 import com.mtdo.haileychemist.model.Product;
@@ -28,8 +32,9 @@ public class ProductSearchService {
 	@Path("/{categoryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId ){
-		List<Product> result = searchProductByCategory( categoryId );
+	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
+		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		List<Product> result = searchProductByCategory( categoryId, queryParameters);
 		return result;
 	}
 
@@ -54,12 +59,12 @@ public class ProductSearchService {
 //	}
 
 	//	get products belong to a category
-//	not in use???
+//	for pagination
 	@Path("/{categoryId}/count")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public long productByCategoryCount(  @PathParam("categoryId") int categoryId ){
-		long result = searchProductByCategoryCount( categoryId );
+	public Map<String, Long> productByCategoryCount(  @PathParam("categoryId") int categoryId ){
+		Map<String, Long> result = searchProductByCategoryCount( categoryId );
 		return result;
 	}
 
@@ -125,8 +130,7 @@ public class ProductSearchService {
 		return result;
 	}
 	
-	public long searchProductByCategoryCount( int categoryId ){
-		long result = 0;
+	public Map<String, Long> searchProductByCategoryCount( int categoryId ){
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
 		//		client.property doesnt work
@@ -136,15 +140,11 @@ public class ProductSearchService {
 		} else {
 			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count";
 		}
-		Map<String, Long> mapCount =
+		Map<String, Long> result =
 				client.target(strUrl)
 				.request(MediaType.APPLICATION_JSON)
 				.get(new GenericType<Map<String, Long>>() {
-				});
-		
-		if ( mapCount.containsKey("count") ) {
-			result = mapCount.get("count");
-		}
+				});		
 		
 		return result;
 	}
@@ -154,15 +154,28 @@ public class ProductSearchService {
 	//	product list must be sorted by categoryId
 	//	can be extended to deal with query parameters.
 	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
-	public List<Product> searchProductByCategory( int categoryId ){
+	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
+
+		String parameters = "";
+		Iterator<String> it = queryParameters.keySet().iterator();
+        while(it.hasNext()){
+	      String theKey = (String)it.next();
+	      String theValue = queryParameters.getFirst(theKey);
+	      if ( parameters.trim().length() < 1 ){
+	    	  parameters = theKey + "=" + theValue;
+	      } else {
+	    	  parameters = parameters + "&" + theKey + "=" + theValue;
+	      }          
+        }
+        
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
 		//		client.property doesnt work
 		String strUrl = "";
 		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId + "&" + parameters;
 		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId" + "&" + parameters;
 		}
 		List<Product> products =
 				client.target(strUrl)

@@ -46,7 +46,7 @@ public class ProductSearchService {
 	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
-		result = searchCategoryPathCount( categoryId );
+		result = searchCategoryPathCount( categoryId, queryParameters );
 		return result;
 	}
 
@@ -71,10 +71,11 @@ public class ProductSearchService {
 	}
 
 	// SHOULD USE SQL GROUP BY AND COUNT TO COUNT
-	public List<ProductCountByCategory> searchCategoryPathCount( int categoryId ){
+	public List<ProductCountByCategory> searchCategoryPathCount( int categoryId, MultivaluedMap<String, String> queryParameters ){
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
 		//		consumes products rest service
 		Client client = ClientBuilder.newClient();
+		String uriParameters = buildUriParameter( queryParameters );
 		//		client.property doesnt work
 		String strUrl = "";
 		if (categoryId > 0) {
@@ -82,6 +83,8 @@ public class ProductSearchService {
 		} else {
 			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
 		}
+		
+		strUrl = strUrl + "&" + uriParameters;
 		List<Product> products =
 				client.target(strUrl)
 				.request(MediaType.APPLICATION_JSON)
@@ -169,10 +172,12 @@ public class ProductSearchService {
 		//		client.property doesnt work
 		String strUrl = "";
 		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId + "&" + parameters;
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
 		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId" + "&" + parameters;
+			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
 		}
+		
+		strUrl = strUrl + "&" + parameters;
 		List<Product> products =
 				client.target(strUrl)
 				.request(MediaType.APPLICATION_JSON)

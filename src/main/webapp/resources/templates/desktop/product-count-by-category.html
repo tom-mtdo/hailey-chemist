@@ -3,7 +3,7 @@
 	<br><span>Products count by category</span>
 <% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
 		_.each( productCountByCategories, function (productCountByCategory) {	%>
-			<br><span><%=productCountByCategory.path%>: <%=productCountByCategory.productCount%></span>
+			<br><span><%=productCountByCategory.path%> | <%=productCountByCategory.categoryName%>: <%=productCountByCategory.productCount%></span>
 <%		});		
 	} else {	%>
 		<br><span>Not found</span>

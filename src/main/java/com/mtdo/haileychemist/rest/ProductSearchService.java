@@ -24,7 +24,7 @@ import com.mtdo.haileychemist.model.Product;
 public class ProductSearchService {
 
 	//	get products belong to a category
-//	return product list
+//	http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount
 	@Path("/{categoryId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +35,7 @@ public class ProductSearchService {
 
 //	return product count by category: 
 //	a list of categoryId, categoryName, categoryPath, productCount 
-	@Path("/{categoryId}/parthCount")
+	@Path("/{categoryId}/pathCount")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId ){

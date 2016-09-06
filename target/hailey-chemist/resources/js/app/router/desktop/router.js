@@ -46,6 +46,7 @@ define("router", [
             "products/:id":"productDetail",
             "products/:pageNo/:pageSize":"productPagination",
             "product-search":"productSearch",
+            "product-search/:categoryId/:keyWord":"productSearchKeyWord",
             "product-search/:categoryId":"productSearchByCategory",
             "cart":"cart",
             "search/:keyWord":"search",
@@ -101,12 +102,20 @@ define("router", [
         },
         
         productSearch:function (  ){
-//        	var paginationModel = {};
-//        	paginationModel.pageNo = 0;
-//        	paginationModel.pageSize = 2;
-////        	paginationModel.dataSource=config.baseUrl + "rest/products/count";
+        	var searchModel = {};
+        	searchModel.keyWord = "";
+        	searchModel.categoryId = "-1";
         	
-        	var productSearchView = new ProductSearchView({ el:$("#content") });
+        	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
+        	utilities.viewManager.showView( productSearchView );
+        },
+
+        productSearchKeyWord:function ( categoryId, keyWord ){
+        	var searchModel = {};
+        	searchModel.keyWord = keyWord;
+        	searchModel.categoryId = categoryId;
+        	
+        	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
         	utilities.viewManager.showView( productSearchView );
         },
         

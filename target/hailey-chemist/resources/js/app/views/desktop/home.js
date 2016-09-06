@@ -42,7 +42,11 @@ define([
             return self;
         },
         
-        searchProducts: function () {        	
+        searchProducts: function () {
+        	var value = this.$("#quickSearchInputHome").val().trim();
+//        	working on this , navigate to search page
+//        	require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
+        	require("router").navigate('/product-search/-1/' + value, true);
         }
     });
 

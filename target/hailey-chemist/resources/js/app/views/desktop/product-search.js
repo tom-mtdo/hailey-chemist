@@ -24,10 +24,10 @@ define([
 
 	var ProductSearchView = Backbone.View.extend({
     	initialize: function(){
-    		this.model = {};
-    		this.model.keyWord = "";
-    		this.model.categoryId = "-1";
-//    		this.model.on('change', this.render, this);
+//    		this.model = {};
+//    		this.model.keyWord = "";
+//    		this.model.categoryId = "-1";
+////    		this.model.on('change', this.render, this);
     	},
     	    			
     	events:{

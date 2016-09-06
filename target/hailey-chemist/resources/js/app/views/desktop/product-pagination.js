@@ -76,8 +76,16 @@ define([
 //        	this path can use mode/collection/fetch(with option) instead of following method
 //        	http://localhost:8080/hailey-chemist/rest/products?first=2&maxResults=2
 //        	var strUrl = config.baseUrl + "rest/products?first=" + self.model.first +
-        	var strUrl = self.model.dataSource + "?first=" + self.model.first + 
+        	var strUrl = "";
+        	if(self.model.dataSource.indexOf("?") > -1){
+        		strUrl = self.model.dataSource + "&first=" + self.model.first + 
         		"&maxResults=" + self.model.pageSize;
+        	} else {
+        		strUrl = self.model.dataSource + "?first=" + self.model.first + 
+        			"&maxResults=" + self.model.pageSize;	
+        	}
+        		
+        	
             $.getJSON(strUrl, function(products){
             	var productPageView = new ProductPageView( {el:$("#divProductPage"), model:products} );            			
             	productPageView.render();

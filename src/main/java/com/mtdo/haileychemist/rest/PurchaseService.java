@@ -27,19 +27,19 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPurchase(PurchaseRequest purchaseRequest){
-//		load customer
+		//		load customer
 		Customer customer = getCustomerByEmail(purchaseRequest.getEmail());
-		
+
 		// init purchase with customer
 		Purchase purchase = new Purchase();
 		purchase.setCustomer(customer);
 
-//		OrderDetail orderDetail = new OrderDetail();
-//		Product product = getEntityManager().find(Product.class, 1 );
-//		orderDetail.setProduct(product);
-//		orderDetail.setQuantity(1.0f);
-//		orderDetail.setPurchase(purchase);
-//		purchase.getOrderDetails().add(orderDetail);
+		//		OrderDetail orderDetail = new OrderDetail();
+		//		Product product = getEntityManager().find(Product.class, 1 );
+		//		orderDetail.setProduct(product);
+		//		orderDetail.setQuantity(1.0f);
+		//		orderDetail.setPurchase(purchase);
+		//		purchase.getOrderDetails().add(orderDetail);
 
 		// fill in order detail		
 		for ( OrderDetailRequest orderDetailRequest : purchaseRequest.getOrderDetailRequests() ){
@@ -52,32 +52,32 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 			// add to purchase
 			purchase.getOrderDetails().add(orderDetail);
 		}
-		
-//		persistent
+
+		//		persistent
 		getEntityManager().persist(purchase);
-						
+
 		return Response.ok().entity(purchase).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
-	
+
 	public Customer getCustomerByEmail(String email){
 		Customer customer = null;
-        // check if customer exist
+		// check if customer exist
 		List<Customer> customers = (List<Customer>) getEntityManager()
-                .createQuery("select c from Customer c where c.email = :email", Customer.class)
-                .setParameter("email", email).setMaxResults(7).setFirstResult(7).getResultList();
-        
-//		if customer not exist then create new customer
-        if ( customers == null || customers.isEmpty() ) {
-        	customer = new Customer();
-        	customer.setEmail(email);
-        	getEntityManager().persist(customer);
-        	// to get make sure get the auto generated id
-        	getEntityManager().flush();
-        } else {
-        	customer = customers.get(0);
-        }
- 
-        return customer;
+				.createQuery("select c from Customer c where c.email = :email", Customer.class)
+				.setParameter("email", email).setMaxResults(7).setFirstResult(7).getResultList();
+
+		//		if customer not exist then create new customer
+		if ( customers == null || customers.isEmpty() ) {
+			customer = new Customer();
+			customer.setEmail(email);
+			getEntityManager().persist(customer);
+			// to get make sure get the auto generated id
+			getEntityManager().flush();
+		} else {
+			customer = customers.get(0);
+		}
+
+		return customer;
 	}
 }

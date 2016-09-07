@@ -11,12 +11,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import com.mtdo.haileychemist.model.Category;
 
@@ -95,6 +98,39 @@ public class CategoryService extends BaseEntityService<Category>{
 		return result;
 	}
 
+//	need test
+	//	insert a category to be first child of its parent
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response postCategory(CategoryPostRequest catRequest) {
+		//		LOCK TABLE nested_category WRITE; doesn't work on H2
+		//		check if parent is null
+		//		get parent left
+		int myLeft = 0;
+		if (catRequest.getParent() != null){
+			myLeft = catRequest.getParent().getLft();			
+		}
+		//		update all node on the right
+		getEntityManager()
+		.createQuery("UPDATE category c SET c.rgt = c.rgt+2 WHERE c.rgt > :myLeft")
+		.setParameter("myLeft", myLeft)
+		.executeUpdate();
 
+		getEntityManager()
+		.createQuery("UPDATE category c SET c.lft = c.lft+2 WHERE c.lft > :myLeft")
+		.setParameter("myLeft", myLeft)
+		.executeUpdate();
+
+		Category category = catRequest.getCategory();
+		category.setLft( myLeft + 1 );
+		category.setRgt( myLeft + 2 );
+
+		getEntityManager().persist(category);
+		getEntityManager().flush();
+		//		insert new category
+		//		UNLOCK TABLES;
+
+		return Response.ok().entity(catRequest).type(MediaType.APPLICATION_JSON_TYPE).build();
+	}
 
 }

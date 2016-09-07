@@ -37,3 +37,16 @@ WHERE node.lft BETWEEN parent.lft AND parent.rgt
         AND node.id = product.category_id
 GROUP BY parent.name
 ORDER BY parent.lft;
+
+-- INSERT a category to be the first child of its parent
+LOCK TABLE category WRITE; -- doesnt work in H2 DB
+
+SELECT @myLeft := lft FROM category
+WHERE id = [parentId];
+
+UPDATE category SET rgt = rgt + 2 WHERE rgt > @myLeft;
+UPDATE category SET lft = lft + 2 WHERE lft > @myLeft;
+
+INSERT INTO category(name, lft, rgt) VALUES('GAME CONSOLES', @myLeft + 1, @myLeft + 2);
+
+UNLOCK TABLES; -- does not work in H2 DB

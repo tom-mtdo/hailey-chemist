@@ -32,7 +32,6 @@ define([
     	    			
     	events:{
     		"keypress #txtSearchKeyWord":"updateOnEnter",
-//    		"blur  #txtSearchKeyWord":"updateModel",
     	},
 		
 		render:function(){

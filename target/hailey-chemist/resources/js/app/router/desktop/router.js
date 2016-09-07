@@ -15,6 +15,7 @@ define("router", [
     'app/views/desktop/cart',
     'app/views/desktop/search',
     'app/views/desktop/product-search',
+    'app/views/desktop/category-admin',
     'text!../templates/desktop/main.html'
 ],function ($,
 			jquerycookie,
@@ -29,6 +30,7 @@ define("router", [
             CartView,
             SearchView,
             ProductSearchView,
+            CategoryAdminView,
             MainTemplate) {
 
     $(document).ready(new function() {
@@ -47,9 +49,11 @@ define("router", [
             "products/:pageNo/:pageSize":"productPagination",
             "product-search":"productSearch",
             "product-search/:categoryId/:keyWord":"productSearchKeyWord",
-            "product-search/:categoryId":"productSearchByCategory",
+            "product-search/:categoryId":"productSearchByCategory", // not in use?
             "cart":"cart",
-            "search/:keyWord":"search",
+            "search/:keyWord":"search", // not in use ?
+            "category-admin":"categoryAdmin",
+            
         },
 //        cart
         home:function () {
@@ -121,6 +125,11 @@ define("router", [
         
         productSearchByCategory:function(){
         	
+        },
+        
+        categoryAdmin:function(){
+        	var categoryAdminView = new CategoryAdminView({ el:$("#content") });
+        	utilities.viewManager.showView( categoryAdminView );
         }
         
     });

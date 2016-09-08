@@ -5,23 +5,33 @@ import com.mtdo.haileychemist.model.Category;
 // for insert a new category
 // always insert to first left for now
 public class CategoryPostRequest {
-	private Category category;
-	private Category parent;
-	
+	private String newCategoryName;
+	private String newCategoryDescription;
+	private int parentId; 
+//	categoryPostRequest.newCategoryName="Other"
+//	categoryPostRequest.newCategoryDescription="Other products"
+//	categoryPostRequest.parentId=1;
 	public CategoryPostRequest() {
 	}
+
 	
-	public Category getCategory() {
-		return category;
+	public String getNewCategoryName() {
+		return newCategoryName;
 	}
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setNewCategoryName(String newCategoryName) {
+		this.newCategoryName = newCategoryName;
 	}
-	public Category getParent() {
-		return parent;
+	public String getNewCategoryDescription() {
+		return newCategoryDescription;
 	}
-	public void setParent(Category parent) {
-		this.parent = parent;
+	public void setNewCategoryDescription(String newCategoryDescription) {
+		this.newCategoryDescription = newCategoryDescription;
+	}
+	public int getParentId() {
+		return parentId;
+	}
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 	
 	

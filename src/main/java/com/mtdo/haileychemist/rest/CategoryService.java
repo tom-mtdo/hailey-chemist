@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -98,7 +99,9 @@ public class CategoryService extends BaseEntityService<Category>{
 		return result;
 	}
 
-//	need test
+	//	need test
+	//	input: newCategoryName,newCategoryDescription,parentCategoryId
+	//	return: a new Category object
 	//	insert a category to be first child of its parent
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -107,21 +110,24 @@ public class CategoryService extends BaseEntityService<Category>{
 		//		check if parent is null
 		//		get parent left
 		int myLeft = 0;
-		if (catRequest.getParent() != null){
-			myLeft = catRequest.getParent().getLft();			
+		if (catRequest.getParentId() > 0){
+			myLeft = getMyleft( catRequest.getParentId() );			
 		}
+
 		//		update all node on the right
 		getEntityManager()
-		.createQuery("UPDATE category c SET c.rgt = c.rgt+2 WHERE c.rgt > :myLeft")
+		.createQuery("UPDATE Category c SET c.rgt = c.rgt+2 WHERE c.rgt > :myLeft")
 		.setParameter("myLeft", myLeft)
 		.executeUpdate();
 
 		getEntityManager()
-		.createQuery("UPDATE category c SET c.lft = c.lft+2 WHERE c.lft > :myLeft")
+		.createQuery("UPDATE Category c SET c.lft = c.lft+2 WHERE c.lft > :myLeft")
 		.setParameter("myLeft", myLeft)
 		.executeUpdate();
 
-		Category category = catRequest.getCategory();
+		Category category = new Category();
+		category.setName(catRequest.getNewCategoryName());
+		category.setDescription(catRequest.getNewCategoryDescription());
 		category.setLft( myLeft + 1 );
 		category.setRgt( myLeft + 2 );
 
@@ -132,5 +138,57 @@ public class CategoryService extends BaseEntityService<Category>{
 
 		return Response.ok().entity(catRequest).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
+
+	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//	working on here
+	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	public int getMyleft(int parentId){
+		int result = 0;	
+		Category category = getEntityManager().find(Category.class, parentId);
+		if (category != null) {
+			result = category.getLft();
+		}
+		return result;
+	}
+
+	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//	need to test
+	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	@DELETE 
+	@Path("/{id:[0-9][0-9]*}")
+	public Response deleteCategory(@PathParam("id") int categoryId) {
+		Category category = getEntityManager().find(Category.class, categoryId);
+		if (category == null) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+
+		int myLeft = category.getLft();
+		int myRight = category.getRgt();
+		int myWidth = myRight - myLeft + 1;
+
+		//		LOCK TABLE nested_category WRITE;
+		getEntityManager()
+		.createQuery("DELETE FROM Category c WHERE c.id = :id")
+		.setParameter("id",category.getId())
+		.executeUpdate();
+
+		//		update all node on the right
+		getEntityManager()
+		.createQuery("UPDATE Category c SET c.rgt = c.rgt - :myWidth WHERE c.rgt > :myRight")
+		.setParameter("myWidth", myWidth)
+		.setParameter("myRight", myRight)
+		.executeUpdate();
+
+		getEntityManager()
+		.createQuery("UPDATE Category c SET c.lft = c.lft - :myWidth WHERE c.lft > :myRight")
+		.setParameter("myWidth", myWidth)
+		.setParameter("myRight", myRight)
+		.executeUpdate();
+		//		UNLOCK TABLES;
+
+		return Response.noContent().build();
+	}
+
 
 }

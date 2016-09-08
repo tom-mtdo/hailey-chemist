@@ -19,26 +19,16 @@
 insert into Member (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') 
 
 -- Categories
-id, lft, name, rgt
-
-
-
-
-
-
-
-
-
-
 INSERT INTO category (id, lft, name, rgt) VALUES(1,	1,	'ConsumingChemist',	16)
-INSERT INTO category (id, lft, name, rgt) VALUES(8,	2,	'General',	5)
-INSERT INTO category (id, lft, name, rgt) VALUES(9,	3,	'Other',	4)
-INSERT INTO category (id, lft, name, rgt) VALUES(2,	6,	'Vitamin',	11)
-INSERT INTO category (id, lft, name, rgt) VALUES(4,	7,	'MenVitamin',	8)
-INSERT INTO category (id, lft, name, rgt) VALUES(5,	9,	'WomenVitamin',	10)
-INSERT INTO category (id, lft, name, rgt) VALUES(3,	12,	'BathShower',	17)
-INSERT INTO category (id, lft, name, rgt) VALUES(6,	13,	'BodyWash',	14)
-INSERT INTO category (id, lft, name, rgt) VALUES(7,	15,	'HairCare',	16)
+INSERT INTO category (id, lft, name, rgt) VALUES(8,	2,	'General',			 5)
+INSERT INTO category (id, lft, name, rgt) VALUES(9,	3,	'Other',			 4)
+INSERT INTO category (id, lft, name, rgt) VALUES(2,	6,	'Vitamin',			11)
+INSERT INTO category (id, lft, name, rgt) VALUES(4,	7,	'MenVitamin',		 8)
+INSERT INTO category (id, lft, name, rgt) VALUES(5,	9,	'WomenVitamin',		10)
+INSERT INTO category (id, lft, name, rgt) VALUES(3,	12,	'BathShower',		17)
+INSERT INTO category (id, lft, name, rgt) VALUES(6,	13,	'BodyWash',			14)
+INSERT INTO category (id, lft, name, rgt) VALUES(7,	15,	'HairCare',			16)
+
 --INSERT INTO category (id, name, lft, rgt) VALUES(4,'MultipleVitamin',5)
 --INSERT INTO category (id, name, lft, rgt) VALUES(8,'MultipleVitamin',9)
 --INSERT INTO category (id, name, lft, rgt) VALUES(10,'Boost',11)

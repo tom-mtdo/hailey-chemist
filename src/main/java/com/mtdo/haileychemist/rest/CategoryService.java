@@ -139,9 +139,6 @@ public class CategoryService extends BaseEntityService<Category>{
 		return Response.ok().entity(catRequest).type(MediaType.APPLICATION_JSON_TYPE).build();
 	}
 
-	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//	working on here
-	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	public int getMyleft(int parentId){
 		int result = 0;	
 		Category category = getEntityManager().find(Category.class, parentId);
@@ -151,10 +148,7 @@ public class CategoryService extends BaseEntityService<Category>{
 		return result;
 	}
 
-	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//	need to test
-	//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+	//	delete leaf node only, otherwise error
 	@DELETE 
 	@Path("/{id:[0-9][0-9]*}")
 	public Response deleteCategory(@PathParam("id") int categoryId) {

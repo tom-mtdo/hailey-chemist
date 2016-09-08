@@ -16,59 +16,61 @@ define([
         		categoryAdminTemplate) {
 
 	var CategoryAdminView = Backbone.View.extend({
-    	initialize: function(){
-    	},
-    	    			
-    	events:{
-    		"click #btnCategorySubmit":"saveCategory",
-    		"click #btnCategoryDelete":"deleteCategory",
-    		
-    	},
-		
+		initialize: function(){
+		},
+
+		events:{
+			"click #btnCategorySubmit":"saveCategory",
+			"click #btnCategoryDelete":"deleteCategory",
+
+		},
+
 		render:function(){
 			var self = this;
 			utilities.applyTemplate( $(self.el), categoryAdminTemplate, {} );
 		},
-    	
-		saveCategory:function(){
-			alert("Category saved!");
 
+		saveCategory:function(){
 //			purchaseRequest.email = $("#email").val();
-// prepare data
+//			prepare data
+			var newName=$("#txtNewCategoryName").val();
+			var newDesc=$("#txtNewCategoryDescription").val();
+			var parentId=$("#txtParentCategoryId").val();
+			
 			var categoryPostRequest = {};
-			categoryPostRequest.newCategoryName="Other"
-			categoryPostRequest.newCategoryDescription="Other products"
-			categoryPostRequest.parentId=1;
-    		
-            $.ajax({
-            	url: (config.baseUrl + "rest/categories"),
-                data:JSON.stringify(categoryPostRequest),
-                type:"POST",
-                dataType:"json",
-                contentType:"application/json",
-                success:function (category) {
-                	alert("Category added!");
-                }
-            }).error(function (error) {
-            	alert("Add category error");
-            })
+			categoryPostRequest.newCategoryName=newName;
+			categoryPostRequest.newCategoryDescription=newDesc;
+			categoryPostRequest.parentId=parentId;
+
+			$.ajax({
+				url: (config.baseUrl + "rest/categories"),
+				data:JSON.stringify(categoryPostRequest),
+				type:"POST",
+				dataType:"json",
+				contentType:"application/json",
+				success:function (category) {
+					alert("Category added!");
+				}
+			}).error(function (error) {
+				alert("Add category error");
+			})
 
 		},
-		
+
 		deleteCategory:function(){
-			var categoryId = 8;
-            $.ajax({
-            	url: (config.baseUrl + "rest/categories/" + categoryId),
-                type:"DELETE",
-                success:function (category) {
-                	alert("Category deleted!");
-                }
-            }).error(function (error) {
-            	alert("Delete category error");
-            })			
+			var categoryId = $("#txtCategoryIdToDelete").val();
+			$.ajax({
+				url: ( config.baseUrl + "rest/categories/" + categoryId ),
+				type:"DELETE",
+				success:function (category) {
+					alert("Category deleted!");
+				}
+			}).error(function (error) {
+				alert("Delete category error");
+			})			
 		}
-		
+
 	});
-	 
+
 	return CategoryAdminView;  
 })

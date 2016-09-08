@@ -46,7 +46,7 @@ define([
 			}
 			$.getJSON(strUrl, function( productCountByCategories ){
 //				show categories and number of its products
-				utilities.applyTemplate( $(self.el), productSearchTemplate, {productCountByCategories:productCountByCategories} );
+				utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 
 ////				category with path and count product
 //				self.productCountByCategoryView = new ProductCountByCategoryView({model:productCountByCategories, el:$("#divProductCountByCategory") });

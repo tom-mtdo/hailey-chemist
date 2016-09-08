@@ -2,6 +2,22 @@
 	<h3>Search products</h3>
 	<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
 	<div id="divProductCountByCategory">Category</div>
+	
+	<!-- Product count by categories -->
+	<!-- input: productCountByCategories -->
+	<div>
+		<br><span>Products count by category</span>
+	<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
+			_.each( productCountByCategories, function (productCountByCategory) {	%>
+				<br><span><%=productCountByCategory.path%> | 
+				<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+	<%		});		
+		} else {	%>
+			<br><span>Not found</span>
+	<%	}	%>
+	</div>
+	<!-- end of Product count by categories -->
+	
 	<br>
 	<div id="divSearchProductPagination">ProductPagination</div>
 </div>

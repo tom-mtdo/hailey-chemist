@@ -32,6 +32,7 @@ define([
 
 		events:{
 			"keypress #txtSearchKeyWord":"updateOnEnter",
+			"click a":"showProductByCategory"
 		},
 
 		render:function(){
@@ -45,11 +46,11 @@ define([
 			}
 			$.getJSON(strUrl, function( productCountByCategories ){
 //				show categories and number of its products
-				utilities.applyTemplate( $(self.el), productSearchTemplate, {} );
+				utilities.applyTemplate( $(self.el), productSearchTemplate, {productCountByCategories:productCountByCategories} );
 
-//				category with path and count product
-				self.productCountByCategoryView = new ProductCountByCategoryView({model:productCountByCategories, el:$("#divProductCountByCategory") });
-				self.productCountByCategoryView.render();
+////				category with path and count product
+//				self.productCountByCategoryView = new ProductCountByCategoryView({model:productCountByCategories, el:$("#divProductCountByCategory") });
+//				self.productCountByCategoryView.render();
 
 				//				Show list of product as search result
 				var paginationModel={};
@@ -86,27 +87,33 @@ define([
 			if ( event.which == 13 ) {
 				this.updateModel();
 			}
-		}
-
-	});
-
-	var ProductCountByCategoryView = Backbone.View.extend({
-		events:{
-			"click a":"showProductByCategory"
-		},
-		
-		render:function(){
-			var self = this;
-			utilities.applyTemplate( $(self.el), productCountByCategoryTemplate, {productCountByCategories: self.model} );
-			return self;
 		},
 		
 		showProductByCategory:function(event){
-			var categoryId = $(event.currentTarget).data("category-id");
-			alert( categoryId );
-			alert("target: " + $(event.currentTarget) );
-		}
+			var self = this;
+			var catId = $(event.currentTarget).data("category-id");
+			self.model.categoryId = catId;
+			self.render();
+ 		}
+
 	});
+
+//	var ProductCountByCategoryView = Backbone.View.extend({
+//		events:{
+//			"click a":"showProductByCategory"
+//		},
+//		
+//		render:function(){
+//			var self = this;
+//			utilities.applyTemplate( $(self.el), productCountByCategoryTemplate, {productCountByCategories: self.model} );
+//			return self;
+//		},
+//		
+//		showProductByCategory:function(event){
+//			var self = this;
+//			var catId = $(event.currentTarget).data("category-id");
+// 		}
+//	});
 
 
 	return ProductSearchView;

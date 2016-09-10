@@ -100,7 +100,7 @@ public class ProductSearchService {
 			int currentCategoryId = products.get(0).getCategory().getId();
 			pCount.setCategoryId(currentCategoryId);
 			pCount.setCategoryName( getCategoryName(currentCategoryId) );
-			pCount.setPath( getCategoryPath( currentCategoryId ) );
+			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
 			pCount.setProductCount( 0 );
 			result.add(pCount);
 			//		pCount and pCount in result point to the same object
@@ -117,7 +117,7 @@ public class ProductSearchService {
 					currentCategoryId = product.getCategory().getId();
 					pCount.setCategoryId( currentCategoryId );
 					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
-					pCount.setPath( getCategoryPath( currentCategoryId ) );
+					pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
 					pCount.setProductCount( 1 );
 					//	store count and reset current category
 					result.add(pCount);
@@ -209,18 +209,18 @@ public class ProductSearchService {
 
 	//	get path from service:
 	//	http://localhost:8080/hailey-chemist/rest/categories/path/3
-	public String getCategoryPath( int categoryId ){
-		String result = "";
+	public List<String> getCategoryPath( int categoryId ){
+		List<String> result = new ArrayList<>();
 
 		Client client = ClientBuilder.newClient();
 		//		client.property doesnt work
 		String strUrl = "";
 		if (categoryId > 0) {
 			strUrl = "http://localhost:8080/hailey-chemist/rest/categories/path/" + categoryId;
-			Map<Integer, String> cPath =
+			Map<Integer, List<String>> cPath =
 					client.target(strUrl)
 					.request(MediaType.APPLICATION_JSON)
-					.get(new GenericType<Map<Integer, String>>() {
+					.get(new GenericType<Map<Integer, List<String>>>() {
 					});
 			if ( cPath.containsKey(categoryId) ){
 				result = cPath.get(categoryId);

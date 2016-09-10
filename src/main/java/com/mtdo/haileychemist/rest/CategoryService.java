@@ -1,4 +1,5 @@
 package com.mtdo.haileychemist.rest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class CategoryService extends BaseEntityService<Category>{
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	//	public Map<Integer, String> getPath(@PathParam("categoryId") int categoryId){
-	public Map<Integer, String> getPath(@PathParam("categoryId") int categoryId){
+	public Map<Integer, List<String>> getPath(@PathParam("categoryId") int categoryId){
 
 		//		List<Predicate> lstPredicates = new ArrayList<Predicate>();
 
@@ -77,22 +78,26 @@ public class CategoryService extends BaseEntityService<Category>{
 		TypedQuery<Tuple> tq = em.createQuery(cq);
 		//		perform query and get result in a list of tuples
 		List<Tuple> qResult = tq.getResultList();
-		Map<Integer, String> result = new HashMap<Integer, String>();
 
+		Map<Integer, List<String>> result = new HashMap<Integer, List<String>>();
 		//		convert tuples to a desired type
-		String path ="";
+		List<String> path = new ArrayList<String>();
 		int count = 1;
 		for (Tuple tuple: qResult){
+			// exclude current category out of the path			
 			if ( count < qResult.size() ) {
-				//			int id = tuple.get(0, Integer.class);
-				//			if first then no need comma
-				if ( path.trim().length() < 1){
-					path = tuple.get(1, String.class);
-				} else {
-					path = path + ">" + tuple.get(1, String.class);	
-				}
-				count++;
+				path.add( tuple.get(1, String.class) );
 			}
+			count++;
+//				//			int id = tuple.get(0, Integer.class);
+//				//			if first then no need comma
+//				if ( path.trim().length() < 1){
+//					path = tuple.get(1, String.class);
+//				} else {
+//					path = path + ">" + tuple.get(1, String.class);	
+//				}
+//				
+//			}
 		}
 		result.put(categoryId, path);
 

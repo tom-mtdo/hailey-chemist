@@ -15,11 +15,14 @@
 	<div>
 		<br><span>Products count by category</span>
 	<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
-			_.each( productCountByCategories, function (productCountByCategory) {	%>
-				<br><span><%=productCountByCategory.path%> | 
-					<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+			_.each( productCountByCategories, function (productCountByCategory) {		%>	
+				<br><span>
+	<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
+					<%=categoryName%>>
+	<%			}); %>
+				| </span> 
+				<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
 					(<%=productCountByCategory.productCount%>)
-				</span>
 	<%		});		
 		} else {	%>
 			<br><span>Not found</span>

@@ -1,47 +1,44 @@
 package com.mtdo.haileychemist.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductCountByCategory {
 
 	
 	private int categoryId;
 	private String categoryName;
 	//		path from top category
-	private String path;
+	private List<String> categoryPath = new ArrayList<String>();
 	//	number of product in this category
 	private int productCount;
 	
 	public ProductCountByCategory() {
 	}
-	public ProductCountByCategory(int categoryId, String path) {
-		super();
-		this.categoryId = categoryId;
-		this.path = path;
-	}
-	public ProductCountByCategory(int categoryId, String path, int productCount) {
-		this.categoryId = categoryId;
-		this.path = path;
-		this.productCount = productCount;
-	}
-	
-	public ProductCountByCategory(int categoryId, String categoryName, String path, int productCount) {
+
+	public ProductCountByCategory(int categoryId, String categoryName, List<String> categoryPath, int productCount) {
 		super();
 		this.categoryId = categoryId;
 		this.categoryName = categoryName;
-		this.path = path;
+		this.categoryPath = categoryPath;
 		this.productCount = productCount;
 	}
+	
 	public int getCategoryId() {
 		return categoryId;
 	}
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}
-	public String getPath() {
-		return path;
+
+	public List<String> getCategoryPath() {
+		return categoryPath;
 	}
-	public void setPath(String path) {
-		this.path = path;
+
+	public void setCategoryPath(List<String> categoryPath) {
+		this.categoryPath = categoryPath;
 	}
+
 	public int getProductCount() {
 		return productCount;
 	}

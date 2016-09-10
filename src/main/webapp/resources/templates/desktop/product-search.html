@@ -2,8 +2,11 @@
 	<h3>Search products</h3>
 	<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
 	<div id="divProductCountByCategory">
-		<span>Category: <%=model.categoryId%></span>
-		<br><span>Keyword: <%=model.keyWord%></span>
+<%		if (model) {	%>
+			<span>Category: <%=model.categoryId%></span>
+			<br><span>Keyword: <%=model.keyWord%></span>
+			<br><span>Found: <%=model.resultCount%></span>
+<%		}	%>
 	</div>
 	
 	
@@ -14,7 +17,9 @@
 	<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
 			_.each( productCountByCategories, function (productCountByCategory) {	%>
 				<br><span><%=productCountByCategory.path%> | 
-				<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+					<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+					(<%=productCountByCategory.productCount%>)
+				</span>
 	<%		});		
 		} else {	%>
 			<br><span>Not found</span>

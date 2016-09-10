@@ -39,7 +39,7 @@ public class ProductService extends BaseEntityService<Product>{
 
 		//		http://localhost:8080/hailey-chemist/rest/products?keyWord=oi
 		if (queryParameters.containsKey("keyWord")) {
-			System.out.println( "Key word: " + queryParameters.getFirst("keyWord") );
+//			System.out.println( "Key word: " + queryParameters.getFirst("keyWord") );
 			Predicate predicate = criteriaBuilder.like( product.<String>get("name"), "%" + queryParameters.getFirst("keyWord") + "%" );
 			predicates.add(predicate);        	
 		}
@@ -47,7 +47,7 @@ public class ProductService extends BaseEntityService<Product>{
 		//		get product belong to a category
 		//		http://localhost:8080/hailey-chemist/rest/products?categoryId=4
 		if ( queryParameters.containsKey("categoryId") ) {
-			System.out.println( "CategoryId: " + queryParameters.getFirst("categoryId") );
+//			System.out.println( "CategoryId: " + queryParameters.getFirst("categoryId") );
 			Predicate predicate = criteriaBuilder.equal( product.get("category").get("id"), queryParameters.getFirst("categoryId") );
 			predicates.add(predicate);        	
 		}

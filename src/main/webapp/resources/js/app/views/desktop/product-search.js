@@ -1,5 +1,5 @@
 /**
- * input: productSearchModel{categoryId,  and query para e.g. keyword}
+ * input: productSearchModel{categoryId,  and query paras: keyword, categoryId, resultCount}
  * maybe: pageNo, pageSize,
  */
 
@@ -11,19 +11,17 @@ define([
         'app/views/desktop/product-page',
         'app/views/desktop/product-pagination',
         'text!../../../../templates/desktop/product-search.html',
-        'text!../../../../templates/desktop/product-count-by-category.html',
-
         ], function (utilities,
         		jquery,
         		bootstrap,
         		config,
         		ProductPageView,
         		ProductPaginationView,
-        		productSearchTemplate,
-        		productCountByCategoryTemplate) {
+        		productSearchTemplate) {
 
 	var ProductSearchView = Backbone.View.extend({
 		initialize: function(){
+			this.model.resultCount = 0;
 //			this.model = {};
 //			this.model.keyWord = "";
 //			this.model.categoryId = "-1";
@@ -38,35 +36,55 @@ define([
 		render:function(){
 			var self = this;
 			var strUrl="";
+			self.paginationModel={};
+			self.paginationModel.pageNo = 0;
+			self.paginationModel.pageSize = 3;
+			self.gotCount = false;
+			self.gotCategoryCount = false;
+
 
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 				strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
+				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
+				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim();
 			} else {
 				strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount";
+				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId;
+				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
 			}
+
+			//			update count
+//        	var strUrl = self.model.dataSourceCount; //config.baseUrl + "rest/products/count";
+        	$.getJSON(self.paginationModel.dataSourceCount, function(result){
+        		$.each( result, function( key, val ) {
+        			if(key == "count"){
+        				self.model.resultCount = val;
+        				self.gotCount = true;
+//        				if got all data then render        				
+        				if (self.gotCount && self.gotCategoryCount) {
+        					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
+        				}
+        			}
+        		});
+        	});
+
 			$.getJSON(strUrl, function( productCountByCategories ){
 //				show categories and number of its products
-				utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
-
-////				category with path and count product
-//				self.productCountByCategoryView = new ProductCountByCategoryView({model:productCountByCategories, el:$("#divProductCountByCategory") });
-//				self.productCountByCategoryView.render();
-
-				//				Show list of product as search result
-				var paginationModel={};
-				paginationModel.pageNo = 0;
-				paginationModel.pageSize = 3;
-//				get all product for now
-				if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
-					paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
-//					alert("Data source: " + paginationModel.dataSource);
-					paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim();
-				} else {
-					paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId;
-					paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
+				self.gotCategoryCount = true;
+//				if got all data then render
+				if (self.gotCount && self.gotCategoryCount) {
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
-				self.productPaginationView = new ProductPaginationView( {model:paginationModel, el:$("#divSearchProductPagination")} );	        	
-
+////				category with path and count product
+				//				Show list of product as search result
+//				if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
+//					self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
+//					self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim();
+//				} else {
+//					self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId;
+//					self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
+//				}
+				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 				self.productPaginationView.render();
 			});
 

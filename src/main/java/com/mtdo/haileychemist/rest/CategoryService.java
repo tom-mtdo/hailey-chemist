@@ -84,8 +84,8 @@ public class CategoryService extends BaseEntityService<Category>{
 		List<String> path = new ArrayList<String>();
 		int count = 1;
 		for (Tuple tuple: qResult){
-			// exclude current category out of the path			
-			if ( count < qResult.size() ) {
+			// exclude the first current category out of the path			
+			if ( (count<qResult.size()) && (count>1)) {
 				path.add( tuple.get(1, String.class) );
 			}
 			count++;

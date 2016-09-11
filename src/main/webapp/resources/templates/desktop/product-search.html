@@ -13,14 +13,14 @@
 	<!-- Product count by categories -->
 	<!-- input: productCountByCategories -->
 	<div>
-		<br><span>Products count by category</span>
+		<br><span><strong>Products count by category</strong></span>
 	<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
 			_.each( productCountByCategories, function (productCountByCategory) {		%>	
 				<br><span>
 	<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
 					<%=categoryName%>>
 	<%			}); %>
-				| </span> 
+				</span> 
 				<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
 					(<%=productCountByCategory.productCount%>)
 	<%		});		

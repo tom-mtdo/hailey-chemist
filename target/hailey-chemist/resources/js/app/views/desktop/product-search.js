@@ -41,8 +41,19 @@ define([
 			self.paginationModel.pageSize = 3;
 			self.gotCount = false;
 			self.gotCategoryCount = false;
+			self.gotCategories = false;
 
 
+//			get all categories, always
+			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
+			$.getJSON( strCatUrl, function(categories){
+				self.gotCategories = true;
+				self.model.categories = categories;
+				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
+				}
+			});
+			
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 				strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
 				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
@@ -61,8 +72,8 @@ define([
         				self.model.resultCount = val;
         				self.gotCount = true;
 //        				if got all data then render        				
-        				if (self.gotCount && self.gotCategoryCount) {
-        					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
+        				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
+        					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
         				}
         			}
         		});
@@ -72,7 +83,7 @@ define([
 //				show categories and number of its products
 				self.gotCategoryCount = true;
 //				if got all data then render
-				if (self.gotCount && self.gotCategoryCount) {
+				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
 					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
 ////				category with path and count product

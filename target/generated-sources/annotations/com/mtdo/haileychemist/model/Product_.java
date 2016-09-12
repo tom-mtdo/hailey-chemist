@@ -14,6 +14,7 @@ public abstract class Product_ {
 	public static volatile ListAttribute<Product, Media> medias;
 	public static volatile SingularAttribute<Product, String> name;
 	public static volatile SingularAttribute<Product, String> description;
+	public static volatile ListAttribute<Product, ProductAttribute> attributes;
 	public static volatile SingularAttribute<Product, Integer> id;
 	public static volatile SingularAttribute<Product, Category> category;
 	public static volatile SingularAttribute<Product, String> productNo;

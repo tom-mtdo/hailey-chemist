@@ -45,6 +45,19 @@ insert into product (id, category_id, product_no, name, description, rrp) values
 insert into product (id, category_id, product_no, name, description, rrp) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99)
 insert into product (id, category_id, product_no, name, description, rrp) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35)
 
+-- Attribute
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'weight',	'Weight in gram',	'int', 'gr')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(2, 'unitweight',	'Weight of each content unit in miligram',	'int', 'mg')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(3, 'quantity', 'Quantity of content in caapsale',	'int', 'Capsale')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(4, 'volume',	'Volume of content in mililitle',	'int', 'ml')
+
+-- product_attribute
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(1, 1,	1,	500)
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(2, 1,	2,	1000)
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(3, 1,	3,	400)
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(4, 2,	3,	300)
+
+
 -- media
 insert into media (type, url, product_id) values('image', './resources/img/product/fish-oil.png', 1)
 insert into media (type, url, product_id) values('image', './resources/img/product/multiple-vitamins.png', 2)

@@ -6,6 +6,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -38,17 +39,17 @@ public class Product implements Serializable {
 
 	private BigDecimal rrp;
 
+	//bi-directional many-to-one association to attribute
+	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
+	private List<ProductAttribute> attributes = new ArrayList<ProductAttribute>();
+
 	//bi-directional many-to-one association to Media
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
-	private List<Media> medias;
-
-//	//bi-directional many-to-one association to OrderDetail
-//	@OneToMany(fetch = EAGER, mappedBy="product")
-//	private List<OrderDetail> orderDetails;
+	private List<Media> medias = new ArrayList<Media>();
 
 	//bi-directional many-to-one association to Sale
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
-	private List<Sale> sales;
+	private List<Sale> sales = new ArrayList<Sale>();
 
 	//one-directional many-to-one association to Product
 	@ManyToOne

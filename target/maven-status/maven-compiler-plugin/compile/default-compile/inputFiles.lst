@@ -5,6 +5,7 @@
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Customer.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Member.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/controller/MemberController.java
+/Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Attribute.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/ProductSearchService.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/ProductService.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/BillAddress.java
@@ -21,6 +22,7 @@
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/Sale.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/MemberResourceRESTService.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/data/MemberListProducer.java
+/Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/model/ProductAttribute.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/CategoryService.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/service/MemberRegistration.java
 /Users/thangdo/workspace/java/hailey-chemist/src/main/java/com/mtdo/haileychemist/rest/OrderDetailRequest.java

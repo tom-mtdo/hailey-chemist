@@ -34,9 +34,9 @@ public class CategoryService extends BaseEntityService<Category>{
 
 	@Override
 	protected Predicate[] extractPredicates(MultivaluedMap<String, String> queryParameters,
-			CriteriaBuilder criteriaBuilder, Root<Category> root) {
+			CriteriaBuilder criteriaBuilder, Root<Category> category) {
 		Predicate[] predicates = new Predicate[]{};
-
+		
 		return predicates;
 	}
 
@@ -188,6 +188,5 @@ public class CategoryService extends BaseEntityService<Category>{
 
 		return Response.noContent().build();
 	}
-
-
+	
 }

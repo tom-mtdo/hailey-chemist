@@ -1,19 +1,10 @@
 <div class="well">
 	<h3>Search products</h3>
-	<% if (model.categories && (model.categories.length>0) ) {	%>
-	    Categogy:
-	    <select id="categorySelect" class="form-control"  style="max-width:200px;">
-	        <option value="-1" selected="true">Select a category</option>
-	        <% _.each(model.categories, function(category) { %>
-	        <option value="<%=category.id%>"><%=category.name%></option>
-	        <% }) %>
-	    </select>
-	<% }	%>
 	<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="70" />
 	<div id="divProductCountByCategory">
 <%		if (model) {	%>
-			<span>Category: <%=model.categoryId%></span>
-			<br><span>Keyword: <%=model.keyWord%></span>
+			<span>Category: <%=model.categoryId%></span> &nbsp; <a id="aClearCategory">Clear</a>
+			<br><span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
 			<br><span>Found: <%=model.resultCount%></span>
 <%		}	%>
 	</div>
@@ -30,7 +21,7 @@
 					<%=categoryName%>>
 	<%			}); %>
 				</span> 
-				<a data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+				<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
 					(<%=productCountByCategory.productCount%>)
 	<%		});		
 		} else {	%>

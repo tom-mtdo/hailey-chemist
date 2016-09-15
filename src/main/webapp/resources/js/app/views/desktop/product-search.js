@@ -1,4 +1,4 @@
-/**
+	/**
  * input: productSearchModel{categoryId,  and query paras: keyword, categoryId, resultCount}
  * maybe: pageNo, pageSize,
  */
@@ -22,15 +22,13 @@ define([
 	var ProductSearchView = Backbone.View.extend({
 		initialize: function(){
 			this.model.resultCount = 0;
-//			this.model = {};
-//			this.model.keyWord = "";
-//			this.model.categoryId = "-1";
-////			this.model.on('change', this.render, this);
 		},
 
 		events:{
 			"keypress #txtSearchKeyWord":"updateOnEnter",
-			"click a":"showProductByCategory"
+			"click a[class='categoryPath']":"showProductByCategory",
+			"click #aClearCategory":"clearCategory",
+			"click #aClearKeyWord":"clearKeyWord",
 		},
 
 		render:function(){
@@ -43,12 +41,12 @@ define([
 			self.gotCategoryCount = false;
 			self.gotCategories = false;
 
-
 //			get all categories, always
 			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
 			$.getJSON( strCatUrl, function(categories){
 				self.gotCategories = true;
 				self.model.categories = categories;
+//				alert("No of category: " + self.model.categories.length);
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
 					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
 				}
@@ -65,7 +63,7 @@ define([
 			}
 
 			//			update count
-//        	var strUrl = self.model.dataSourceCount; //config.baseUrl + "rest/products/count";
+			//        	var strUrl = self.model.dataSourceCount; //config.baseUrl + "rest/products/count";
         	$.getJSON(self.paginationModel.dataSourceCount, function(result){
         		$.each( result, function( key, val ) {
         			if(key == "count"){
@@ -86,15 +84,6 @@ define([
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
 					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
-////				category with path and count product
-				//				Show list of product as search result
-//				if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
-//					self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
-//					self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim();
-//				} else {
-//					self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId;
-//					self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
-//				}
 				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 				self.productPaginationView.render();
 			});
@@ -123,27 +112,21 @@ define([
 			var catId = $(event.currentTarget).data("category-id");
 			self.model.categoryId = catId;
 			self.render();
+ 		},
+ 		
+ 		clearCategory:function(){
+ 			this.model.categoryId = -1;
+ 			this.render();
+ 		},
+ 		
+ 		clearKeyWord:function(){
+ 			this.model.keyWord = "";
+ 			this.render();
  		}
-
+		 		
 	});
 
-//	var ProductCountByCategoryView = Backbone.View.extend({
-//		events:{
-//			"click a":"showProductByCategory"
-//		},
-//		
-//		render:function(){
-//			var self = this;
-//			utilities.applyTemplate( $(self.el), productCountByCategoryTemplate, {productCountByCategories: self.model} );
-//			return self;
-//		},
-//		
-//		showProductByCategory:function(event){
-//			var self = this;
-//			var catId = $(event.currentTarget).data("category-id");
-// 		}
-//	});
-
+	
 
 	return ProductSearchView;
 

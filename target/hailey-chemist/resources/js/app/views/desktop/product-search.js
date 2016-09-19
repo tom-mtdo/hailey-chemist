@@ -1,6 +1,10 @@
-	/**
+/**
  * input: productSearchModel{categoryId,  and query paras: keyword, categoryId, resultCount}
- * maybe: pageNo, pageSize,
+ * This view will add to model: 
+ * resultCount: Number of product found
+ * categories: list of all category to fill in the category select for search
+ * attributeValues: list all values of product found group by each attribute, for advanced search 
+ * 
  */
 
 define([
@@ -40,6 +44,11 @@ define([
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = false;
+			
+			self.model.listAttributeValues = [
+				{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
+				{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
+				];
 
 //			get all categories, always
 			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";

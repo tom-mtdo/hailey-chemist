@@ -150,5 +150,13 @@ public class Product implements Serializable {
 		this.category = category;
 	}
 
+	public List<ProductAttribute> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(List<ProductAttribute> attributes) {
+		this.attributes = attributes;
+	}
+
 	
 }

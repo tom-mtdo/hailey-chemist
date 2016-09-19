@@ -46,10 +46,10 @@ insert into product (id, category_id, product_no, name, description, rrp) values
 insert into product (id, category_id, product_no, name, description, rrp) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35)
 
 -- Attribute
-INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'weight',	'Weight in gram',	'int', 'gr')
-INSERT INTO attribute (id, name, description, data_type, unit) VALUES(2, 'unitweight',	'Weight of each content unit in miligram',	'int', 'mg')
-INSERT INTO attribute (id, name, description, data_type, unit) VALUES(3, 'quantity', 'Quantity of content in caapsale',	'int', 'Capsale')
-INSERT INTO attribute (id, name, description, data_type, unit) VALUES(4, 'volume',	'Volume of content in mililitle',	'int', 'ml')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'Total Weight',	'Total package weight in gram',	'int', 'gr')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(2, 'Content Weight',	'Weight of each content unit in miligram',	'int', 'mg')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(3, 'Content Quantity', 'Quantity of content in caapsale',	'int', 'Capsale')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(4, 'Content Volume',	'Volume of content in mililitle',	'int', 'ml')
 
 -- product_attribute
 INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(1, 1,	1,	500)

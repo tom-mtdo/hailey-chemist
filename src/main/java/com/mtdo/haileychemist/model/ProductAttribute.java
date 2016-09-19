@@ -10,12 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Entity implementation class for Entity: ProductAttribute
  *
  */
 @Entity
 @Table(name="product_attribute")
+@JsonIgnoreProperties({"product"})
 public class ProductAttribute implements Serializable {
 
 	private static final long serialVersionUID = 1L;

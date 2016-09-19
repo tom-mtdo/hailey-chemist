@@ -59,7 +59,7 @@ public class ProductSearchService {
 	//		return result;
 	//	}
 
-	//	get products belong to a category
+	//	get products belong to a category or all category if input categoryId = -1
 	//	for pagination
 	@Path("/{categoryId}/count")
 	@GET
@@ -69,6 +69,19 @@ public class ProductSearchService {
 		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
 		return result;
 	}
+	
+	
+//		WORKDING HERE
+	@Path("/{categoryId}/attribute")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, Long> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
+		Map<String, Long> result = null;
+//		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+//		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
+		return result;
+	}
+
 
 	// SHOULD USE SQL GROUP BY AND COUNT TO COUNT
 	public List<ProductCountByCategory> searchCategoryPathCount( int categoryId, MultivaluedMap<String, String> queryParameters ){

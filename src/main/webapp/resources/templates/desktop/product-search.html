@@ -9,7 +9,6 @@
 <%		}	%>
 	</div>
 	
-	
 	<!-- Product count by categories -->
 	<!-- input: productCountByCategories -->
 	<div>
@@ -29,6 +28,28 @@
 	<%	}	%>
 	</div>
 	<!-- end of Product count by categories -->
+
+	<br>
+	<!-- list all attributes -->
+	<div>
+		<div class="row">
+		<% 	if ( model.listAttributeValues && (model.listAttributeValues.length>0) ){
+			_.each( model.listAttributeValues, function (attributeValues) {		%>
+			<!-- WORKING HERE  -->
+				<!-- each property is in a column -->
+				<div class="col-md-1">
+					<span style="display:none;">id: <%=attributeValues.id%>, </span>
+					<span><%=attributeValues.name%></span>
+		<%  		_.each( attributeValues.values, function(value){	%>
+						<br><span><input type="checkbox" /><%=value%></span>
+		<%			});				%>
+				</div>
+		<%		});		
+			} else {	%>
+				<br><span>No attribute</span>
+		<%	}	%>
+		</div>
+	</div>	
 	
 	<br>
 	<div id="divSearchProductPagination">ProductPagination</div>

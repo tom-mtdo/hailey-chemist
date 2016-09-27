@@ -1,0 +1,18 @@
+* Left join query:
+- in Java query language
+SELECT f from Student f LEFT JOIN f.classTbls s WHERE s.ClassName = 'abc'
+
+- in criteria builder
+-- type safe, know error when compile/coding
+CriteriaQuery<Pet> cq = cb.createQuery(Pet.class);
+Metamodel m = em.getMetamodel();
+EntityType<Pet> Pet_ = m.entity(Pet.class);
+EntityType<Owner> Owner_ = m.entity(Owner.class);
+Root<Pet> pet = cq.from(Pet.class);
+Join<Owner, Address> address = cq.join(Pet_.owners).join(Owner_.addresses);
+-- or not type safe error known at runtime
+CriteriaQuery<Pet> cq = cb.createQuery(Pet.class);
+Metamodel m = em.getMetamodel();
+EntityType<Pet> petMetaModel = m.entity(Pet.class);
+Root<Pet> pet = cq.from(Pet.class);
+Join<Pet, Owner> owner = pet.join(petMetaModel.getSet("owners", Owner.class));

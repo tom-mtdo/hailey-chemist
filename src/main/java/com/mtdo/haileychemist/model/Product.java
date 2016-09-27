@@ -41,7 +41,7 @@ public class Product implements Serializable {
 
 	//bi-directional many-to-one association to attribute
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
-	private List<ProductAttribute> attributes = new ArrayList<ProductAttribute>();
+	private List<ProductAttribute> productAttributes = new ArrayList<ProductAttribute>();
 
 	//bi-directional many-to-one association to Media
 	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
@@ -150,12 +150,12 @@ public class Product implements Serializable {
 		this.category = category;
 	}
 
-	public List<ProductAttribute> getAttributes() {
-		return attributes;
+	public List<ProductAttribute> getproductAttributes() {
+		return productAttributes;
 	}
 
-	public void setAttributes(List<ProductAttribute> attributes) {
-		this.attributes = attributes;
+	public void setproductAttributes(List<ProductAttribute> productAttributes) {
+		this.productAttributes = productAttributes;
 	}
 
 	

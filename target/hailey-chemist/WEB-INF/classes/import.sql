@@ -48,7 +48,7 @@ insert into product (id, category_id, product_no, name, description, rrp) values
 -- Attribute
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'Total Weight',	'Total package weight in gram',	'int', 'gr')
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(2, 'Content Weight',	'Weight of each content unit in miligram',	'int', 'mg')
-INSERT INTO attribute (id, name, description, data_type, unit) VALUES(3, 'Content Quantity', 'Quantity of content in caapsale',	'int', 'Capsale')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(3, 'Content Quantity', 'Quantity of content in capsale',	'int', 'Capsale')
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(4, 'Content Volume',	'Volume of content in mililitle',	'int', 'ml')
 
 -- product_attribute

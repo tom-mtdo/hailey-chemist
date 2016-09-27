@@ -1,11 +1,22 @@
 package com.mtdo.haileychemist.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,13 +31,16 @@ import javax.ws.rs.core.UriInfo;
 
 import com.mtdo.haileychemist.model.Category;
 import com.mtdo.haileychemist.model.Product;
+import com.mtdo.haileychemist.model.ProductAttribute;
 
 // parameters: categoryId, keyWord
 // if category id < 0 -> mean all category
 @Path("/product-search")
 @Stateless
 public class ProductSearchService {
-
+	@Inject
+	private EntityManager entityManager;
+	
 	//	get products belong to a category
 	//	http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount
 	@Path("/{categoryId}")
@@ -70,13 +84,51 @@ public class ProductSearchService {
 		return result;
 	}
 	
-	
+
+//	Get all value of each attribute of all products found
+//	URL parameters: url?keyWork=""&categoryId=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
+//	Return a list of attribute and for each attribute all values from products found
 //		WORKDING HERE
 	@Path("/{categoryId}/attribute")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Long> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
-		Map<String, Long> result = null;
+	public Map<String, List<String>> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
+		Map<String, List<String>> result = new HashMap<String, List<String>>();		
+		
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		Root<Product> product = cq.from(Product.class);
+//		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
+		Predicate predicates = cb.like(product.<String>get("name"), "%i%");
+		cq.where(predicates);
+
+//		cq.multiselect(
+//				product.get("name"));
+		
+		cq.multiselect( 
+				productAttribute.get("attribute").get("name"), 
+				productAttribute.get("attribute_value"),
+				product.get("name"));
+
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		List<Tuple> lstTuple = tq.getResultList();
+
+		List<String> lstValue = null;
+		int i = 0;
+		for (Tuple tuple: lstTuple) {
+			lstValue = new ArrayList<String>();
+//			lstValue.add(tuple.get(0, String.class));
+			lstValue.add("Attribute name: " + tuple.get(0, String.class));
+			lstValue.add("Attribute value: " + tuple.get(1, String.class));
+			lstValue.add("Product name: " + tuple.get(2, String.class));
+			result.put("Key " + i, lstValue);
+			i++;
+		}
+
+//		Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);        
+//		criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
+		
 //		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 //		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
 		return result;

@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.GET;
@@ -87,7 +88,7 @@ public class ProductSearchService {
 
 //	Get all value of each attribute of all products found
 //	URL parameters: url?keyWork=""&categoryId=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
-//	Return a list of attribute and for each attribute all values from products found
+//	Return a Map<attributeId, List<attributeValue>> for all products found 
 //		WORKDING HERE
 	@Path("/{categoryId}/attribute")
 	@GET
@@ -100,16 +101,31 @@ public class ProductSearchService {
 		Root<Product> product = cq.from(Product.class);
 //		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
+		
 		Predicate predicates = cb.like(product.<String>get("name"), "%i%");
 		cq.where(predicates);
-
-//		cq.multiselect(
-//				product.get("name"));
 		
-		cq.multiselect( 
+		Order order = cb.asc(productAttribute.get("attribute").get("id"));
+		cq.orderBy(order);
+		
+		cq.multiselect(
+				productAttribute.get("attribute").get("id"),
 				productAttribute.get("attribute").get("name"), 
 				productAttribute.get("attribute_value"),
-				product.get("name"));
+				product.get("name")
+				);
+		
+		cq.groupBy(				
+				productAttribute.get("attribute").get("id"), 
+				productAttribute.get("attribute_value")
+				);
+
+//		cq.multiselect(
+//				productAttribute.get("attribute").get("id"),
+//				productAttribute.get("attribute").get("name"), 
+//				productAttribute.get("attribute_value")
+////				product.get("name")
+//				).distinct(true);
 
 		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
 		List<Tuple> lstTuple = tq.getResultList();
@@ -118,14 +134,48 @@ public class ProductSearchService {
 		int i = 0;
 		for (Tuple tuple: lstTuple) {
 			lstValue = new ArrayList<String>();
-//			lstValue.add(tuple.get(0, String.class));
-			lstValue.add("Attribute name: " + tuple.get(0, String.class));
-			lstValue.add("Attribute value: " + tuple.get(1, String.class));
-			lstValue.add("Product name: " + tuple.get(2, String.class));
+			lstValue.add("Attribute id: " + tuple.get(0, Integer.class));
+			lstValue.add("Attribute name: " + tuple.get(1, String.class));
+			lstValue.add("Attribute value: " + tuple.get(2, String.class));
+			lstValue.add("Product name: " + tuple.get(3, String.class));
 			result.put("Key " + i, lstValue);
 			i++;
 		}
 
+//		//		Count product for each category
+//		if ( products.size() > 0 ) {
+//			//	init result					
+//			ProductCountByCategory pCount = new ProductCountByCategory();
+//			//		set first categoryId to be current
+//			//		start from category of the first product
+//			int currentCategoryId = products.get(0).getCategory().getId();
+//			pCount.setCategoryId(currentCategoryId);
+//			pCount.setCategoryName( getCategoryName(currentCategoryId) );
+//			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
+//			pCount.setProductCount( 0 );
+//			result.add(pCount);
+//			//		pCount and pCount in result point to the same object
+//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
+//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//			for ( Product product: products ) {
+//				//			store category id
+//				//			if same category then increase count
+//				if ( currentCategoryId == product.getCategory().getId() ){
+//					pCount.setProductCount( pCount.getProductCount() + 1 );
+//				} else { // else store count for current category then reset to count for new category
+//					pCount = new ProductCountByCategory();
+//					currentCategoryId = product.getCategory().getId();
+//					pCount.setCategoryId( currentCategoryId );
+//					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
+//					pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
+//					pCount.setProductCount( 1 );
+//					//	store count and reset current category
+//					result.add(pCount);
+//				}
+//			}
+//		}
+		
 //		Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);        
 //		criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
 		

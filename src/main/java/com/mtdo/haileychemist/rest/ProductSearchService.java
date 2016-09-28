@@ -88,13 +88,13 @@ public class ProductSearchService {
 
 //	Get all value of each attribute of all products found
 //	URL parameters: url?keyWork=""&categoryId=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
-//	Return a Map<attributeId, List<attributeValue>> for all products found 
+//	Return a Map<<attributeId, attributeName>, List<attributeValue>> for all products found 
 //		WORKDING HERE
 	@Path("/{categoryId}/attribute")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, List<String>> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
-		Map<String, List<String>> result = new HashMap<String, List<String>>();		
+	public Map<List<String>, List<String>> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
+		Map<List<String>, List<String>> result = new HashMap<List<String>, List<String>>();		
 		
 		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Tuple> cq = cb.createTupleQuery();
@@ -122,33 +122,48 @@ public class ProductSearchService {
 
 //		cq.multiselect(
 //				productAttribute.get("attribute").get("id"),
-//				productAttribute.get("attribute").get("name"), 
 //				productAttribute.get("attribute_value")
-////				product.get("name")
 //				).distinct(true);
 
 		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
 		List<Tuple> lstTuple = tq.getResultList();
 
+		List<String> lstKey   = null;
 		List<String> lstValue = null;
-		int i = 0;
+
+		//		first attribute 
+		
+//		int i = 0;
+		
 		for (Tuple tuple: lstTuple) {
-			lstValue = new ArrayList<String>();
-			lstValue.add("Attribute id: " + tuple.get(0, Integer.class));
-			lstValue.add("Attribute name: " + tuple.get(1, String.class));
-			lstValue.add("Attribute value: " + tuple.get(2, String.class));
-			lstValue.add("Product name: " + tuple.get(3, String.class));
-			result.put("Key " + i, lstValue);
-			i++;
+			lstKey = new ArrayList<String>();
+//			lstKey.add("" + i);
+			lstKey.add( "" + tuple.get(0, Integer.class) );
+			lstKey.add( tuple.get(1, String.class) );
+//			if key in list already then add value to value list of the key
+//			else add key to key list and value to value list of the key
+			if ( result.containsKey(lstKey) ){
+				result.get(lstKey).add( tuple.get(2, String.class) );
+			} else {
+				lstValue = new ArrayList<String>();
+				lstValue.add(tuple.get(2, String.class));
+				result.put(lstKey, lstValue);
+			}
+//			lstValue.add("Attribute value: " + tuple.get(2, String.class));
+//			lstValue.add("Product name: " + tuple.get(3, String.class));
+//			result.put(lstKey, lstValue);
+//			i++;
 		}
 
-//		//		Count product for each category
-//		if ( products.size() > 0 ) {
+//		//		collect values for each attribute
+//		if ( lstTuple.size() > 0 ) {
 //			//	init result					
 //			ProductCountByCategory pCount = new ProductCountByCategory();
-//			//		set first categoryId to be current
-//			//		start from category of the first product
-//			int currentCategoryId = products.get(0).getCategory().getId();
+//			//		set first attributeId to be current
+//			//		start from value of the first attribute
+//			int currentAttributeId = lstTuple.get(0).get(0, Integer.class);
+//			lstValue = new ArrayList<String>();
+//			lstValue .add(e);
 //			pCount.setCategoryId(currentCategoryId);
 //			pCount.setCategoryName( getCategoryName(currentCategoryId) );
 //			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );

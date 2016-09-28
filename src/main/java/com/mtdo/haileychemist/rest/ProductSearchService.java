@@ -99,10 +99,13 @@ public class ProductSearchService {
 		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Tuple> cq = cb.createTupleQuery();
 		Root<Product> product = cq.from(Product.class);
-//		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
 		
-		Predicate predicates = cb.like(product.<String>get("name"), "%i%");
+		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		queryParameters.add("categoryId", "" + categoryId);
+		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
+		
+//		Predicate predicates = cb.like(product.<String>get("name"), "%i%");
 		cq.where(predicates);
 		
 		Order order = cb.asc(productAttribute.get("attribute").get("id"));
@@ -144,10 +147,6 @@ public class ProductSearchService {
 			}
 		}
 
-//		Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);        
-//		criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
-		
-//		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 //		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
 		return result;
 	}

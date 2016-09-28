@@ -88,13 +88,13 @@ public class ProductSearchService {
 
 //	Get all value of each attribute of all products found
 //	URL parameters: url?keyWork=""&categoryId=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
-//	Return a Map<<attributeId, attributeName>, List<attributeValue>> for all products found 
+//	Return a Map<attributeId, List<attributeValue>> for all products found 
 //		WORKDING HERE
 	@Path("/{categoryId}/attribute")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<List<String>, List<String>> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
-		Map<List<String>, List<String>> result = new HashMap<List<String>, List<String>>();		
+	public Map<Integer, List<String>> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
+		Map<Integer, List<String>> result = new HashMap<Integer, List<String>>();		
 		
 		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Tuple> cq = cb.createTupleQuery();
@@ -128,69 +128,22 @@ public class ProductSearchService {
 		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
 		List<Tuple> lstTuple = tq.getResultList();
 
-		List<String> lstKey   = null;
 		List<String> lstValue = null;
-
-		//		first attribute 
-		
-//		int i = 0;
-		
+		int attributeId = 0;
 		for (Tuple tuple: lstTuple) {
-			lstKey = new ArrayList<String>();
-//			lstKey.add("" + i);
-			lstKey.add( "" + tuple.get(0, Integer.class) );
-			lstKey.add( tuple.get(1, String.class) );
+			attributeId = tuple.get(0, Integer.class);
 //			if key in list already then add value to value list of the key
 //			else add key to key list and value to value list of the key
-			if ( result.containsKey(lstKey) ){
-				result.get(lstKey).add( tuple.get(2, String.class) );
+			if ( result.containsKey(attributeId) ){
+				result.get(attributeId).add( tuple.get(2, String.class) );
 			} else {
 				lstValue = new ArrayList<String>();
+				lstValue.add(tuple.get(1, String.class));
 				lstValue.add(tuple.get(2, String.class));
-				result.put(lstKey, lstValue);
+				result.put(attributeId, lstValue);
 			}
-//			lstValue.add("Attribute value: " + tuple.get(2, String.class));
-//			lstValue.add("Product name: " + tuple.get(3, String.class));
-//			result.put(lstKey, lstValue);
-//			i++;
 		}
 
-//		//		collect values for each attribute
-//		if ( lstTuple.size() > 0 ) {
-//			//	init result					
-//			ProductCountByCategory pCount = new ProductCountByCategory();
-//			//		set first attributeId to be current
-//			//		start from value of the first attribute
-//			int currentAttributeId = lstTuple.get(0).get(0, Integer.class);
-//			lstValue = new ArrayList<String>();
-//			lstValue .add(e);
-//			pCount.setCategoryId(currentCategoryId);
-//			pCount.setCategoryName( getCategoryName(currentCategoryId) );
-//			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
-//			pCount.setProductCount( 0 );
-//			result.add(pCount);
-//			//		pCount and pCount in result point to the same object
-//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
-//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//			for ( Product product: products ) {
-//				//			store category id
-//				//			if same category then increase count
-//				if ( currentCategoryId == product.getCategory().getId() ){
-//					pCount.setProductCount( pCount.getProductCount() + 1 );
-//				} else { // else store count for current category then reset to count for new category
-//					pCount = new ProductCountByCategory();
-//					currentCategoryId = product.getCategory().getId();
-//					pCount.setCategoryId( currentCategoryId );
-//					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
-//					pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
-//					pCount.setProductCount( 1 );
-//					//	store count and reset current category
-//					result.add(pCount);
-//				}
-//			}
-//		}
-		
 //		Predicate[] predicates = extractPredicates(queryParameters, criteriaBuilder, root);        
 //		criteriaQuery.select(criteriaQuery.getSelection()).where(predicates);
 		

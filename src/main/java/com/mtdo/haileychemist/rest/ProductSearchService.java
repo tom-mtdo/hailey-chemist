@@ -3,10 +3,11 @@ package com.mtdo.haileychemist.rest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -106,34 +107,10 @@ public class ProductSearchService {
 		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-		
-//		test parameters
-		Iterator<String> it = queryParameters.keySet().iterator();
-		while ( it.hasNext() ){
-			String theKey = (String)it.next();
-			List<String> theValues = queryParameters.get(theKey);
-			System.out.print("Key: " + theKey + ", values: [");
-			for (String str: theValues) {
-				System.out.print(str + ",");
-			}
-			System.out.println("]");
-		}
-//		==============
 		queryParameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
-		
-		int attrId = 3;
-		String attrValue = "400";
-		Predicate predicateAttrId = cb.equal( attribute.get("id"), attrId );
-		Predicate predicateAttrValue = cb.equal( productAttribute.get("attribute_value"), attrValue );
-		
 		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
-		lstPredicate.add(predicateAttrId);
-		lstPredicate.add(predicateAttrValue);
-		predicates = new Predicate[lstPredicate.size()];
-		lstPredicate.toArray(predicates);
-		cq.where(predicates);
-		
+
 		Order order = cb.asc(attribute.get("id"));
 		cq.orderBy(order);
 		
@@ -148,12 +125,77 @@ public class ProductSearchService {
 				productAttribute.get("attribute_value")
 				);
 
-		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
-		List<Tuple> lstTuple = tq.getResultList();
+//		test parameters
+		int attrId = -1;
+		List<String> theValues = null;
+		Predicate predicateAttrId = null;
+		Predicate predicateAttrValue  = null;
+		TypedQuery<Tuple> tq = null;
+		Set<Tuple> setTuple = new HashSet<Tuple>();
+//		List<Tuple> lstTuple  = null;
+		List<Tuple> lstTupleTmp  = null;
+		Boolean wasQueried = false;
+		
+		Iterator<String> it = queryParameters.keySet().iterator();
+		while ( it.hasNext() ){
+			String theKey = (String)it.next();
+			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
+				attrId = Integer.parseInt(theKey.substring(4));
+				theValues = queryParameters.get(theKey);
+				predicateAttrId = cb.equal( attribute.get("id"), attrId );
+				predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
+
+//				remove old attribute predicate
+				if (lstPredicate.contains(predicateAttrId)) {
+					lstPredicate.remove(predicateAttrId);
+				}
+				if (lstPredicate.contains(predicateAttrValue)) {
+					lstPredicate.remove(predicateAttrValue);
+				}
+				
+				lstPredicate.add(predicateAttrId);
+				lstPredicate.add(predicateAttrValue);
+				predicates = new Predicate[lstPredicate.size()];
+				lstPredicate.toArray(predicates);
+				cq.where(predicates);
+
+				tq = entityManager.createQuery(cq);
+				lstTupleTmp = tq.getResultList();
+//				union all query result from searching by each set of attribute value
+				setTuple.addAll(lstTupleTmp);
+				wasQueried = true;
+//				System.out.println("The Key: " + theKey);
+//				System.out.print("AttributeId: " + attrId + ", values: [");
+//				for (String str: theValues) {
+//					System.out.print(str + ",");
+//				}
+//				System.out.println("]");
+			}
+		}
+		
+//		if not running query yet, there was no attribute parameter 
+//		then run query, for categoryId and keyWord
+		if (!wasQueried) {
+			cq.where(predicates);
+			tq = entityManager.createQuery(cq);
+			lstTupleTmp = tq.getResultList();
+			setTuple.addAll(lstTupleTmp);
+		}
+//		==============
+		
+		
+//		int attrId = 3;
+//		String attrValue = "400";
+//		Predicate predicateAttrId = cb.equal( attribute.get("id"), attrId );
+////		Predicate predicateAttrValue = cb.equal( productAttribute.get("attribute_value"), attrValue );
+//		Predicate predicateAttrValue = productAttribute.get("attribute_value").in(attrValue);
+		
+		
+
 
 		List<String> lstValue = null;
 		int attributeId = 0;
-		for (Tuple tuple: lstTuple) {
+		for (Tuple tuple: setTuple) {
 			attributeId = tuple.get(0, Integer.class);
 //			if key in list already then add value to value list of the key
 //			else add key to key list and value to value list of the key

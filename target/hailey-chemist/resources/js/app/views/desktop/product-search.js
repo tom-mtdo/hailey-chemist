@@ -26,12 +26,13 @@ define([
         		ProductPaginationView,
         		productSearchTemplate,
         		attributeTemplate) {
-	
+
 	var AttributeView = Backbone.View.extend({
 		initialize: function(){
 		},
 
 		events:{
+//			either of following two line works
 //			"change input[class='checkboxAttributeValue']":"updateFilter"
 			"change :checkbox[class='checkboxAttributeValue']":"updateFilter"
 		},
@@ -52,14 +53,14 @@ define([
 				utilities.applyTemplate( $(self.el), attributeTemplate, {model:self.model} );
 			});
 		},
-		
+
 		updateFilter:function( event ){
 			var self=this;
 			var $target = $(event.currentTarget)
 			var attrId = $target.data("attribute-id");
 			var attrValue = $target.val();
-	        var checked = $target.is(':checked');
-	        
+			var checked = $target.is(':checked');
+
 			if ( checked ){
 				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
 			} else {
@@ -93,7 +94,7 @@ define([
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = false;
-			
+
 //			get all categories, always to choose to search, currently not in use
 			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
 			$.getJSON( strCatUrl, function(categories){
@@ -104,7 +105,7 @@ define([
 					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
 			});
-			
+
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
 				self.attributeModel.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute" + "?keyWord=" + self.model.keyWord.trim();
@@ -119,20 +120,20 @@ define([
 
 			//			update count number of product found
 			//        	var strUrl = self.model.dataSourceCount; //config.baseUrl + "rest/products/count";
-        	$.getJSON(self.paginationModel.dataSourceCount, function(result){
-        		$.each( result, function( key, val ) {
-        			if(key == "count"){
-        				self.model.resultCount = val;
-        				self.gotCount = true;
-//        				if got all data then render        				
-        				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
-        					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
-        				}
-        			}
-        		});
-        	});
+			$.getJSON(self.paginationModel.dataSourceCount, function(result){
+				$.each( result, function( key, val ) {
+					if(key == "count"){
+						self.model.resultCount = val;
+						self.gotCount = true;
+//						if got all data then render        				
+						if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
+							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
+						}
+					}
+				});
+			});
 
-//        	count product found by category
+//			count product found by category
 			$.getJSON(self.strUrl, function( productCountByCategories ){
 //				show categories and number of its products
 				self.gotCategoryCount = true;
@@ -144,7 +145,7 @@ define([
 //				attribute
 				self.attributeView = new AttributeView( {model:self.attributeModel, el:$("#divSearchProductAttribute")} );
 				self.attributeView.render();
-				
+
 //				pagination
 				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 				self.productPaginationView.render();
@@ -153,14 +154,14 @@ define([
 //				{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
 //				{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
 //				];
-//
+
 //				self.attributeView = new AttributeView( {model:self.model, el:$("#divSearchProductAttribute")} );
 //				self.attributeView.render();
 
 			});
 
-				
-			
+
+
 
 			return self;
 		},
@@ -179,24 +180,24 @@ define([
 				this.updateModel();
 			}
 		},
-		
+
 		showProductByCategory:function(event){
 			var self = this;
 			var catId = $(event.currentTarget).data("category-id");
 			self.model.categoryId = catId;
 			self.render();
- 		},
- 		
- 		clearCategory:function(){
- 			this.model.categoryId = -1;
- 			this.render();
- 		},
- 		
- 		clearKeyWord:function(){
- 			this.model.keyWord = "";
- 			this.render();
- 		}
-		 		
+		},
+
+		clearCategory:function(){
+			this.model.categoryId = -1;
+			this.render();
+		},
+
+		clearKeyWord:function(){
+			this.model.keyWord = "";
+			this.render();
+		}
+
 	});
 
 	return ProductSearchView;

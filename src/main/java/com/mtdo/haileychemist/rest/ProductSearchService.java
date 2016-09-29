@@ -1,6 +1,8 @@
 package com.mtdo.haileychemist.rest;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
+import com.mtdo.haileychemist.model.Attribute;
 import com.mtdo.haileychemist.model.Category;
 import com.mtdo.haileychemist.model.Product;
 import com.mtdo.haileychemist.model.ProductAttribute;
@@ -100,31 +103,37 @@ public class ProductSearchService {
 		final CriteriaQuery<Tuple> cq = cb.createTupleQuery();
 		Root<Product> product = cq.from(Product.class);
 		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
+		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
+		
+		int attrId = 3;
+		String attrValue = "400";
+		Predicate predicateAttrId = cb.equal( attribute.get("id"), attrId );
+		Predicate predicateAttrValue = cb.equal( productAttribute.get("attribute_value"), attrValue );
+		
+		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
+		lstPredicate.add(predicateAttrId);
+		lstPredicate.add(predicateAttrValue);
+		predicates = new Predicate[lstPredicate.size()];
+		lstPredicate.toArray(predicates);
 		cq.where(predicates);
 		
-		Order order = cb.asc(productAttribute.get("attribute").get("id"));
+		Order order = cb.asc(attribute.get("id"));
 		cq.orderBy(order);
 		
 		cq.multiselect(
-				productAttribute.get("attribute").get("id"),
-				productAttribute.get("attribute").get("name"), 
-				productAttribute.get("attribute_value"),
-				product.get("name")
+				attribute.get("id"),
+				attribute.get("name"),
+				productAttribute.get("attribute_value")
 				);
 		
 		cq.groupBy(				
-				productAttribute.get("attribute").get("id"), 
+				attribute.get("id"),
 				productAttribute.get("attribute_value")
 				);
-
-//		cq.multiselect(
-//				productAttribute.get("attribute").get("id"),
-//				productAttribute.get("attribute_value")
-//				).distinct(true);
 
 		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
 		List<Tuple> lstTuple = tq.getResultList();

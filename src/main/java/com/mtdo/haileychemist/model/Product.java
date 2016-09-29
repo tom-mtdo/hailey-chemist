@@ -150,11 +150,11 @@ public class Product implements Serializable {
 		this.category = category;
 	}
 
-	public List<ProductAttribute> getproductAttributes() {
+	public List<ProductAttribute> getProductAttributes() {
 		return productAttributes;
 	}
 
-	public void setproductAttributes(List<ProductAttribute> productAttributes) {
+	public void setProductAttributes(List<ProductAttribute> productAttributes) {
 		this.productAttributes = productAttributes;
 	}
 

@@ -4,6 +4,8 @@
  * resultCount: Number of product found
  * categories: list of all category to fill in the category select for search
  * attributeValues: list all values of product found group by each attribute, for advanced search 
+ * Main view: product-search.html
+ * 
  * 
  */
 
@@ -15,13 +17,42 @@ define([
         'app/views/desktop/product-page',
         'app/views/desktop/product-pagination',
         'text!../../../../templates/desktop/product-search.html',
+        'text!../../../../templates/desktop/product-search-attribute.html',
         ], function (utilities,
         		jquery,
         		bootstrap,
         		config,
         		ProductPageView,
         		ProductPaginationView,
-        		productSearchTemplate) {
+        		productSearchTemplate,
+        		attributeTemplate) {
+	
+	var AttributeView = Backbone.View.extend({
+		initialize: function(){
+		},
+
+		events:{
+		},
+
+		render:function(){
+			var self = this;
+			$.getJSON(self.model.strUrlAttr, function( listAttributeValues ){
+				self.model.listAttributeValues = [];
+				$.each( listAttributeValues, function( attributeId, values ){
+					var attributeValues = {"id":attributeId, "name":values[0], "values":[]};
+//					get all attribute values except the first one as it is attribute name
+					var i
+					for ( i=1; i<values.length; i++) {
+						attributeValues.values.push(values[i]);
+					}
+					self.model.listAttributeValues.push(attributeValues);
+				});
+				utilities.applyTemplate( $(self.el), attributeTemplate, {model:self.model} );
+			});
+
+
+		}
+	});
 
 	var ProductSearchView = Backbone.View.extend({
 		initialize: function(){
@@ -37,41 +68,40 @@ define([
 
 		render:function(){
 			var self = this;
-			var strUrl="";
+			self.strUrl="";
+			self.strUrlAttr = "";
 			self.paginationModel={};
 			self.paginationModel.pageNo = 0;
 			self.paginationModel.pageSize = 3;
+			self.attributeModel={};
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = false;
 			
-			self.model.listAttributeValues = [
-				{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
-				{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
-				];
-
-//			get all categories, always
+//			get all categories, always to choose to search, currently not in use
 			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
 			$.getJSON( strCatUrl, function(categories){
 				self.gotCategories = true;
 				self.model.categories = categories;
 //				alert("No of category: " + self.model.categories.length);
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
-					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
 			});
 			
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
-				strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
+				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
+				self.attributeModel.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute" + "?keyWord=" + self.model.keyWord.trim();
 				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
 				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim();
 			} else {
-				strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount";
+				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount";
+				self.attributeModel.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute";
 				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId;
 				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
 			}
 
-			//			update count
+			//			update count number of product found
 			//        	var strUrl = self.model.dataSourceCount; //config.baseUrl + "rest/products/count";
         	$.getJSON(self.paginationModel.dataSourceCount, function(result){
         		$.each( result, function( key, val ) {
@@ -86,21 +116,39 @@ define([
         		});
         	});
 
-			$.getJSON(strUrl, function( productCountByCategories ){
+//        	count product found by category
+			$.getJSON(self.strUrl, function( productCountByCategories ){
 //				show categories and number of its products
 				self.gotCategoryCount = true;
 //				if got all data then render
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
 					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
+
+//				attribute
+				self.attributeView = new AttributeView( {model:self.attributeModel, el:$("#divSearchProductAttribute")} );
+				self.attributeView.render();
+				
+//				pagination
 				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 				self.productPaginationView.render();
+
+//				self.model.listAttributeValues = [
+//				{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
+//				{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
+//				];
+//
+//				self.attributeView = new AttributeView( {model:self.model, el:$("#divSearchProductAttribute")} );
+//				self.attributeView.render();
+
 			});
+
+				
+			
 
 			return self;
 		},
 
-//		working on this +++++++++++++++
 		updateModel:function(){
 			var value = this.$("#txtSearchKeyWord").val().trim();
 			if(value) {
@@ -134,8 +182,6 @@ define([
  		}
 		 		
 	});
-
-	
 
 	return ProductSearchView;
 

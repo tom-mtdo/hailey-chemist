@@ -104,8 +104,6 @@ public class ProductSearchService {
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
-		
-//		Predicate predicates = cb.like(product.<String>get("name"), "%i%");
 		cq.where(predicates);
 		
 		Order order = cb.asc(productAttribute.get("attribute").get("id"));
@@ -146,8 +144,6 @@ public class ProductSearchService {
 				result.put(attributeId, lstValue);
 			}
 		}
-
-//		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
 		return result;
 	}
 

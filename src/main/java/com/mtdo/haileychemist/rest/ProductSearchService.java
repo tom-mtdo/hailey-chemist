@@ -1,12 +1,12 @@
 package com.mtdo.haileychemist.rest;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -106,6 +106,19 @@ public class ProductSearchService {
 		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		
+//		test parameters
+		Iterator<String> it = queryParameters.keySet().iterator();
+		while ( it.hasNext() ){
+			String theKey = (String)it.next();
+			List<String> theValues = queryParameters.get(theKey);
+			System.out.print("Key: " + theKey + ", values: [");
+			for (String str: theValues) {
+				System.out.print(str + ",");
+			}
+			System.out.println("]");
+		}
+//		==============
 		queryParameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
 		

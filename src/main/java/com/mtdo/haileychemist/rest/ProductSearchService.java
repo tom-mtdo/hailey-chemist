@@ -127,52 +127,55 @@ public class ProductSearchService {
 
 //		test parameters
 		int attrId = -1;
-		List<String> theValues = null;
+		List<String> theValues = new ArrayList<String>();
 		Predicate predicateAttrId = null;
 		Predicate predicateAttrValue  = null;
 		TypedQuery<Tuple> tq = null;
 		Set<Tuple> setTuple = new HashSet<Tuple>();
 //		List<Tuple> lstTuple  = null;
-		List<Tuple> lstTupleTmp  = null;
+		List<Tuple> lstTupleTmp  = new ArrayList<Tuple>();
 		Boolean wasQueried = false;
 		
-		Iterator<String> it = queryParameters.keySet().iterator();
-		while ( it.hasNext() ){
-			String theKey = (String)it.next();
-			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
-				attrId = Integer.parseInt(theKey.substring(4));
-				theValues = queryParameters.get(theKey);
-				predicateAttrId = cb.equal( attribute.get("id"), attrId );
-				predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
-
-//				remove old attribute predicate
-				if (lstPredicate.contains(predicateAttrId)) {
-					lstPredicate.remove(predicateAttrId);
-				}
-				if (lstPredicate.contains(predicateAttrValue)) {
-					lstPredicate.remove(predicateAttrValue);
-				}
-				
-				lstPredicate.add(predicateAttrId);
-				lstPredicate.add(predicateAttrValue);
-				predicates = new Predicate[lstPredicate.size()];
-				lstPredicate.toArray(predicates);
-				cq.where(predicates);
-
-				tq = entityManager.createQuery(cq);
-				lstTupleTmp = tq.getResultList();
-//				union all query result from searching by each set of attribute value
-				setTuple.addAll(lstTupleTmp);
-				wasQueried = true;
-//				System.out.println("The Key: " + theKey);
-//				System.out.print("AttributeId: " + attrId + ", values: [");
-//				for (String str: theValues) {
-//					System.out.print(str + ",");
+//		Iterator<String> it = queryParameters.keySet().iterator();
+//		while ( it.hasNext() ){
+//			String theKey = (String)it.next();
+//			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
+//				attrId = Integer.parseInt(theKey.substring(4));
+//				theValues = queryParameters.get(theKey);
+//				predicateAttrId = cb.equal( attribute.get("id"), attrId );
+//				predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
+//
+////				remove old attribute predicate
+//				if (lstPredicate.contains(predicateAttrId)) {
+//					lstPredicate.remove(predicateAttrId);
 //				}
-//				System.out.println("]");
-			}
-		}
+//				if (lstPredicate.contains(predicateAttrValue)) {
+//					lstPredicate.remove(predicateAttrValue);
+//				}
+//				
+//				lstPredicate.add(predicateAttrId);
+//				lstPredicate.add(predicateAttrValue);
+//				predicates = new Predicate[lstPredicate.size()];
+//				lstPredicate.toArray(predicates);
+//				cq.where(predicates);
+//
+//				tq = entityManager.createQuery(cq);
+//				lstTupleTmp = tq.getResultList();
+////				union all query result from searching by each set of attribute value
+//				setTuple.addAll(lstTupleTmp);
+//				wasQueried = true;
+//			}
+//		}
 		
+		attrId = 3;
+		theValues.add("400");
+		predicateAttrId = cb.equal( attribute.get("id"), attrId );
+		predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
+		lstPredicate.add(predicateAttrId);
+		lstPredicate.add(predicateAttrValue);
+		predicates = new Predicate[lstPredicate.size()];
+		lstPredicate.toArray(predicates);
+
 //		if not running query yet, there was no attribute parameter 
 //		then run query, for categoryId and keyWord
 		if (!wasQueried) {
@@ -181,17 +184,6 @@ public class ProductSearchService {
 			lstTupleTmp = tq.getResultList();
 			setTuple.addAll(lstTupleTmp);
 		}
-//		==============
-		
-		
-//		int attrId = 3;
-//		String attrValue = "400";
-//		Predicate predicateAttrId = cb.equal( attribute.get("id"), attrId );
-////		Predicate predicateAttrValue = cb.equal( productAttribute.get("attribute_value"), attrValue );
-//		Predicate predicateAttrValue = productAttribute.get("attribute_value").in(attrValue);
-		
-		
-
 
 		List<String> lstValue = null;
 		int attributeId = 0;

@@ -32,6 +32,8 @@ define([
 		},
 
 		events:{
+//			"change input[class='checkboxAttributeValue']":"updateFilter"
+			"change :checkbox[class='checkboxAttributeValue']":"updateFilter"
 		},
 
 		render:function(){
@@ -49,9 +51,23 @@ define([
 				});
 				utilities.applyTemplate( $(self.el), attributeTemplate, {model:self.model} );
 			});
-
-
+		},
+		
+		updateFilter:function( event ){
+			var self=this;
+			var $target = $(event.currentTarget)
+			var attrId = $target.data("attribute-id");
+			var attrValue = $target.val();
+	        var checked = $target.is(':checked');
+	        
+			if ( checked ){
+				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
+			} else {
+				alert("Remove filter: attributeId: " + attrId + ", value: " + attrValue);				
+			}
+//			self.model.categoryId = catId;
 		}
+
 	});
 
 	var ProductSearchView = Backbone.View.extend({

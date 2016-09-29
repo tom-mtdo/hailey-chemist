@@ -10,7 +10,7 @@
 				<span style="display:none;">id: <%=attributeValues.id%>, </span>
 				<span><%=attributeValues.name%></span>
 	<%  		_.each( attributeValues.values, function(value){	%>
-					<br><span><input type="checkbox" /><%=value%></span>
+					<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" value="<%=value%>"/><%=value%></span>
 	<%			});				%>
 			</div>
 	<%		});		

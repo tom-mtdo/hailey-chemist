@@ -82,6 +82,10 @@ define([
 			"click a[class='categoryPath']":"showProductByCategory",
 			"click #aClearCategory":"clearCategory",
 			"click #aClearKeyWord":"clearKeyWord",
+	//		either of following two line works
+	//		"change input[class='checkboxAttributeValue']":"updateFilter"
+			"change :checkbox[class='checkboxAttributeValue']":"updateFilter",
+			"click #btnApplyFilter":"applyFilter"
 		},
 
 		render:function(){
@@ -207,8 +211,27 @@ define([
 		clearKeyWord:function(){
 			this.model.keyWord = "";
 			this.render();
-		}
+		},
+		
+		updateFilter:function( event ){
+			var self=this;
+			var $target = $(event.currentTarget)
+			var attrId = $target.data("attribute-id");
+			var attrValue = $target.val();
+			var checked = $target.is(':checked');
+	
+			if ( checked ){
+				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
+			} else {
+				alert("Remove filter: attributeId: " + attrId + ", value: " + attrValue);				
+			}
+	//		self.model.categoryId = catId;
+		},
 
+		applyFilter:function(){
+			alert("Apply filter!!");
+		}
+		
 	});
 
 	return ProductSearchView;

@@ -17,59 +17,60 @@ define([
         'app/views/desktop/product-page',
         'app/views/desktop/product-pagination',
         'text!../../../../templates/desktop/product-search.html',
-        'text!../../../../templates/desktop/product-search-attribute.html',
+//        'text!../../../../templates/desktop/product-search-attribute.html',
         ], function (utilities,
         		jquery,
         		bootstrap,
         		config,
         		ProductPageView,
         		ProductPaginationView,
-        		productSearchTemplate,
-        		attributeTemplate) {
+        		productSearchTemplate
+//        		attributeTemplate
+        		) {
 
-	var AttributeView = Backbone.View.extend({
-		initialize: function(){
-		},
-
-		events:{
-//			either of following two line works
-//			"change input[class='checkboxAttributeValue']":"updateFilter"
-			"change :checkbox[class='checkboxAttributeValue']":"updateFilter"
-		},
-
-		render:function(){
-			var self = this;
-			$.getJSON(self.model.strUrlAttr, function( listAttributeValues ){
-				self.model.listAttributeValues = [];
-				$.each( listAttributeValues, function( attributeId, values ){
-					var attributeValues = {"id":attributeId, "name":values[0], "values":[]};
-//					get all attribute values except the first one as it is attribute name
-					var i
-					for ( i=1; i<values.length; i++) {
-						attributeValues.values.push(values[i]);
-					}
-					self.model.listAttributeValues.push(attributeValues);
-				});
-				utilities.applyTemplate( $(self.el), attributeTemplate, {model:self.model} );
-			});
-		},
-
-		updateFilter:function( event ){
-			var self=this;
-			var $target = $(event.currentTarget)
-			var attrId = $target.data("attribute-id");
-			var attrValue = $target.val();
-			var checked = $target.is(':checked');
-
-			if ( checked ){
-				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
-			} else {
-				alert("Remove filter: attributeId: " + attrId + ", value: " + attrValue);				
-			}
-//			self.model.categoryId = catId;
-		}
-
-	});
+//	var AttributeView = Backbone.View.extend({
+//		initialize: function(){
+//		},
+//
+//		events:{
+////			either of following two line works
+////			"change input[class='checkboxAttributeValue']":"updateFilter"
+//			"change :checkbox[class='checkboxAttributeValue']":"updateFilter"
+//		},
+//
+//		render:function(){
+//			var self = this;
+//			$.getJSON(self.model.strUrlAttr, function( listAttributeValues ){
+//				self.model.listAttributeValues = [];
+//				$.each( listAttributeValues, function( attributeId, values ){
+//					var attributeValues = {"id":attributeId, "name":values[0], "values":[]};
+////					get all attribute values except the first one as it is attribute name
+//					var i
+//					for ( i=1; i<values.length; i++) {
+//						attributeValues.values.push(values[i]);
+//					}
+//					self.model.listAttributeValues.push(attributeValues);
+//				});
+//				utilities.applyTemplate( $(self.el), attributeTemplate, {model:self.model} );
+//			});
+//		},
+//
+//		updateFilter:function( event ){
+//			var self=this;
+//			var $target = $(event.currentTarget)
+//			var attrId = $target.data("attribute-id");
+//			var attrValue = $target.val();
+//			var checked = $target.is(':checked');
+//
+//			if ( checked ){
+//				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
+//			} else {
+//				alert("Remove filter: attributeId: " + attrId + ", value: " + attrValue);				
+//			}
+////			self.model.categoryId = catId;
+//		}
+//
+//	});
 
 	var ProductSearchView = Backbone.View.extend({
 		initialize: function(){
@@ -137,31 +138,28 @@ define([
 			$.getJSON(self.strUrl, function( productCountByCategories ){
 //				show categories and number of its products
 				self.gotCategoryCount = true;
+				self.model.listAttributeValues = [
+					{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
+					{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
+					];
+
 //				if got all data then render
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories ) {
 					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
 				}
 
-//				attribute
-				self.attributeView = new AttributeView( {model:self.attributeModel, el:$("#divSearchProductAttribute")} );
-				self.attributeView.render();
+////				attribute
+//				self.attributeView = new AttributeView( {model:self.attributeModel, el:$("#divSearchProductAttribute")} );
+//				self.attributeView.render();
 
 //				pagination
 				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 				self.productPaginationView.render();
 
-//				self.model.listAttributeValues = [
-//				{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
-//				{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
-//				];
-
 //				self.attributeView = new AttributeView( {model:self.model, el:$("#divSearchProductAttribute")} );
 //				self.attributeView.render();
 
 			});
-
-
-
 
 			return self;
 		},

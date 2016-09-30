@@ -31,7 +31,26 @@
 
 	<br>
 	<!-- list all attributes -->
-	<div id="divSearchProductAttribute">Product attributes</div>	
+	<!-- <div id="divSearchProductAttribute">Product attributes</div> -->
+	<div>
+		<div class="row">
+		<% 	if ( model.listAttributeValues && (model.listAttributeValues.length>0) ){
+			_.each( model.listAttributeValues, function (attributeValues) {		%>
+			<!-- WORKING HERE  -->
+				<!-- each property is in a column -->
+				<div class="col-md-1">
+					<span style="display:none;">id: <%=attributeValues.id%>, </span>
+					<span><%=attributeValues.name%></span>
+		<%  		_.each( attributeValues.values, function(value){	%>
+						<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" value="<%=value%>"/><%=value%></span>
+		<%			});				%>
+				</div>
+		<%		});		
+			} else {	%>
+				<br><span>No attribute</span>
+		<%	}	%>
+		</div>
+	</div>	
 	
 	<br>
 	<div id="divSearchProductPagination">ProductPagination</div>

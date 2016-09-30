@@ -86,7 +86,8 @@ define([
 	//		either of following two line works
 	//		"change input[class='checkboxAttributeValue']":"updateFilter"
 			"change :checkbox[class='checkboxAttributeValue']":"updateFilter",
-			"click #btnApplyFilter":"applyFilter"
+			"click #btnApplyFilter":"applyFilter",
+			"click a[class='clearFilter']":"clearFilter"
 		},
 
 		render:function(){
@@ -96,7 +97,6 @@ define([
 			self.paginationModel={};
 			self.paginationModel.pageNo = 0;
 			self.paginationModel.pageSize = 3;
-//			self.attributeModel={};
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = false;
@@ -136,8 +136,6 @@ define([
 						self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?" + strFilter;
 					}
 				});
-				alert(self.paginationModel.dataSource);
-				alert(self.paginationModel.dataSourceCount);
 			}
 
 			
@@ -243,7 +241,7 @@ define([
 		
 		updateFilter:function( event ){
 			var self=this;
-			var $target = $(event.currentTarget)
+			var $target = $(event.currentTarget);
 			var attrId = $target.data("attribute-id");
 			var attrValue = $target.val();
 			var checked = $target.is(':checked');
@@ -260,6 +258,7 @@ define([
 				this.model.filter.splice(index, 1);
 			}
 		},
+		
 
 		applyFilter:function(){
 			this.render();
@@ -268,6 +267,15 @@ define([
 //				str = str + flt + "&";
 //			});
 //			alert("Attributes: " + str);
+		},
+		
+		clearFilter:function(event){
+			var self = this;
+			var $target = $(event.currentTarget);
+			var filter = $target.data("filter");
+			var index = this.model.filter.indexOf(filter);
+			this.model.filter.splice(index, 1);
+			self.render();
 		}
 		
 	});

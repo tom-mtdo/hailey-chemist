@@ -212,40 +212,8 @@ public class ProductSearchService {
 	 */
 	public Set<Integer> productFilter( MultivaluedMap<String, String> queryParameters  ){
 		Set<Integer> result = new HashSet<Integer>();		
-		//		copy parameter, just in case
-//		MultivaluedMap<String, String> parameters = new MultivaluedHashMap<String, String>(inQueryParameters);
-//		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-//		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-//
-//		//		FROM
-//		Root<Product> product = cq.from(Product.class);
-//		//		WHERE
-//		//		query by category and keyWord
-//		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
-//		//		SELECT
-//		cq.multiselect( product.get("id") );
-//		cq.groupBy( product.get("id") );
-//		// 		ORDER BY
-//		Order order = cb.asc( product.get("id") );
-//		cq.orderBy( order );
-//		//		query by attributes	which are from url parameters
-//		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
-//
-//		int attrId = -1;
-//		List<String> theValues = new ArrayList<String>();
-//
-//		TypedQuery<Tuple> tq = null;
-//		//		product found by each attribute
-//		List<Tuple> lstTupleTmp  = new ArrayList<Tuple>();
-//		// 		find product match attribute filter
-//		//		find attribute parameter in url
-//		Boolean wasFilteredByAttribute = false;
 
-		//		set of id of product found
-//		Set<Tuple> setTupleProductId = new HashSet<Tuple>();
 		List<Tuple> lstTupleProductId = new ArrayList<Tuple>();
-//		List<Tuple> lstTupleTmp = new ArrayList<Tuple>();
-//		Boolean hasAttribute = false;
 		int numberOfAttribute = 0;
 		int attrId = -1;
 		List<String> attrValues = new ArrayList<String>();
@@ -253,41 +221,12 @@ public class ProductSearchService {
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
-//				hasAttribute = true;
 				numberOfAttribute++;
-//				//	JOIN attribute and value tables
-//				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
-//				//	Do not use below line, otherwise has error when query an attribute which is not in any product
-//				//	Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
-
 				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
 				attrValues = queryParameters.get(theKey);
 				List<Tuple> lstTupleTmp = filterSingleAttribute(queryParameters, attrId, attrValues);
 				lstTupleProductId.addAll(lstTupleTmp);
-//				Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attrId );
-//				Predicate predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
-//				//				remove old attribute predicate
-//				if (lstPredicate.contains(predicateAttrId)) {
-//					lstPredicate.remove(predicateAttrId);
-//				}
-//				if (lstPredicate.contains(predicateAttrValue)) {
-//					lstPredicate.remove(predicateAttrValue);
-//				}
-//
-//				lstPredicate.add(predicateAttrId);
-//				lstPredicate.add(predicateAttrValue);
-//
-//				// convert to array to put in where clause
-//				predicates = new Predicate[lstPredicate.size()];
-//				lstPredicate.toArray(predicates);
-//				cq.where(predicates);
-//
-//				tq = entityManager.createQuery(cq);
-//				lstTupleTmp = tq.getResultList();
-//				//				union all productId found for each attribute 
-//				setTupleProductId.addAll(lstTupleTmp);
-//				wasFilteredByAttribute = true;
 			}
 		}
 		
@@ -320,24 +259,7 @@ public class ProductSearchService {
 					result.add(productId);
 				}
 			}
-//			setTupleProductId.addAll(lstTupleTmp);
-//			//		extract productId
-//			if( setTupleProductId.size()>0 ){
-//				int productId = -1;
-//				for (Tuple tuple: setTupleProductId) {
-//					productId = tuple.get(0, Integer.class);
-//					result.add(productId);
-//				}
-//			}
 		}
-
-//		if (!wasFilteredByAttribute){
-//			cq.where(predicates);
-//			tq = entityManager.createQuery(cq);
-//			lstTupleTmp = tq.getResultList();
-//			//to make sure no duplicate value
-//			setTupleProductId.addAll(lstTupleTmp);			
-//		}
 
 		return result;
 	}
@@ -388,9 +310,6 @@ public class ProductSearchService {
 		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
 		//	query by attributes	which are from url parameters
 		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
-
-//		int attrId = -1;
-//		List<String> theValues = new ArrayList<String>();
 
 		Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attributeId );
 		Predicate predicateAttrValue = productAttribute.get("attribute_value").in(attributeValues);
@@ -464,64 +383,6 @@ public class ProductSearchService {
 		}
 		return result;
 	}
-
-	//	public Map<String, Long> searchProductByCategoryCount( MultivaluedMap<String, String> queryParameters ){
-	//		
-	//		Map<String, Long> result = new HashMap<String, Long>();		
-	//		//	get all query parameters: categoryId, keyWord, a
-	//		Set<Integer> setProductId = productFilter(queryParameters);
-	//		if( (setProductId==null) || (setProductId.size()<1) ){
-	//			result.put("count", 0L);
-	//		} else {
-	//			result.put("count", new Long(setProductId.size()) );
-	//		}
-	//		
-	////		//		consumes products rest service
-	////		Client client = ClientBuilder.newClient();
-	////		String uriParameters = buildUriParameter( queryParameters );
-	////		//		client.property doesnt work
-	////		String strUrl = "";
-	////		if (categoryId > 0) {
-	////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId + "&" + uriParameters;
-	////		} else {
-	////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count" + "?" + uriParameters;
-	////		}
-	////		Map<String, Long> result =
-	////				client.target(strUrl)
-	////				.request(MediaType.APPLICATION_JSON)
-	////				.get(new GenericType<Map<String, Long>>() {
-	////				});		
-	//
-	//		return result;
-	//	}
-
-	//	input: categoryId
-	//	if category < 0 -> all categories
-	//	product list must be sorted by categoryId
-	//	can be extended to deal with query parameters.
-	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
-	//	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
-	//
-	//		String parameters = buildUriParameter( queryParameters );
-	//		//		consumes products rest service
-	//		Client client = ClientBuilder.newClient();
-	//		//		client.property doesnt work
-	//		String strUrl = "";
-	//		if (categoryId > 0) {
-	//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
-	//		} else {
-	//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
-	//		}
-	//
-	//		strUrl = strUrl + "&" + parameters;
-	//		List<Product> products =
-	//				client.target(strUrl)
-	//				.request(MediaType.APPLICATION_JSON)
-	//				.get(new GenericType<List<Product>>() {
-	//				});
-	//
-	//		return products;
-	//	}
 
 	//	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
 	//		String result = "";

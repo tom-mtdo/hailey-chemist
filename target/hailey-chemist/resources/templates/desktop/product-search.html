@@ -6,6 +6,13 @@
 			<span>Category: <%=model.categoryId%></span> &nbsp; <a id="aClearCategory">Clear</a>
 			| <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
 			| <span>Found: <%=model.resultCount%></span>
+			<br>
+<%			if (model.filter.length > 0){	%>
+				<span>Filter:</span>
+<%				$.each(model.filter, function(index, aFilter){	%>
+					<span><%=aFilter%></span> &nbsp; <a class="clearFilter" data-filter="<%=aFilter%>">Clear</a> |
+<%				})
+			}	%>			
 <%		}	%>
 	</div>
 	

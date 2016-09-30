@@ -75,6 +75,7 @@ define([
 	var ProductSearchView = Backbone.View.extend({
 		initialize: function(){
 			this.model.resultCount = 0;
+			this.model.filter=[];
 		},
 
 		events:{
@@ -95,7 +96,7 @@ define([
 			self.paginationModel={};
 			self.paginationModel.pageNo = 0;
 			self.paginationModel.pageSize = 3;
-			self.attributeModel={};
+//			self.attributeModel={};
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = false;
@@ -103,15 +104,42 @@ define([
 
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
-				self.attributeModel.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute" + "?keyWord=" + self.model.keyWord.trim();
+				self.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute" + "?keyWord=" + self.model.keyWord.trim();
 				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim();
 				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim();
 			} else {
 				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount";
-				self.attributeModel.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute";
+				self.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute";
 				self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId;
 				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
 			}
+			
+			// add other filter: like attribute filters
+			if ( this.model.filter.length > 0 ) {
+//				convert filters to string to add to url
+				var strFilter = "";
+				$.each(this.model.filter, function(index, flt){
+					strFilter = strFilter + flt + "&";
+				});
+				
+//				add to url
+				$.each(this.model.filter, function(index, flt){
+					if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
+						self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;
+						self.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute" + "?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;
+						self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;
+						self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;
+					} else {
+						self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount?" + strFilter;
+						self.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute?" + strFilter;
+						self.paginationModel.dataSource="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "?" + strFilter;
+						self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count?" + strFilter;
+					}
+				});
+				alert(self.paginationModel.dataSource);
+				alert(self.paginationModel.dataSourceCount);
+			}
+
 			
 //			get all categories, always to choose to search, currently not in use
 			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
@@ -154,7 +182,7 @@ define([
 			});
 
 //			get attribute of product found
-			$.getJSON(self.attributeModel.strUrlAttr, function( listAttributeValues ){
+			$.getJSON(self.strUrlAttr, function( listAttributeValues ){
 				self.gotAttributes = true;
 //				self.model.listAttributeValues = [
 //  					{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
@@ -221,15 +249,25 @@ define([
 			var checked = $target.is(':checked');
 	
 			if ( checked ){
-				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
+				var newFilter = "attr" + attrId + "=" + attrValue;
+				var index = this.model.filter.indexOf(newFilter);
+				if ( index < 0 ){
+					this.model.filter.push(newFilter);	
+				}
 			} else {
-				alert("Remove filter: attributeId: " + attrId + ", value: " + attrValue);				
+				var oldFilter = "attr" + attrId + "=" + attrValue;
+				var index = this.model.filter.indexOf(oldFilter);
+				this.model.filter.splice(index, 1);
 			}
-	//		self.model.categoryId = catId;
 		},
 
 		applyFilter:function(){
-			alert("Apply filter!!");
+			this.render();
+//			var str = "";
+//			$.each(this.model.filter, function(index, flt){
+//				str = str + flt + "&";
+//			});
+//			alert("Attributes: " + str);
 		}
 		
 	});

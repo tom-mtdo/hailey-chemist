@@ -34,8 +34,6 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
-import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
-
 import com.mtdo.haileychemist.model.Attribute;
 import com.mtdo.haileychemist.model.Category;
 import com.mtdo.haileychemist.model.Product;
@@ -56,16 +54,16 @@ public class ProductSearchService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
 		List<Product> result = new ArrayList<Product>();
-		
+
 		//	filter products
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
 		Set<Integer> setProductId = productFilter(queryParameters);
-		
+
 		if( (setProductId==null) || (setProductId.size()<1) ){
 			return result;
 		}
-		
+
 		// extract product list to return	
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
@@ -73,7 +71,7 @@ public class ProductSearchService {
 
 		Predicate predicate = product.get("id").in(setProductId);    
 		cq.select(product).where(predicate);
-		
+
 		TypedQuery<Product> tq = entityManager.createQuery(cq);
 		if (queryParameters.containsKey("first")) {
 			// original
@@ -98,39 +96,28 @@ public class ProductSearchService {
 	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
-	
+
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
 		result = searchCategoryPathCount( queryParameters );
 		return result;
 	}
 
-	//	//	get products belong to all categories
-	////	 not in use
-	//	@GET
-	//	@Produces(MediaType.APPLICATION_JSON)
-	//	public ProductSearchResult searchProducts() {
-	//		ProductSearchResult result = searchProductByCategory( -1 );
-	//		return result;
-	//	}
-
-	//	get products belong to a category or all category if input categoryId = -1
-	//	for pagination
 	@Path("/{categoryId}/count")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Long> productByCategoryCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
 		Map<String, Long> result = new HashMap<String, Long>();
-		
+
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
 		Set<Integer> setProductId = productFilter(queryParameters);
-		
+
 		if( (setProductId==null) || (setProductId.size()<1) ){
 			result.put("count", 0L);
 		} else {
 			result.put("count", new Long(setProductId.size()) );
 		}
-//		Map<String, Long> result = searchProductByCategoryCount( queryParameters );
+		//		Map<String, Long> result = searchProductByCategoryCount( queryParameters );
 		return result;
 	}
 
@@ -186,7 +173,7 @@ public class ProductSearchService {
 		//	WHERE
 		Predicate predicateProductId = product.get("id").in(setProductId);
 		cq.where(predicateProductId);
-		
+
 		//	perform query		
 		tq = entityManager.createQuery(cq);
 		lstTupleTmp = tq.getResultList();
@@ -232,59 +219,39 @@ public class ProductSearchService {
 
 		//		FROM
 		Root<Product> product = cq.from(Product.class);
-//		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
-//		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
-
 		//		WHERE
 		//		query by category and keyWord
-		//		parameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(parameters, cb, product);
-
 		//		SELECT
 		cq.multiselect( product.get("id") );
 		cq.groupBy( product.get("id") );
 		// 		ORDER BY
 		Order order = cb.asc( product.get("id") );
 		cq.orderBy( order );
-
 		//		query by attributes	which are from url parameters
 		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
 
 		int attrId = -1;
 		List<String> theValues = new ArrayList<String>();
-//		Predicate predicateAttrId = null;
-//		Predicate predicateAttrValue  = null;
 
 		TypedQuery<Tuple> tq = null;
 		//		set of id of product found
 		Set<Tuple> setTupleProductId = new HashSet<Tuple>();
 		//		product found by each attribute
 		List<Tuple> lstTupleTmp  = new ArrayList<Tuple>();
-
 		// 		find product match attribute filter
 		//		find attribute parameter in url
 		Boolean wasFilteredByAttribute = false;
-//		Boolean wasInit = false;
+		//		Boolean wasInit = false;
 		Iterator<String> it = parameters.keySet().iterator();
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
 				//	JOIN attribute and value tables
 				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
-//				Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
+				//	Do not use below line, otherwise has error when query an attribute which is not in any product
+				//	Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 
-//				if ( !wasInit ) {
-//					//		SELECT
-//					cq.multiselect(
-//							product.get("id"),
-//							attribute.get("id")
-//							);
-//					cq.groupBy(	attribute.get("id") );
-//					// 		ORDER BY
-//					Order order = cb.asc(attribute.get("id"));
-//					cq.orderBy(order);
-//					wasInit = true;
-//				}
 				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
 				theValues = parameters.get(theKey);
@@ -315,13 +282,6 @@ public class ProductSearchService {
 		}
 
 		if (!wasFilteredByAttribute){
-//			//		SELECT
-//			cq.multiselect( product.get("id") );
-//			cq.groupBy( product.get("id") );
-//			// 		ORDER BY
-//			Order order = cb.asc( product.get("id") );
-//			cq.orderBy( order );
-			//		Then query 
 			cq.where(predicates);
 			tq = entityManager.createQuery(cq);
 			lstTupleTmp = tq.getResultList();
@@ -346,7 +306,7 @@ public class ProductSearchService {
 		if( (setProductId==null) || (setProductId.size()<1) ){
 			return result;
 		}
-		
+
 		//	get categoryId and count
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
@@ -358,7 +318,7 @@ public class ProductSearchService {
 		// GROUP BY		
 		cq.groupBy( product.get("category").get("id") );
 		//	SELECT
-//		cb.count(product);
+		//		cb.count(product);
 		cq.multiselect(
 				product.get("category").get("id"),
 				cb.count(product)
@@ -366,12 +326,12 @@ public class ProductSearchService {
 		//	WHERE
 		Predicate predicate = product.get("id").in(setProductId);
 		cq.where(predicate);
-		
+
 		//	perform query		
 		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
 		List<Tuple> lstTuple = tq.getResultList();
-		
-//		convert to return format
+
+		//		convert to return format
 		int intCategoryId = -1;
 		ProductCountByCategory pCount = null;
 		for (Tuple tuple: lstTuple){
@@ -382,88 +342,87 @@ public class ProductSearchService {
 			pCount.setCategoryName( getCategoryName( intCategoryId ) );
 			pCount.setCategoryPath( getCategoryPath( intCategoryId ) );
 			pCount.setProductCount( tuple.get(1, Long.class).intValue() );
-			//	store count and reset current category
 			result.add(pCount);
 		}
 		return result;
 	}
 
-//	public Map<String, Long> searchProductByCategoryCount( MultivaluedMap<String, String> queryParameters ){
-//		
-//		Map<String, Long> result = new HashMap<String, Long>();		
-//		//	get all query parameters: categoryId, keyWord, a
-//		Set<Integer> setProductId = productFilter(queryParameters);
-//		if( (setProductId==null) || (setProductId.size()<1) ){
-//			result.put("count", 0L);
-//		} else {
-//			result.put("count", new Long(setProductId.size()) );
-//		}
-//		
-////		//		consumes products rest service
-////		Client client = ClientBuilder.newClient();
-////		String uriParameters = buildUriParameter( queryParameters );
-////		//		client.property doesnt work
-////		String strUrl = "";
-////		if (categoryId > 0) {
-////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId + "&" + uriParameters;
-////		} else {
-////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count" + "?" + uriParameters;
-////		}
-////		Map<String, Long> result =
-////				client.target(strUrl)
-////				.request(MediaType.APPLICATION_JSON)
-////				.get(new GenericType<Map<String, Long>>() {
-////				});		
-//
-//		return result;
-//	}
+	//	public Map<String, Long> searchProductByCategoryCount( MultivaluedMap<String, String> queryParameters ){
+	//		
+	//		Map<String, Long> result = new HashMap<String, Long>();		
+	//		//	get all query parameters: categoryId, keyWord, a
+	//		Set<Integer> setProductId = productFilter(queryParameters);
+	//		if( (setProductId==null) || (setProductId.size()<1) ){
+	//			result.put("count", 0L);
+	//		} else {
+	//			result.put("count", new Long(setProductId.size()) );
+	//		}
+	//		
+	////		//		consumes products rest service
+	////		Client client = ClientBuilder.newClient();
+	////		String uriParameters = buildUriParameter( queryParameters );
+	////		//		client.property doesnt work
+	////		String strUrl = "";
+	////		if (categoryId > 0) {
+	////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId + "&" + uriParameters;
+	////		} else {
+	////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count" + "?" + uriParameters;
+	////		}
+	////		Map<String, Long> result =
+	////				client.target(strUrl)
+	////				.request(MediaType.APPLICATION_JSON)
+	////				.get(new GenericType<Map<String, Long>>() {
+	////				});		
+	//
+	//		return result;
+	//	}
 
 	//	input: categoryId
 	//	if category < 0 -> all categories
 	//	product list must be sorted by categoryId
 	//	can be extended to deal with query parameters.
 	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
-//	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
-//
-//		String parameters = buildUriParameter( queryParameters );
-//		//		consumes products rest service
-//		Client client = ClientBuilder.newClient();
-//		//		client.property doesnt work
-//		String strUrl = "";
-//		if (categoryId > 0) {
-//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
-//		} else {
-//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
-//		}
-//
-//		strUrl = strUrl + "&" + parameters;
-//		List<Product> products =
-//				client.target(strUrl)
-//				.request(MediaType.APPLICATION_JSON)
-//				.get(new GenericType<List<Product>>() {
-//				});
-//
-//		return products;
-//	}
+	//	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
+	//
+	//		String parameters = buildUriParameter( queryParameters );
+	//		//		consumes products rest service
+	//		Client client = ClientBuilder.newClient();
+	//		//		client.property doesnt work
+	//		String strUrl = "";
+	//		if (categoryId > 0) {
+	//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+	//		} else {
+	//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
+	//		}
+	//
+	//		strUrl = strUrl + "&" + parameters;
+	//		List<Product> products =
+	//				client.target(strUrl)
+	//				.request(MediaType.APPLICATION_JSON)
+	//				.get(new GenericType<List<Product>>() {
+	//				});
+	//
+	//		return products;
+	//	}
 
-//	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
-//		String result = "";
-//
-//		String parameters = "";
-//		Iterator<String> it = queryParameters.keySet().iterator();
-//		while(it.hasNext()){
-//			String theKey = (String)it.next();
-//			String theValue = queryParameters.getFirst(theKey);
-//			if ( parameters.trim().length() < 1 ){
-//				parameters = theKey + "=" + theValue;
-//			} else {
-//				parameters = parameters + "&" + theKey + "=" + theValue;
-//			}          
-//		}
-//
-//		result = parameters;
-//		return result;
-//	}
+	//	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
+	//		String result = "";
+	//
+	//		String parameters = "";
+	//		Iterator<String> it = queryParameters.keySet().iterator();
+	//		while(it.hasNext()){
+	//			String theKey = (String)it.next();
+	//			String theValue = queryParameters.getFirst(theKey);
+	//			if ( parameters.trim().length() < 1 ){
+	//				parameters = theKey + "=" + theValue;
+	//			} else {
+	//				parameters = parameters + "&" + theKey + "=" + theValue;
+	//			}          
+	//		}
+	//
+	//		result = parameters;
+	//		return result;
+	//	}
 
 	//	get path from service:
 	//	http://localhost:8080/hailey-chemist/rest/categories/path/3

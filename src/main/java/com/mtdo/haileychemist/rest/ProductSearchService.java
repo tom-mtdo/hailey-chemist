@@ -55,9 +55,38 @@ public class ProductSearchService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
+		List<Product> result = new ArrayList<Product>();
+		
+		//	filter products
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
-		List<Product> result = searchProductByCategory( categoryId, queryParameters);
+		Set<Integer> setProductId = productFilter(queryParameters);
+		
+		if( (setProductId==null) || (setProductId.size()<1) ){
+			return result;
+		}
+		
+		// extract product list to return	
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> product = cq.from(Product.class);
+
+		Predicate predicate = product.get("id").in(setProductId);    
+		cq.select(product).where(predicate);
+		
+		TypedQuery<Product> tq = entityManager.createQuery(cq);
+		if (queryParameters.containsKey("first")) {
+			// original
+			// Integer firstRecord = Integer.parseInt(queryParameters.getFirst("first"))-1;
+			Integer firstRecord = Integer.parseInt(queryParameters.getFirst("first"));
+			tq.setFirstResult(firstRecord);
+		}
+		if (queryParameters.containsKey("maxResults")) {
+			Integer maxResults = Integer.parseInt(queryParameters.getFirst("maxResults"));
+			tq.setMaxResults(maxResults);
+		}
+		result = tq.getResultList();
+
 		return result;
 	}
 
@@ -209,13 +238,20 @@ public class ProductSearchService {
 		//		parameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(parameters, cb, product);
 
+		//		SELECT
+		cq.multiselect( product.get("id") );
+		cq.groupBy( product.get("id") );
+		// 		ORDER BY
+		Order order = cb.asc( product.get("id") );
+		cq.orderBy( order );
+
 		//		query by attributes	which are from url parameters
 		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
 
 		int attrId = -1;
 		List<String> theValues = new ArrayList<String>();
-		Predicate predicateAttrId = null;
-		Predicate predicateAttrValue  = null;
+//		Predicate predicateAttrId = null;
+//		Predicate predicateAttrValue  = null;
 
 		TypedQuery<Tuple> tq = null;
 		//		set of id of product found
@@ -226,28 +262,32 @@ public class ProductSearchService {
 		// 		find product match attribute filter
 		//		find attribute parameter in url
 		Boolean wasFilteredByAttribute = false;
+//		Boolean wasInit = false;
 		Iterator<String> it = parameters.keySet().iterator();
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
 				//	JOIN attribute and value tables
-				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
+				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
 				Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 
-				//		SELECT
-				cq.multiselect(
-						product.get("id"),
-						attribute.get("id")
-						);
-				cq.groupBy(	attribute.get("id") );
-				// 		ORDER BY
-				Order order = cb.asc(attribute.get("id"));
-				cq.orderBy(order);
+//				if ( !wasInit ) {
+//					//		SELECT
+//					cq.multiselect(
+//							product.get("id"),
+//							attribute.get("id")
+//							);
+//					cq.groupBy(	attribute.get("id") );
+//					// 		ORDER BY
+//					Order order = cb.asc(attribute.get("id"));
+//					cq.orderBy(order);
+//					wasInit = true;
+//				}
 				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
 				theValues = parameters.get(theKey);
-				predicateAttrId = cb.equal( attribute.get("id"), attrId );
-				predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
+				Predicate predicateAttrId = cb.equal( attribute.get("id"), attrId );
+				Predicate predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
 				//				remove old attribute predicate
 				if (lstPredicate.contains(predicateAttrId)) {
 					lstPredicate.remove(predicateAttrId);
@@ -273,12 +313,12 @@ public class ProductSearchService {
 		}
 
 		if (!wasFilteredByAttribute){
-			//		SELECT
-			cq.multiselect( product.get("id") );
-			cq.groupBy( product.get("id") );
-			// 		ORDER BY
-			Order order = cb.asc( product.get("id") );
-			cq.orderBy( order );
+//			//		SELECT
+//			cq.multiselect( product.get("id") );
+//			cq.groupBy( product.get("id") );
+//			// 		ORDER BY
+//			Order order = cb.asc( product.get("id") );
+//			cq.orderBy( order );
 			//		Then query 
 			cq.where(predicates);
 			tq = entityManager.createQuery(cq);
@@ -391,28 +431,28 @@ public class ProductSearchService {
 	//	product list must be sorted by categoryId
 	//	can be extended to deal with query parameters.
 	//	http://localhost:8080/hailey-chemist/rest/products?categoryId=4
-	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
-
-		String parameters = buildUriParameter( queryParameters );
-		//		consumes products rest service
-		Client client = ClientBuilder.newClient();
-		//		client.property doesnt work
-		String strUrl = "";
-		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
-		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
-		}
-
-		strUrl = strUrl + "&" + parameters;
-		List<Product> products =
-				client.target(strUrl)
-				.request(MediaType.APPLICATION_JSON)
-				.get(new GenericType<List<Product>>() {
-				});
-
-		return products;
-	}
+//	public List<Product> searchProductByCategory( int categoryId, MultivaluedMap<String, String> queryParameters ){
+//
+//		String parameters = buildUriParameter( queryParameters );
+//		//		consumes products rest service
+//		Client client = ClientBuilder.newClient();
+//		//		client.property doesnt work
+//		String strUrl = "";
+//		if (categoryId > 0) {
+//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
+//		} else {
+//			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
+//		}
+//
+//		strUrl = strUrl + "&" + parameters;
+//		List<Product> products =
+//				client.target(strUrl)
+//				.request(MediaType.APPLICATION_JSON)
+//				.get(new GenericType<List<Product>>() {
+//				});
+//
+//		return products;
+//	}
 
 	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
 		String result = "";

@@ -1,3 +1,28 @@
+-- Select product based on many attributes
+SELECT r2.product_id FROM ((
+SELECT r1.product_id, count(*) as count FROM
+(SELECT p.id as product_id
+FROM product p 
+    JOIN product_attribute v
+    ON p.id = v.product_id
+WHERE
+     v.attribute_id = 2
+     and v.attribute_value in (1000)
+
+UNION ALL
+
+SELECT p.id  as product_id
+FROM product p 
+    JOIN product_attribute v
+    ON p.id = v.product_id
+WHERE
+     v.attribute_id = 3
+     and v.attribute_value in (300,400)
+) r1
+GROUP BY r1.product_id
+)) r2
+WHERE r2.count =2
+
 -- select products, attributes and values, attribute can be null
 SELECT p.*, a.naME, v.attribute_value 
 FROM 
@@ -17,3 +42,4 @@ FROM
    LEFT JOIN attribute a
    ON v.attribute_id = a.id
 WHERE p.name like '%i%'
+

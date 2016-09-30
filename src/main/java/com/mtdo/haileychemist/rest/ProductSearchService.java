@@ -2,6 +2,7 @@ package com.mtdo.haileychemist.rest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -30,7 +31,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
@@ -242,16 +242,19 @@ public class ProductSearchService {
 //		Boolean wasFilteredByAttribute = false;
 
 		//		set of id of product found
-		Set<Tuple> setTupleProductId = new HashSet<Tuple>();
+//		Set<Tuple> setTupleProductId = new HashSet<Tuple>();
+		List<Tuple> lstTupleProductId = new ArrayList<Tuple>();
 //		List<Tuple> lstTupleTmp = new ArrayList<Tuple>();
-		Boolean hasAttribute = false;
+//		Boolean hasAttribute = false;
+		int numberOfAttribute = 0;
 		int attrId = -1;
 		List<String> attrValues = new ArrayList<String>();
 		Iterator<String> it = queryParameters.keySet().iterator();
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
-				hasAttribute = true;
+//				hasAttribute = true;
+				numberOfAttribute++;
 //				//	JOIN attribute and value tables
 //				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
 //				//	Do not use below line, otherwise has error when query an attribute which is not in any product
@@ -261,7 +264,7 @@ public class ProductSearchService {
 				attrId = Integer.parseInt(theKey.substring(4));
 				attrValues = queryParameters.get(theKey);
 				List<Tuple> lstTupleTmp = filterSingleAttribute(queryParameters, attrId, attrValues);
-				setTupleProductId.addAll(lstTupleTmp);
+				lstTupleProductId.addAll(lstTupleTmp);
 //				Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attrId );
 //				Predicate predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
 //				//				remove old attribute predicate
@@ -288,9 +291,44 @@ public class ProductSearchService {
 			}
 		}
 		
-		if ( !hasAttribute ){
+		if ( numberOfAttribute > 0 ){
+			//	convert List<Tuple> to List<Integer> of productId
+			if( lstTupleProductId.size()>0 ){
+				int productId = -1;
+				List<Integer> lstAllProductIdFound = new ArrayList<Integer>();
+				for (Tuple tuple: lstTupleProductId) {
+					productId = tuple.get(0, Integer.class);
+					lstAllProductIdFound.add(productId);
+				}
+				//	find product has all attributes match
+				Set<Integer> setUniqueProductIdFound = new HashSet<Integer>(lstAllProductIdFound);	
+				for(Integer pId: setUniqueProductIdFound){
+					if ( Collections.frequency(lstAllProductIdFound,pId) == numberOfAttribute ){
+						result.add(pId);
+					}
+				}
+			}
+		}
+		
+		//	if no attribute, then query with other parameter (attributeId, keyWord .etc)		
+		if ( numberOfAttribute <= 0 ){
 			List<Tuple> lstTupleTmp = filterNoAttribute(queryParameters);
-			setTupleProductId.addAll(lstTupleTmp);
+			if( lstTupleTmp.size() > 0 ){
+				int productId = -1;
+				for (Tuple tuple: lstTupleTmp) {
+					productId = tuple.get(0, Integer.class);
+					result.add(productId);
+				}
+			}
+//			setTupleProductId.addAll(lstTupleTmp);
+//			//		extract productId
+//			if( setTupleProductId.size()>0 ){
+//				int productId = -1;
+//				for (Tuple tuple: setTupleProductId) {
+//					productId = tuple.get(0, Integer.class);
+//					result.add(productId);
+//				}
+//			}
 		}
 
 //		if (!wasFilteredByAttribute){
@@ -301,14 +339,6 @@ public class ProductSearchService {
 //			setTupleProductId.addAll(lstTupleTmp);			
 //		}
 
-		//		extract productId
-		if( setTupleProductId.size()>0 ){
-			int productId = -1;
-			for (Tuple tuple: setTupleProductId) {
-				productId = tuple.get(0, Integer.class);
-				result.add(productId);
-			}
-		}
 		return result;
 	}
 

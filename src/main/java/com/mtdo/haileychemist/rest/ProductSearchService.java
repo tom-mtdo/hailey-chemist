@@ -271,7 +271,7 @@ public class ProductSearchService {
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
 				//	JOIN attribute and value tables
 				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
-				Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
+//				Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 
 //				if ( !wasInit ) {
 //					//		SELECT
@@ -288,7 +288,7 @@ public class ProductSearchService {
 				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
 				theValues = parameters.get(theKey);
-				Predicate predicateAttrId = cb.equal( attribute.get("id"), attrId );
+				Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attrId );
 				Predicate predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
 				//				remove old attribute predicate
 				if (lstPredicate.contains(predicateAttrId)) {
@@ -372,7 +372,6 @@ public class ProductSearchService {
 		List<Tuple> lstTuple = tq.getResultList();
 		
 //		convert to return format
-//		NEED check if categoryId = -1: all
 		int intCategoryId = -1;
 		ProductCountByCategory pCount = null;
 		for (Tuple tuple: lstTuple){
@@ -386,41 +385,6 @@ public class ProductSearchService {
 			//	store count and reset current category
 			result.add(pCount);
 		}
-		
-//		//		Count product for each category
-//		if ( products.size() > 0 ) {
-//			//	init result					
-//			ProductCountByCategory pCount = new ProductCountByCategory();
-//			//		set first categoryId to be current
-//			//		start from category of the first product
-//			int currentCategoryId = products.get(0).getCategory().getId();
-//			pCount.setCategoryId(currentCategoryId);
-//			pCount.setCategoryName( getCategoryName(currentCategoryId) );
-//			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
-//			pCount.setProductCount( 0 );
-//			result.add(pCount);
-//			//		pCount and pCount in result point to the same object
-//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
-//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//			for ( Product product: products ) {
-//				//			store category id
-//				//			if same category then increase count
-//				if ( currentCategoryId == product.getCategory().getId() ){
-//					pCount.setProductCount( pCount.getProductCount() + 1 );
-//				} else { // else store count for current category then reset to count for new category
-//					pCount = new ProductCountByCategory();
-//					currentCategoryId = product.getCategory().getId();
-//					pCount.setCategoryId( currentCategoryId );
-//					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
-//					pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
-//					pCount.setProductCount( 1 );
-//					//	store count and reset current category
-//					result.add(pCount);
-//				}
-//			}
-//		}
-
 		return result;
 	}
 
@@ -482,24 +446,24 @@ public class ProductSearchService {
 //		return products;
 //	}
 
-	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
-		String result = "";
-
-		String parameters = "";
-		Iterator<String> it = queryParameters.keySet().iterator();
-		while(it.hasNext()){
-			String theKey = (String)it.next();
-			String theValue = queryParameters.getFirst(theKey);
-			if ( parameters.trim().length() < 1 ){
-				parameters = theKey + "=" + theValue;
-			} else {
-				parameters = parameters + "&" + theKey + "=" + theValue;
-			}          
-		}
-
-		result = parameters;
-		return result;
-	}
+//	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
+//		String result = "";
+//
+//		String parameters = "";
+//		Iterator<String> it = queryParameters.keySet().iterator();
+//		while(it.hasNext()){
+//			String theKey = (String)it.next();
+//			String theValue = queryParameters.getFirst(theKey);
+//			if ( parameters.trim().length() < 1 ){
+//				parameters = theKey + "=" + theValue;
+//			} else {
+//				parameters = parameters + "&" + theKey + "=" + theValue;
+//			}          
+//		}
+//
+//		result = parameters;
+//		return result;
+//	}
 
 	//	get path from service:
 	//	http://localhost:8080/hailey-chemist/rest/categories/path/3

@@ -97,8 +97,10 @@ public class ProductSearchService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		queryParameters.add("categoryId", "" + categoryId);
+	
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
-		result = searchCategoryPathCount( categoryId, queryParameters );
+		result = searchCategoryPathCount( queryParameters );
 		return result;
 	}
 
@@ -338,60 +340,86 @@ public class ProductSearchService {
 		return result;
 	}
 
-	// SHOULD USE SQL GROUP BY AND COUNT TO COUNT
-	public List<ProductCountByCategory> searchCategoryPathCount( int categoryId, MultivaluedMap<String, String> queryParameters ){
+	public List<ProductCountByCategory> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
-		//		consumes products rest service
-		Client client = ClientBuilder.newClient();
-		String uriParameters = buildUriParameter( queryParameters );
-		//		client.property doesnt work
-		String strUrl = "";
-		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?categoryId=" + categoryId;
-		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products?orderBy=categoryId";
+		Set<Integer> setProductId = productFilter(queryParameters);
+		if( (setProductId==null) || (setProductId.size()<1) ){
+			return result;
 		}
+		
+		//	get categoryId and count
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//	FROM
+		Root<Product> product = cq.from(Product.class);
+		// 	ORDER BY
+		Order order = cb.asc(product.get("category").get("id"));
+		cq.orderBy(order);
+		// GROUP BY		
+		cq.groupBy( product.get("category").get("id") );
+		//	SELECT
+//		cb.count(product);
+		cq.multiselect(
+				product.get("category").get("id"),
+				cb.count(product)
+				);
+		//	WHERE
+		Predicate predicate = product.get("id").in(setProductId);
+		cq.where(predicate);
+		
+		//	perform query		
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		List<Tuple> lstTuple = tq.getResultList();
+		
+//		convert to return format
+//		NEED check if categoryId = -1: all
+		int intCategoryId = -1;
+		ProductCountByCategory pCount = null;
+		for (Tuple tuple: lstTuple){
+			intCategoryId = tuple.get(0, Integer.class);
 
-		strUrl = strUrl + "&" + uriParameters;
-		List<Product> products =
-				client.target(strUrl)
-				.request(MediaType.APPLICATION_JSON)
-				.get(new GenericType<List<Product>>() {
-				});
-
-		//		Count product for each category
-		if ( products.size() > 0 ) {
-			//	init result					
-			ProductCountByCategory pCount = new ProductCountByCategory();
-			//		set first categoryId to be current
-			//		start from category of the first product
-			int currentCategoryId = products.get(0).getCategory().getId();
-			pCount.setCategoryId(currentCategoryId);
-			pCount.setCategoryName( getCategoryName(currentCategoryId) );
-			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
-			pCount.setProductCount( 0 );
+			pCount = new ProductCountByCategory();
+			pCount.setCategoryId( intCategoryId );
+			pCount.setCategoryName( getCategoryName( intCategoryId ) );
+			pCount.setCategoryPath( getCategoryPath( intCategoryId ) );
+			pCount.setProductCount( tuple.get(1, Long.class).intValue() );
+			//	store count and reset current category
 			result.add(pCount);
-			//		pCount and pCount in result point to the same object
-			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
-			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			for ( Product product: products ) {
-				//			store category id
-				//			if same category then increase count
-				if ( currentCategoryId == product.getCategory().getId() ){
-					pCount.setProductCount( pCount.getProductCount() + 1 );
-				} else { // else store count for current category then reset to count for new category
-					pCount = new ProductCountByCategory();
-					currentCategoryId = product.getCategory().getId();
-					pCount.setCategoryId( currentCategoryId );
-					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
-					pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
-					pCount.setProductCount( 1 );
-					//	store count and reset current category
-					result.add(pCount);
-				}
-			}
 		}
+		
+//		//		Count product for each category
+//		if ( products.size() > 0 ) {
+//			//	init result					
+//			ProductCountByCategory pCount = new ProductCountByCategory();
+//			//		set first categoryId to be current
+//			//		start from category of the first product
+//			int currentCategoryId = products.get(0).getCategory().getId();
+//			pCount.setCategoryId(currentCategoryId);
+//			pCount.setCategoryName( getCategoryName(currentCategoryId) );
+//			pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
+//			pCount.setProductCount( 0 );
+//			result.add(pCount);
+//			//		pCount and pCount in result point to the same object
+//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//			//		SHOULD USE GROUP BY & COUNT OF SQL TO COUNT
+//			//		++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//			for ( Product product: products ) {
+//				//			store category id
+//				//			if same category then increase count
+//				if ( currentCategoryId == product.getCategory().getId() ){
+//					pCount.setProductCount( pCount.getProductCount() + 1 );
+//				} else { // else store count for current category then reset to count for new category
+//					pCount = new ProductCountByCategory();
+//					currentCategoryId = product.getCategory().getId();
+//					pCount.setCategoryId( currentCategoryId );
+//					pCount.setCategoryName( getCategoryName( currentCategoryId ) );
+//					pCount.setCategoryPath( getCategoryPath( currentCategoryId ) );
+//					pCount.setProductCount( 1 );
+//					//	store count and reset current category
+//					result.add(pCount);
+//				}
+//			}
+//		}
 
 		return result;
 	}

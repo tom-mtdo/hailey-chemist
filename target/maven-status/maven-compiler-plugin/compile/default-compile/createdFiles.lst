@@ -23,7 +23,6 @@ com/mtdo/haileychemist/rest/PurchaseService.class
 com/mtdo/haileychemist/model/ProductAttribute.class
 com/mtdo/haileychemist/model/Media_.class
 com/mtdo/haileychemist/model/Product_.class
-com/mtdo/haileychemist/rest/ProductSearchService$3.class
 com/mtdo/haileychemist/rest/ProductSearchService$1.class
 com/mtdo/haileychemist/model/ShipAddress_.class
 com/mtdo/haileychemist/data/MemberListProducer.class

@@ -92,7 +92,8 @@ public class ProductSearchService {
 
 	//	Get all value of each attribute of all products found
 	//	URL parameters: url?keyWork=""&categoryId=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
-	//	Return a Map<attributeId, List<attributeValue>> for all products found 
+	//	Return a Map<attributeId, List<attributeValue>> for all products found
+	//	 the first element in List<attributeValue> is attribute name.
 	//		WORKDING HERE
 	@Path("/{categoryId}/attribute")
 	@GET
@@ -100,48 +101,43 @@ public class ProductSearchService {
 	public Map<Integer, List<String>> productSearchAttribute(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
 		Map<Integer, List<String>> result = new HashMap<Integer, List<String>>();		
 
-
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//		FROM
 		Root<Product> product = cq.from(Product.class);
 		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
 		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 
+		// 		ORDER BY
+		Order order = cb.asc(attribute.get("id"));
+		cq.orderBy(order);
+
+		//		WHERE
+		//		query by category and keyWord
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
 		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
 
-		//		query products		
+		//		query by attributes	which are from url parameters
 		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
 
-		Order order = cb.asc(attribute.get("id"));
-		cq.orderBy(order);
-
-//		get all product id
-
-//		cq.multiselect(
-//				attribute.get("id"),
-//				attribute.get("name"),
-//				productAttribute.get("attribute_value")
-//				);
-
-//		cq.groupBy(				
-//				attribute.get("id"),
-//				productAttribute.get("attribute_value")
-//				);
-
-		//		filter by attributes, got from parameters
 		int attrId = -1;
 		List<String> theValues = new ArrayList<String>();
 		Predicate predicateAttrId = null;
 		Predicate predicateAttrValue  = null;
+
 		TypedQuery<Tuple> tq = null;
+		//		all pair attribute-value found
 		Set<Tuple> setTuple = new HashSet<Tuple>();
+		//		set of id of product found
 		Set<Tuple> setTupleProductId = new HashSet<Tuple>();
-		//		List<Tuple> lstTuple  = null;
+		//		product found by each attribute
 		List<Tuple> lstTupleTmp  = new ArrayList<Tuple>();
+		//		if search by attribute happened
 		Boolean wasQueried = false;
 
+		// 		find product match attribute filter
+		//		find attribute parameter in url
 		Iterator<String> it = queryParameters.keySet().iterator();
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
@@ -151,64 +147,59 @@ public class ProductSearchService {
 						attribute.get("id")
 						);
 				cq.groupBy(				
-					attribute.get("id")
-				);
-				
+						attribute.get("id")
+						);
+				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
 				theValues = queryParameters.get(theKey);
 				predicateAttrId = cb.equal( attribute.get("id"), attrId );
 				predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
 
-//				remove old attribute predicate
+				//				remove old attribute predicate
 				if (lstPredicate.contains(predicateAttrId)) {
 					lstPredicate.remove(predicateAttrId);
 				}
 				if (lstPredicate.contains(predicateAttrValue)) {
 					lstPredicate.remove(predicateAttrValue);
 				}
-				
+
 				lstPredicate.add(predicateAttrId);
 				lstPredicate.add(predicateAttrValue);
+
+				//				convert to array to put in where clause
 				predicates = new Predicate[lstPredicate.size()];
 				lstPredicate.toArray(predicates);
 				cq.where(predicates);
 
 				tq = entityManager.createQuery(cq);
 				lstTupleTmp = tq.getResultList();
-//				union all query result from searching by each set of attribute value
+				//				union all productId found for each attribute 
 				setTupleProductId.addAll(lstTupleTmp);
 				wasQueried = true;
 			}
 		}
 
-//		attrId = 3;
-//		theValues.add("400");
-//		predicateAttrId = cb.equal( attribute.get("id"), attrId );
-//		predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
-//		lstPredicate.add(predicateAttrId);
-//		lstPredicate.add(predicateAttrValue);
-//		predicates = new Predicate[lstPredicate.size()];
-//		lstPredicate.toArray(predicates);
-
+		//		get all (other) attributes of the found products		
 		cq.multiselect(
-			attribute.get("id"),
-			attribute.get("name"),
-			productAttribute.get("attribute_value")
-		);
+				attribute.get("id"),
+				attribute.get("name"),
+				productAttribute.get("attribute_value")
+				);
 		cq.groupBy(				
-			attribute.get("id"),
-			productAttribute.get("attribute_value")
-		);
+				attribute.get("id"),
+				productAttribute.get("attribute_value")
+				);
 
-		int productId = -1;
-		List<Integer> lstProductId = new ArrayList<Integer>();
 		if(wasQueried){
-// 			get product all Id found
+			int productId = -1;
+			List<Integer> lstProductId = new ArrayList<Integer>();
+
+			// 			extract productId found
 			for (Tuple tuple: setTupleProductId) {
 				productId = tuple.get(0, Integer.class);
 				lstProductId.add(productId);
 			}
-//			remove old attribute predicate
+			//			remove old attribute predicate
 			if (lstPredicate.contains(predicateAttrId)) {
 				lstPredicate.remove(predicateAttrId);
 			}
@@ -217,38 +208,48 @@ public class ProductSearchService {
 			}
 			Predicate predicateProductId = product.get("id").in(lstProductId);
 			lstPredicate.add(predicateProductId);
+			//			convert to array
 			predicates = new Predicate[lstPredicate.size()];
 			lstPredicate.toArray(predicates);
-			cq.where(predicates);
-			tq = entityManager.createQuery(cq);
-			lstTupleTmp = tq.getResultList();
-//			union all query result from searching by each set of attribute value
-			setTuple.addAll(lstTupleTmp);			
+			////			Then query
+			//			cq.where(predicates);
+			//			tq = entityManager.createQuery(cq);
+			//			lstTupleTmp = tq.getResultList();
+			//// to make sure no duplicate value
+			//			setTuple.addAll(lstTupleTmp);			
 		}
 
-		//		if not running query yet, there was no attribute parameter 
-		//		then run query, for categoryId and keyWord
-		if (!wasQueried) {
-			cq.where(predicates);
-			tq = entityManager.createQuery(cq);
-			lstTupleTmp = tq.getResultList();
-			setTuple.addAll(lstTupleTmp);
-		}
+		//		//		if not running query yet, there was no attribute parameter 
+		//		//		then run query, for categoryId and keyWord
+		//		if (!wasQueried) {
+		//			cq.where(predicates);
+		//			tq = entityManager.createQuery(cq);
+		//			lstTupleTmp = tq.getResultList();
+		//			setTuple.addAll(lstTupleTmp);
+		//		}
 
-		//		query all attribute and values of these products.
+		//		Then query 
+		cq.where(predicates);
+		tq = entityManager.createQuery(cq);
+		lstTupleTmp = tq.getResultList();
+		//to make sure no duplicate value
+		setTuple.addAll(lstTupleTmp);			
+
+		//	put into data format to return
 		List<String> lstValue = null;
-		int attributeId = 0;
+		//		int attributeId = 0;
+		attrId = -1;
 		for (Tuple tuple: setTuple) {
-			attributeId = tuple.get(0, Integer.class);
+			attrId = tuple.get(0, Integer.class);
 			//			if key in list already then add value to value list of the key
 			//			else add key to key list and value to value list of the key
-			if ( result.containsKey(attributeId) ){
-				result.get(attributeId).add( tuple.get(2, String.class) );
+			if ( result.containsKey(attrId) ){
+				result.get(attrId).add( tuple.get(2, String.class) );
 			} else {
 				lstValue = new ArrayList<String>();
 				lstValue.add(tuple.get(1, String.class));
 				lstValue.add(tuple.get(2, String.class));
-				result.put(attributeId, lstValue);
+				result.put(attrId, lstValue);
 			}
 		}
 		return result;

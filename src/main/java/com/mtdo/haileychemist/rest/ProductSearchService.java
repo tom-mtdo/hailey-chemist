@@ -56,6 +56,7 @@ public class ProductSearchService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Product> productByCategory(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		queryParameters.add("categoryId", "" + categoryId);
 		List<Product> result = searchProductByCategory( categoryId, queryParameters);
 		return result;
 	}
@@ -87,8 +88,18 @@ public class ProductSearchService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Long> productByCategoryCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo  ){
+		Map<String, Long> result = new HashMap<String, Long>();
+		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-		Map<String, Long> result = searchProductByCategoryCount( categoryId, queryParameters );
+		queryParameters.add("categoryId", "" + categoryId);
+		Set<Integer> setProductId = productFilter(queryParameters);
+		
+		if( (setProductId==null) || (setProductId.size()<1) ){
+			result.put("count", 0L);
+		} else {
+			result.put("count", new Long(setProductId.size()) );
+		}
+//		Map<String, Long> result = searchProductByCategoryCount( queryParameters );
 		return result;
 	}
 
@@ -97,7 +108,6 @@ public class ProductSearchService {
 	//	URL parameters: url?keyWork=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
 	//	Return a Map<attributeId, List<attributeValue>> for all products found
 	//	 the first element in List<attributeValue> is attribute name.
-	//		WORKDING HERE
 	@Path("/{categoryId}/attribute")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -191,8 +201,8 @@ public class ProductSearchService {
 
 		//		FROM
 		Root<Product> product = cq.from(Product.class);
-		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
-		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
+//		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
+//		Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 
 		//		WHERE
 		//		query by category and keyWord
@@ -220,25 +230,24 @@ public class ProductSearchService {
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
+				//	JOIN attribute and value tables
+				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes", JoinType.LEFT);
+				Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
+
 				//		SELECT
 				cq.multiselect(
 						product.get("id"),
 						attribute.get("id")
 						);
-
-				cq.groupBy(				
-						attribute.get("id")
-						);
+				cq.groupBy(	attribute.get("id") );
 				// 		ORDER BY
 				Order order = cb.asc(attribute.get("id"));
 				cq.orderBy(order);
-				
 				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
 				theValues = parameters.get(theKey);
 				predicateAttrId = cb.equal( attribute.get("id"), attrId );
 				predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
-
 				//				remove old attribute predicate
 				if (lstPredicate.contains(predicateAttrId)) {
 					lstPredicate.remove(predicateAttrId);
@@ -250,7 +259,7 @@ public class ProductSearchService {
 				lstPredicate.add(predicateAttrId);
 				lstPredicate.add(predicateAttrValue);
 
-				//				convert to array to put in where clause
+				// convert to array to put in where clause
 				predicates = new Predicate[lstPredicate.size()];
 				lstPredicate.toArray(predicates);
 				cq.where(predicates);
@@ -265,17 +274,11 @@ public class ProductSearchService {
 
 		if (!wasFilteredByAttribute){
 			//		SELECT
-			cq.multiselect(
-					product.get("id")
-					);
-			
-			cq.groupBy(				
-					product.get("id")
-					);
+			cq.multiselect( product.get("id") );
+			cq.groupBy( product.get("id") );
 			// 		ORDER BY
-			Order order = cb.asc(product.get("id"));
-			cq.orderBy(order);
-
+			Order order = cb.asc( product.get("id") );
+			cq.orderBy( order );
 			//		Then query 
 			cq.where(predicates);
 			tq = entityManager.createQuery(cq);
@@ -353,25 +356,35 @@ public class ProductSearchService {
 		return result;
 	}
 
-	public Map<String, Long> searchProductByCategoryCount( int categoryId, MultivaluedMap<String, String> queryParameters ){
-		//		consumes products rest service
-		Client client = ClientBuilder.newClient();
-		String uriParameters = buildUriParameter( queryParameters );
-		//		client.property doesnt work
-		String strUrl = "";
-		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId + "&" + uriParameters;
-		} else {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count" + "?" + uriParameters;
-		}
-		Map<String, Long> result =
-				client.target(strUrl)
-				.request(MediaType.APPLICATION_JSON)
-				.get(new GenericType<Map<String, Long>>() {
-				});		
-
-		return result;
-	}
+//	public Map<String, Long> searchProductByCategoryCount( MultivaluedMap<String, String> queryParameters ){
+//		
+//		Map<String, Long> result = new HashMap<String, Long>();		
+//		//	get all query parameters: categoryId, keyWord, a
+//		Set<Integer> setProductId = productFilter(queryParameters);
+//		if( (setProductId==null) || (setProductId.size()<1) ){
+//			result.put("count", 0L);
+//		} else {
+//			result.put("count", new Long(setProductId.size()) );
+//		}
+//		
+////		//		consumes products rest service
+////		Client client = ClientBuilder.newClient();
+////		String uriParameters = buildUriParameter( queryParameters );
+////		//		client.property doesnt work
+////		String strUrl = "";
+////		if (categoryId > 0) {
+////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count?categoryId=" + categoryId + "&" + uriParameters;
+////		} else {
+////			strUrl = "http://localhost:8080/hailey-chemist/rest/products/count" + "?" + uriParameters;
+////		}
+////		Map<String, Long> result =
+////				client.target(strUrl)
+////				.request(MediaType.APPLICATION_JSON)
+////				.get(new GenericType<Map<String, Long>>() {
+////				});		
+//
+//		return result;
+//	}
 
 	//	input: categoryId
 	//	if category < 0 -> all categories

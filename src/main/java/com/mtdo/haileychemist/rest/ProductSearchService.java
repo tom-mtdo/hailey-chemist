@@ -210,84 +210,96 @@ public class ProductSearchService {
 	 * output:
 	 * 		: list<productId> found
 	 */
-	public Set<Integer> productFilter( MultivaluedMap<String, String> inQueryParameters  ){
+	public Set<Integer> productFilter( MultivaluedMap<String, String> queryParameters  ){
 		Set<Integer> result = new HashSet<Integer>();		
 		//		copy parameter, just in case
-		MultivaluedMap<String, String> parameters = new MultivaluedHashMap<String, String>(inQueryParameters);
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+//		MultivaluedMap<String, String> parameters = new MultivaluedHashMap<String, String>(inQueryParameters);
+//		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+//
+//		//		FROM
+//		Root<Product> product = cq.from(Product.class);
+//		//		WHERE
+//		//		query by category and keyWord
+//		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);
+//		//		SELECT
+//		cq.multiselect( product.get("id") );
+//		cq.groupBy( product.get("id") );
+//		// 		ORDER BY
+//		Order order = cb.asc( product.get("id") );
+//		cq.orderBy( order );
+//		//		query by attributes	which are from url parameters
+//		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
+//
+//		int attrId = -1;
+//		List<String> theValues = new ArrayList<String>();
+//
+//		TypedQuery<Tuple> tq = null;
+//		//		product found by each attribute
+//		List<Tuple> lstTupleTmp  = new ArrayList<Tuple>();
+//		// 		find product match attribute filter
+//		//		find attribute parameter in url
+//		Boolean wasFilteredByAttribute = false;
 
-		//		FROM
-		Root<Product> product = cq.from(Product.class);
-		//		WHERE
-		//		query by category and keyWord
-		Predicate[] predicates = ProductService.extractPredicatesImpl(parameters, cb, product);
-		//		SELECT
-		cq.multiselect( product.get("id") );
-		cq.groupBy( product.get("id") );
-		// 		ORDER BY
-		Order order = cb.asc( product.get("id") );
-		cq.orderBy( order );
-		//		query by attributes	which are from url parameters
-		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
-
-		int attrId = -1;
-		List<String> theValues = new ArrayList<String>();
-
-		TypedQuery<Tuple> tq = null;
 		//		set of id of product found
 		Set<Tuple> setTupleProductId = new HashSet<Tuple>();
-		//		product found by each attribute
-		List<Tuple> lstTupleTmp  = new ArrayList<Tuple>();
-		// 		find product match attribute filter
-		//		find attribute parameter in url
-		Boolean wasFilteredByAttribute = false;
-		//		Boolean wasInit = false;
-		Iterator<String> it = parameters.keySet().iterator();
+//		List<Tuple> lstTupleTmp = new ArrayList<Tuple>();
+		Boolean hasAttribute = false;
+		int attrId = -1;
+		List<String> attrValues = new ArrayList<String>();
+		Iterator<String> it = queryParameters.keySet().iterator();
 		while ( it.hasNext() ){
 			String theKey = (String)it.next();
 			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
-				//	JOIN attribute and value tables
-				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
-				//	Do not use below line, otherwise has error when query an attribute which is not in any product
-				//	Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
+				hasAttribute = true;
+//				//	JOIN attribute and value tables
+//				Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
+//				//	Do not use below line, otherwise has error when query an attribute which is not in any product
+//				//	Join<ProductAttribute, Attribute> attribute = productAttribute.join("attribute");
 
 				//				which attribute
 				attrId = Integer.parseInt(theKey.substring(4));
-				theValues = parameters.get(theKey);
-				Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attrId );
-				Predicate predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
-				//				remove old attribute predicate
-				if (lstPredicate.contains(predicateAttrId)) {
-					lstPredicate.remove(predicateAttrId);
-				}
-				if (lstPredicate.contains(predicateAttrValue)) {
-					lstPredicate.remove(predicateAttrValue);
-				}
-
-				lstPredicate.add(predicateAttrId);
-				lstPredicate.add(predicateAttrValue);
-
-				// convert to array to put in where clause
-				predicates = new Predicate[lstPredicate.size()];
-				lstPredicate.toArray(predicates);
-				cq.where(predicates);
-
-				tq = entityManager.createQuery(cq);
-				lstTupleTmp = tq.getResultList();
-				//				union all productId found for each attribute 
+				attrValues = queryParameters.get(theKey);
+				List<Tuple> lstTupleTmp = filterSingleAttribute(queryParameters, attrId, attrValues);
 				setTupleProductId.addAll(lstTupleTmp);
-				wasFilteredByAttribute = true;
+//				Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attrId );
+//				Predicate predicateAttrValue = productAttribute.get("attribute_value").in(theValues);
+//				//				remove old attribute predicate
+//				if (lstPredicate.contains(predicateAttrId)) {
+//					lstPredicate.remove(predicateAttrId);
+//				}
+//				if (lstPredicate.contains(predicateAttrValue)) {
+//					lstPredicate.remove(predicateAttrValue);
+//				}
+//
+//				lstPredicate.add(predicateAttrId);
+//				lstPredicate.add(predicateAttrValue);
+//
+//				// convert to array to put in where clause
+//				predicates = new Predicate[lstPredicate.size()];
+//				lstPredicate.toArray(predicates);
+//				cq.where(predicates);
+//
+//				tq = entityManager.createQuery(cq);
+//				lstTupleTmp = tq.getResultList();
+//				//				union all productId found for each attribute 
+//				setTupleProductId.addAll(lstTupleTmp);
+//				wasFilteredByAttribute = true;
 			}
 		}
-
-		if (!wasFilteredByAttribute){
-			cq.where(predicates);
-			tq = entityManager.createQuery(cq);
-			lstTupleTmp = tq.getResultList();
-			//to make sure no duplicate value
-			setTupleProductId.addAll(lstTupleTmp);			
+		
+		if ( !hasAttribute ){
+			List<Tuple> lstTupleTmp = filterNoAttribute(queryParameters);
+			setTupleProductId.addAll(lstTupleTmp);
 		}
+
+//		if (!wasFilteredByAttribute){
+//			cq.where(predicates);
+//			tq = entityManager.createQuery(cq);
+//			lstTupleTmp = tq.getResultList();
+//			//to make sure no duplicate value
+//			setTupleProductId.addAll(lstTupleTmp);			
+//		}
 
 		//		extract productId
 		if( setTupleProductId.size()>0 ){
@@ -299,6 +311,82 @@ public class ProductSearchService {
 		}
 		return result;
 	}
+
+	//	query product with categoryId, keyWord (and maybe other criteria) which are stored in queryParameters
+	public List<Tuple> filterNoAttribute(MultivaluedMap<String, String> queryParameters ){
+		List<Tuple> result = new ArrayList<Tuple>();
+		
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//		FROM
+		Root<Product> product = cq.from(Product.class);
+		//		SELECT
+		cq.multiselect( product.get("id") );
+		cq.groupBy( product.get("id") );
+		// 		ORDER BY
+		Order order = cb.asc( product.get("id") );
+		cq.orderBy( order );
+		//	WHERE		
+		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
+		cq.where(predicates);
+
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		result = tq.getResultList();
+		
+		return result;		
+	}	
+	
+//	Filter product by single attribute
+//	input: predicates which contains: categoryId, keyWord
+//		 : attributeId
+//		 : set of values
+	public List<Tuple> filterSingleAttribute(MultivaluedMap<String, String> queryParameters, int attributeId, List<String> attributeValues ){
+		List<Tuple> result = new ArrayList<Tuple>();
+		
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//		FROM
+		Root<Product> product = cq.from(Product.class);
+		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
+		//		SELECT
+		cq.multiselect( product.get("id") );
+		cq.groupBy( product.get("id") );
+		// 		ORDER BY
+		Order order = cb.asc( product.get("id") );
+		cq.orderBy( order );
+		//	WHERE		
+		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
+		//	query by attributes	which are from url parameters
+		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
+
+//		int attrId = -1;
+//		List<String> theValues = new ArrayList<String>();
+
+		Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attributeId );
+		Predicate predicateAttrValue = productAttribute.get("attribute_value").in(attributeValues);
+		//				remove old attribute predicate
+		if (lstPredicate.contains(predicateAttrId)) {
+			lstPredicate.remove(predicateAttrId);
+		}
+		if (lstPredicate.contains(predicateAttrValue)) {
+			lstPredicate.remove(predicateAttrValue);
+		}
+
+		lstPredicate.add(predicateAttrId);
+		lstPredicate.add(predicateAttrValue);
+
+		// convert to array to put in where clause
+		Predicate[] newPredicates = new Predicate[lstPredicate.size()];
+		lstPredicate.toArray(newPredicates);
+		cq.where(newPredicates);
+
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		result = tq.getResultList();
+		
+		return result;
+	}
+	
+	
 
 	public List<ProductCountByCategory> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
 		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();

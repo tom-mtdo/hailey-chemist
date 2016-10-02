@@ -7,10 +7,10 @@
 			| <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
 			| <span>Found: <%=model.resultCount%></span>
 			<br>
-<%			if (model.filter.length > 0){	%>
+<%			if (model.filters.length > 0){	%>
 				<span>Filter:</span>
-<%				$.each(model.filter, function(index, aFilter){	%>
-					<span><%=aFilter%></span> &nbsp; <a class="clearFilter" data-filter="<%=aFilter%>">Clear</a> |
+<%				$.each(model.filters, function(index, filter){	%>
+					<span><%=filter.attributeName%></span> &nbsp; <a class="clearFilter" data-filter="<%=filter.attributeId%>">Clear</a> |
 <%				})
 			}	%>			
 <%		}	%>
@@ -49,7 +49,7 @@
 					<span style="display:none;">id: <%=attributeValues.id%>, </span>
 					<span><%=attributeValues.name%></span>
 		<%  		_.each( attributeValues.values, function(value){	%>
-						<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" value="<%=value%>"/><%=value%></span>
+						<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" data-attribute-name="<%=attributeValues.name%>" value="<%=value%>"/><%=value%></span>
 		<%			});				%>
 				</div>
 		<%		});		

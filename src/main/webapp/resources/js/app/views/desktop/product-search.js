@@ -28,54 +28,14 @@ define([
 //        		attributeTemplate
         		) {
 
-//	var AttributeView = Backbone.View.extend({
-//		initialize: function(){
-//		},
-//
-//		events:{
-////			either of following two line works
-////			"change input[class='checkboxAttributeValue']":"updateFilter"
-//			"change :checkbox[class='checkboxAttributeValue']":"updateFilter"
-//		},
-//
-//		render:function(){
-//			var self = this;
-//			$.getJSON(self.model.strUrlAttr, function( listAttributeValues ){
-//				self.model.listAttributeValues = [];
-//				$.each( listAttributeValues, function( attributeId, values ){
-//					var attributeValues = {"id":attributeId, "name":values[0], "values":[]};
-////					get all attribute values except the first one as it is attribute name
-//					var i
-//					for ( i=1; i<values.length; i++) {
-//						attributeValues.values.push(values[i]);
-//					}
-//					self.model.listAttributeValues.push(attributeValues);
-//				});
-//				utilities.applyTemplate( $(self.el), attributeTemplate, {model:self.model} );
-//			});
-//		},
-//
-//		updateFilter:function( event ){
-//			var self=this;
-//			var $target = $(event.currentTarget)
-//			var attrId = $target.data("attribute-id");
-//			var attrValue = $target.val();
-//			var checked = $target.is(':checked');
-//
-//			if ( checked ){
-//				alert("Add filter: attributeId: " + attrId + ", value: " + attrValue);
-//			} else {
-//				alert("Remove filter: attributeId: " + attrId + ", value: " + attrValue);				
-//			}
-////			self.model.categoryId = catId;
-//		}
-//
-//	});
-
 	var ProductSearchView = Backbone.View.extend({
 		initialize: function(){
-			this.model.resultCount = 0;
-			this.model.filter=[];
+			var self = this;
+			self.model.resultCount = 0;
+//			for clear filter of 1 value of 1 attribute
+			self.model.filters=[]; //[{ attributeId: attrId, attributeName: attrName, attributeValue:attrValue }]
+//			for clear filter of all value of 1 attribute
+			self.model.filterAttributes=[]; // [{attributeId, attributeName}] no double value
 		},
 
 		events:{
@@ -114,16 +74,26 @@ define([
 				self.paginationModel.dataSourceCount="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/count";
 			}
 			
-			// add other filter: like attribute filters
-			if ( this.model.filter.length > 0 ) {
+			// add other filter: like attribute filters, which are inform of "attr" + attributeId = attributeValue
+			if ( self.model.filters.length > 0 ) {
 //				convert filters to string to add to url
 				var strFilter = "";
-				$.each(this.model.filter, function(index, flt){
-					strFilter = strFilter + flt + "&";
+				var i = 0;
+				$.each(self.model.filters, function(index, flt){
+					if (i==0){	// if first element then no &
+						strFilter = strFilter + "attr" + flt.attributeId + "=" + flt.attributeValue;
+					} else {
+						strFilter = strFilter + "&attr" + flt.attributeId + "=" + flt.attributeValue;	
+					}					
+					i++;
 				});
 				
+//				$.each(self.model.filters, function(index, flt){
+//					strFilter = strFilter + flt + "&";
+//				});
+				
 //				add to url
-				$.each(this.model.filter, function(index, flt){
+				$.each(self.model.filters, function(index, flt){
 					if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 						self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;
 						self.strUrlAttr="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/attribute" + "?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;
@@ -189,6 +159,7 @@ define([
 				
 				self.model.listAttributeValues = [];
 				$.each( listAttributeValues, function( attributeId, values ){
+//					convert to desired format for display template
 					var attributeValues = {"id":attributeId, "name":values[0], "values":[]};
 //					get all attribute values except the first one as it is attribute name
 					var i
@@ -243,40 +214,65 @@ define([
 			var self=this;
 			var $target = $(event.currentTarget);
 			var attrId = $target.data("attribute-id");
+			var attrName = $target.data("attribute-name");
 			var attrValue = $target.val();
 			var checked = $target.is(':checked');
-	
+			
+//			alert("id:" + attrId + ", name:" + attrName + ", value:" + attrValue);
+			var checkFilter = { attributeId: attrId, attributeName: attrName, attributeValue:attrValue };
+			var attribute = {attributeId: attrId, attributeName: attrName};
+			
 			if ( checked ){
-				var newFilter = "attr" + attrId + "=" + attrValue;
-				var index = this.model.filter.indexOf(newFilter);
-				if ( index < 0 ){
-					this.model.filter.push(newFilter);	
+//				var newFilter = "attr" + attrId + "=" + attrValue;
+//				{attributeId:[attributeName,attributeValue]}
+//				var newFilter = { attributeId: attrId, attributeName: attrName, attrValue:attrValue };
+//				var index = self.model.filters.indexOf(newFilter);
+				if ( !_.contains( self.model.filters, checkFilter )){
+					self.model.filters.push(checkFilter);	
 				}
 			} else {
-				var oldFilter = "attr" + attrId + "=" + attrValue;
-				var index = this.model.filter.indexOf(oldFilter);
-				this.model.filter.splice(index, 1);
+//				var oldFilter = "attr" + attrId + "=" + attrValue;
+//				var oldFilter = { attributeId: attrId, attributeName: attrName, attrValue:attrValue };
+//				var index = self.model.filters.indexOf(oldFilter);
+//				self.model.filters.splice(index, 1);
+				self.model.filters = _.reject(self.model.filters, function(filter){ 
+					return (filter.attributeId == attrId) && (filter.attributeValue==attrValue); 
+				});
 			}
 		},
 		
 
 		applyFilter:function(){
-			this.render();
-//			var str = "";
-//			$.each(this.model.filter, function(index, flt){
-//				str = str + flt + "&";
+			var self=this;
+			
+//			var strFilter = "";
+//			var i = 0;
+//			$.each(self.model.filters, function(index, flt){
+//				if (i==0){	// if first element then no &
+//					strFilter = strFilter + "attr" + flt.attributeId + "=" + flt.attributeValue;
+//				} else {
+//					strFilter = strFilter + "&attr" + flt.attributeId + "=" + flt.attributeValue;	
+//				}					
+//				i++;
 //			});
-//			alert("Attributes: " + str);
+//			alert("Filter: " + strFilter);
+			
+			self.render();
 		},
 		
 		clearFilter:function(event){
 			var self = this;
 			var $target = $(event.currentTarget);
-			var filter = $target.data("filter");
-			var index = this.model.filter.indexOf(filter);
-			this.model.filter.splice(index, 1);
+			var attrId = $target.data("filter");
+			
+			self.model.filters = _.reject(self.model.filters, function(filter){ 
+				return ( (filter.attributeId==attrId) ); 
+			});
+			
+//			var index = self.model.filters.indexOf(filter);
+//			self.model.filters.splice(index, 1);
 			self.render();
-		}
+		},
 		
 	});
 

@@ -160,13 +160,31 @@ define([
 				self.model.listAttributeValues = [];
 				$.each( listAttributeValues, function( attributeId, values ){
 //					convert to desired format for display template
-					var attributeValues = {"id":attributeId, "name":values[0], "values":[]};
 //					get all attribute values except the first one as it is attribute name
-					var i
-					for ( i=1; i<values.length; i++) {
-						attributeValues.values.push(values[i]);
+
+					//	if this attributed was used to filtered data then display clear & clear all buttons
+					//	else display check-box
+					var filterValues = _.filter(self.model.filters, function(filter){ 
+						return filter.attributeId == attributeId; 
+					});
+					
+					if ( filterValues && (filterValues.length>0) ){
+						var attributeValues = { "id":attributeId, "name":values[0], "values":[], "filtered":true };
+						_.each(filterValues, function(filter){
+							attributeValues.values.push(filter.attributeValue);
+							alert("Attribute:" + values[0] + ", value:" + filter.attributeValue);
+						});
+						self.model.listAttributeValues.push(attributeValues);
+					} else {
+						var attributeValues = { "id":attributeId, "name":values[0], "values":[], "filtered":false };						
+						var i;
+						for ( i=1; i<values.length; i++) {
+							attributeValues.values.push(values[i]);
+						}
+						self.model.listAttributeValues.push(attributeValues);
 					}
-					self.model.listAttributeValues.push(attributeValues);
+					
+					
 				});
 				
 //				if got all data then render

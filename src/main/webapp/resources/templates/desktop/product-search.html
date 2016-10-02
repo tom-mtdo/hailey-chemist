@@ -46,11 +46,21 @@
 			<!-- WORKING HERE  -->
 				<!-- each property is in a column -->
 				<div class="col-md-1">
-					<span style="display:none;">id: <%=attributeValues.id%>, </span>
-					<span><%=attributeValues.name%></span>
-		<%  		_.each( attributeValues.values, function(value){	%>
-						<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" data-attribute-name="<%=attributeValues.name%>" value="<%=value%>"/><%=value%></span>
-		<%			});				%>
+				<!-- if attributed was used to filter data then display clear & clear all buttons, 
+				else display check box -->
+<%					if ( attributeValues.filtered ) {	%>
+						<span><%=attributeValues.name%></span>
+						<a class="clearFilters" data-attribute-id="<%=attributeValues.id%>">Clear</a></span>
+			<%  		_.each( attributeValues.values, function(value){	%>
+							<br><span><%=value%> <a class="clearFilter" data-attribute-id="<%=attributeValues.id%>" data-attribute-value="<%=value%>"> Clear</a></span>
+			<%			});				
+					} else {	%>				
+						<span style="display:none;">id: <%=attributeValues.id%>, </span>
+						<span><%=attributeValues.name%></span>
+			<%  		_.each( attributeValues.values, function(value){	%>
+							<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" data-attribute-name="<%=attributeValues.name%>" value="<%=value%>"/><%=value%></span>
+			<%			});				
+					}		%>
 				</div>
 		<%		});		
 			} else {	%>

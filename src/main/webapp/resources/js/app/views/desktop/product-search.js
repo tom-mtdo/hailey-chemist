@@ -263,10 +263,11 @@ define([
 		clearFilter:function(event){
 			var self = this;
 			var $target = $(event.currentTarget);
-			var attrId = $target.data("filter");
+			var attrId = $target.data("attribute-id");
+			var attrValue = $target.data("attribute-value");
 			
 			self.model.filters = _.reject(self.model.filters, function(filter){ 
-				return ( (filter.attributeId==attrId) ); 
+				return ( (filter.attributeId==attrId)  && (filter.attributeValue==attrValue) ); 
 			});
 			
 //			var index = self.model.filters.indexOf(filter);

@@ -47,7 +47,8 @@ define([
 	//		"change input[class='checkboxAttributeValue']":"updateFilter"
 			"change :checkbox[class='checkboxAttributeValue']":"updateFilter",
 			"click #btnApplyFilter":"applyFilter",
-			"click a[class='clearFilter']":"clearFilter"
+			"click a[class='clearFilter']":"clearFilter",
+			"click a[class='clearFilters']":"clearFilters"
 		},
 
 		render:function(){
@@ -172,7 +173,6 @@ define([
 						var attributeValues = { "id":attributeId, "name":values[0], "values":[], "filtered":true };
 						_.each(filterValues, function(filter){
 							attributeValues.values.push(filter.attributeValue);
-							alert("Attribute:" + values[0] + ", value:" + filter.attributeValue);
 						});
 						self.model.listAttributeValues.push(attributeValues);
 					} else {
@@ -286,6 +286,20 @@ define([
 			
 			self.model.filters = _.reject(self.model.filters, function(filter){ 
 				return ( (filter.attributeId==attrId)  && (filter.attributeValue==attrValue) ); 
+			});
+			
+//			var index = self.model.filters.indexOf(filter);
+//			self.model.filters.splice(index, 1);
+			self.render();
+		},
+		
+		clearFilters:function(event){
+			var self = this;
+			var $target = $(event.currentTarget);
+			var attrId = $target.data("attribute-id");
+			
+			self.model.filters = _.reject(self.model.filters, function(filter){ 
+				return ( (filter.attributeId==attrId) ); 
 			});
 			
 //			var index = self.model.filters.indexOf(filter);

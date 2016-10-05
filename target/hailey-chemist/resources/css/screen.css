@@ -2,17 +2,24 @@
 
 /* =================== Tom added ======================*/
 
+/* not in used */
 .homeSlideItem {
 	width: auto;
-	height: 150px;
-	max-height: 150px;
+	height: 180px;
+	max-height: 180px;
 }
+
 .homeSlideItem img{
 	width: auto;
-	height: 150px;
-	max-height: 150px;
+	height: 180px;
+	max-height: 180px;
 	margin: auto;
 }
+
+IMG.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto }
 
 .border1 {
   border-radius: 0;
@@ -30,9 +37,33 @@
     font-family: 'Rokkitt', serif;
     font-weight: normal;
 }
+
+.carousel-caption-text-wrap {
+	height: 130px;
+	max-height: 130px;	
+}
+
 .grid-product-image img
 {
 	width:30px;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+/* .carousel-img {
+    padding: 0px;
+    position: relative;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+   	height: 180px;
+	max-height: 180px;
+} */
+.z999 {
+	z-index: 999;
 }
 /* =================== End Tom added ==================*/
 
@@ -287,33 +318,53 @@ footer {
 
 /* Carousel */
 .carousel-container {
-    width: 640px;
+    width: 100%;
 }
+/* width: 640px; */
 
 .carousel-control {
     border: none;
 }
 
 .carousel-caption {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.70);
-    padding: 10px 15px;
+    padding: 0px;
     position: relative;
+    top: 0px;
     right: 0px;
     left: 0px;
     bottom: 0px;
+   	height: 150px;
+	max-height: 150px;
 }
+/* .carousel-caption {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.70);
+    padding: 0px;
+    position: relative;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+} */
+/* padding: 10px 15px; */
 
 .carousel-caption h4, .carousel-caption p {
-    margin-top: 10px;
+    margin-top: 0px;
 }
+/* margin-top: 10px; */
 
 .carousel-caption h4 {
+    color: #ce4240;
+    font-size: 20px;
+    font-family: 'Rokkitt', serif;
+    font-weight: normal;
+}
+/* .carousel-caption h4 {
     color: #ce4240;
     font-size: 32px;
     text-shadow: 0 2px 2px #000;
     font-family: 'Rokkitt', serif;
     font-weight: normal;
-}
+} */
 
 .carousel-caption p {
     font-weight: bold;
@@ -321,8 +372,11 @@ footer {
 }
 
 .carousel-caption .action {
-    margin: 50px 0;
+    margin: 0px 0;
 }
+/* .carousel-caption .action {
+    margin: 50px 0;
+} */
 
 /* Pagination */
 
@@ -482,4 +536,3 @@ span[data-tm-role="delete"] {
 a.highlight-link {
     color: #EDF4EA;
 }
-

@@ -5,14 +5,14 @@
 /* not in used */
 .homeSlideItem {
 	width: auto;
-	height: 180px;
-	max-height: 180px;
+	height: 260px;
+	max-height: 260px;
 }
 
 .homeSlideItem img{
 	width: auto;
-	height: 180px;
-	max-height: 180px;
+	height: 260px;
+	max-height: 260px;
 	margin: auto;
 }
 
@@ -39,8 +39,8 @@ IMG.displayed {
 }
 
 .carousel-caption-text-wrap {
-	height: 130px;
-	max-height: 130px;	
+	height: 200px;
+	max-height: 200px;	
 }
 
 .grid-product-image img
@@ -51,6 +51,14 @@ IMG.displayed {
 .nopadding {
    padding: 0 !important;
    margin: 0 !important;
+}
+.nopadding-left {
+   padding-left: 0 !important;
+   margin-left: 0 !important;
+}
+.nopadding-right {
+   padding-right: 0 !important;
+   margin-right: 0 !important;
 }
 /* .carousel-img {
     padding: 0px;
@@ -64,6 +72,18 @@ IMG.displayed {
 } */
 .z999 {
 	z-index: 999;
+}
+
+.content-row-1{
+	width: auto;
+	height: 260px;
+	max-height: 260px;
+}
+
+.carousel-wrapper{
+	background-color: #f5f5f5;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 /* =================== End Tom added ==================*/
 

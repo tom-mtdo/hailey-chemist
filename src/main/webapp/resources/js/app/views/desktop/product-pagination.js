@@ -1,5 +1,12 @@
 /**
  * browse product - grid view
+ * model: 	{"pageNo":0, 
+ * 			 "pageSize":4
+        	 "dataSource"		//=config.baseUrl + "rest/products/";
+        	 "dataSourceCount" 	//=config.baseUrl + "rest/products/count";
+        	 "viewToRender"		// when click add to cart (can do the same with other events) then, 
+        	 					// this view (viewToRender) need to update
+			}
  * 
  */
 define([

@@ -91,31 +91,39 @@
 	</div>
 	<!-- Basket -->
 	<div class="col-md-3 nopadding-left">
-		<div class="well content-row-1">
+		<div id="divEmbeddedCart" class="well content-row-1">
 			<h4>Your basket</h4>
 		</div>
 	</div>
 </div>
 
-
-<!-- Featured products -->
-<div id="featuredProductsWraper" class="well">
-	<div class="row">
-		<div class="col-md-3">
-			<h5>Featured products</h5>
-		</div>
-		<div class="col-md-9"> 
-			<!-- quick search -->
+<div class="row">
+	<div class="col-md-9">
+		<!-- Featured products -->
+		<div id="featuredProductsWraper" class="well">
 			<div class="row">
-		 		<div class="col-md-12" style="padding-bottom:10px;">
-					<form action="#">
-						<input id="quickSearchInputHome" type="text" size="40"
-							placeholder="Search part no, keyword" />
-						<a id="quickSearchLink"><span class="glyphicon glyphicon-search"></span></a>
-					</form>
-		  		</div>
+				<div class="col-md-3">
+					<h5>Featured products</h5>
+				</div>
+				<div class="col-md-9"> 
+					<!-- quick search -->
+					<div class="row">
+				 		<div class="col-md-12" style="padding-bottom:10px;">
+							<form action="#">
+								<input id="quickSearchInputHome" type="text" size="40"
+									placeholder="Search part no, keyword" />
+								<a id="quickSearchLink"><span class="glyphicon glyphicon-search"></span></a>
+							</form>
+				  		</div>
+					</div>
+				</div>
 			</div>
+			<div id="featuredProducts"></div>
 		</div>
 	</div>
-	<div id="featuredProducts"></div>
+	<div class="col-md-3 nopadding-left">
+		<div class="well">
+			<h4>Browse by Categories</h4>
+		</div>
+	</div>
 </div>

@@ -7,12 +7,14 @@ define([
     'bootstrap',
     'configuration',
     'app/views/desktop/product-pagination',
+    'app/views/desktop/cart-embedded',
     'text!../../../../templates/desktop/home.html'
 ], function (utilities,
 		jquery,
 		bootstrap,
 		config,
 		ProductPaginationView,
+		EmbeddedCartView,
 		homeTemplate		) {
 
     var HomeView = Backbone.View.extend({
@@ -31,7 +33,11 @@ define([
 //            utilities.applyTemplate($('#featuredProducts'), productGrid, {products:this.model})
 //            see router to see more details
 // ********************************************************************************************************            
- 
+            // embedded cart
+            var embeddedCart = new EmbeddedCartView({ el:$("#divEmbeddedCart") });
+            embeddedCart.render();
+            
+            // pagination            
             // http://localhost:8080/hailey-chemist/rest/products/:first/:maxResults            
         	var paginationModel = {"pageNo":0, "pageSize":4};
         	paginationModel.dataSource=config.baseUrl + "rest/products/";

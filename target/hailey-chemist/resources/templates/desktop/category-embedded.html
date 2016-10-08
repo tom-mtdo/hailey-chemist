@@ -1,0 +1,19 @@
+<!-- Product count by categories -->
+<!-- input: productCountByCategories -->
+<div>
+	<br><span><strong>Products by category</strong></span>
+<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
+		_.each( productCountByCategories, function (productCountByCategory) {		%>	
+			<br><span>
+<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
+				<%=categoryName%>>
+<%			}); %>
+			</span> 
+			<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+				(<%=productCountByCategory.productCount%>)
+<%		});		
+	} else {	%>
+		<br><span>Not found</span>
+<%	}	%>
+</div>
+<!-- end of Product count by categories -->	

@@ -8,35 +8,25 @@ define([
     'configuration',
     'app/views/desktop/product-pagination',
     'app/views/desktop/cart-embedded',
-    'text!../../../../templates/desktop/home.html'
+    'text!../../../../templates/desktop/home.html',
+    'text!../../../../templates/desktop/category-embedded.html'
 ], function (utilities,
 		jquery,
 		bootstrap,
 		config,
 		ProductPaginationView,
 		EmbeddedCartView,
-		homeTemplate		) {
-
-//	<script type="text/javascript">
-// 	//Create an object 'myVal' and 'myVal1' and extend them using Backbone.Events method
-//    var myVal = _.extend({name:'Hello..'}, Backbone.Events);
-//    var myVal1 = _.extend({name:'Welcome to TutorialsPoint!!!'}, Backbone.Events);
-//
-//   //create the 'listenMe' callback function and invoke when one object listens to particular event on another object
-//    var listenMe = function(){
-//       document.write("The value is: ");
-//       document.write(this.name);
-//    };
-//  //The object 'myVal1' listens once for the 'listenMe' event triggered on object 'myVal'
-//   myVal1.listenTo(myVal, 'listenMe', listenMe);
-//
-//   //The 'myVal' has no listenMe event and displays the value of 'myVal1'
-//   myVal.trigger('listenMe');
-// </script>
-// 
-//	var event_bus = _({}).extend(Backbone.Events);
+		homeTemplate,
+		categoryEmbeddedTemplate
+		) {
 	
-	
+	var CategoryEmbedded = Backbone.View.extend({
+		render:function(){
+			self = this;
+			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {productCountByCategories:self.model} );
+			return self;
+		}
+	});
 	
     var HomeView = Backbone.View.extend({
     	
@@ -66,6 +56,13 @@ define([
         	paginationModel.dataSourceCount=config.baseUrl + "rest/products/count";
         	var productPaginationView = new ProductPaginationView( {model:paginationModel, el:$("#featuredProducts")} );
         	productPaginationView.render();
+
+//        	//	product found by category
+			self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount";
+        	$.getJSON(self.strUrl, function( productCountByCategories ){
+            	var categoryEmbedded = new CategoryEmbedded({model:productCountByCategories, el:$("#divCategoryEmbedded") });
+            	categoryEmbedded.render();
+			});
         	
             return self;
         },

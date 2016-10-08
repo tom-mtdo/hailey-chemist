@@ -23,7 +23,26 @@ define([
 	var CategoryEmbedded = Backbone.View.extend({
 		render:function(){
 			self = this;
-			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {productCountByCategories:self.model} );
+//			get parents of each category, then make unique
+			var parents = _.uniq(
+		            _.map(this.model.productCountByCategories, function(productCountByCategory){
+		            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+		                return productCountByCategory.categoryPath[parentIndex];
+		            }), false);
+			
+			self.model.categoryParents = parents;
+////			---------
+//			var strParents = "";
+//			_.each(parents, function(parent){
+//				strParents = strParents + parent + ", ";
+//			})
+//			alert(strParents);
+////			---------
+			
+//			_.each( model, function (productCountByCategory) {
+//				self.parentCategory = productCountByCategory.categoryPath[productCountByCategory.categoryPath.length];
+//			});
+			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {model:self.model} );
 			return self;
 		}
 	});
@@ -58,9 +77,11 @@ define([
         	productPaginationView.render();
 
 //        	//	product found by category
+        	var catModel={};
 			self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount";
         	$.getJSON(self.strUrl, function( productCountByCategories ){
-            	var categoryEmbedded = new CategoryEmbedded({model:productCountByCategories, el:$("#divCategoryEmbedded") });
+            	catModel.productCountByCategories = productCountByCategories;
+        		var categoryEmbedded = new CategoryEmbedded({model:catModel, el:$("#divCategoryEmbedded") });
             	categoryEmbedded.render();
 			});
         	

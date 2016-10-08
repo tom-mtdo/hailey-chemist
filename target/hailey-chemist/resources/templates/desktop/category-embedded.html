@@ -1,17 +1,20 @@
 <!-- Product count by categories -->
 <!-- input: productCountByCategories -->
 <div>
-	<br><span><strong>Products by category</strong></span>
-<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
-		_.each( productCountByCategories, function (productCountByCategory) {		%>	
-			<br><span>
-<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
-				<%=categoryName%>>
-<%			}); %>
-			</span> 
-			<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
-				(<%=productCountByCategory.productCount%>)
-<%		});		
+	<br><span><strong>Products by Category</strong></span>
+<% 	if ( model.productCountByCategories && (model.productCountByCategories.length>0) 
+		&& model.categoryParents && (model.categoryParents.length>0) ){
+		_.each( model.categoryParents, function(parent){	%>
+			<h6><%=parent%></h6>
+<%			_.each( model.productCountByCategories, function (productCountByCategory) {		
+				var parentIndex = (productCountByCategory.categoryPath.length-1);
+				if ( productCountByCategory.categoryPath[parentIndex] == parent ) {		%>
+					<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+					(<%=productCountByCategory.productCount%>)
+					<br>
+<%				}
+			});		
+		})
 	} else {	%>
 		<br><span>Not found</span>
 <%	}	%>

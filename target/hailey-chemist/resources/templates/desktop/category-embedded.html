@@ -4,10 +4,12 @@
 	<br><span><strong>Products by Category</strong></span>
 <% 	if ( model.productCountByCategories && (model.productCountByCategories.length>0) 
 		&& model.categoryParents && (model.categoryParents.length>0) ){
+		<!-- // each parent category -->
 		_.each( model.categoryParents, function(parent){	%>
 			<h6><%=parent%></h6>
 <%			_.each( model.productCountByCategories, function (productCountByCategory) {		
 				var parentIndex = (productCountByCategory.categoryPath.length-1);
+				<!-- // if this category belong to current  parent category then display -->
 				if ( productCountByCategory.categoryPath[parentIndex] == parent ) {		%>
 					<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
 					(<%=productCountByCategory.productCount%>)

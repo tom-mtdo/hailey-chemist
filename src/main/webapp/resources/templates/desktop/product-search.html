@@ -1,40 +1,49 @@
 <div class="well">
-	<h3>Search products</h3>
-	<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="70" />
-	<div id="divProductCountByCategory">
-<%		if (model) {	%>
-			<span>Category: <%=model.categoryId%></span> &nbsp; <a id="aClearCategory">Clear</a>
-			| <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
-			| <span>Found: <%=model.resultCount%></span>
-			<br>
-<%			if (model.filters.length > 0){	%>
-				<span>Filter:</span>
-<%				$.each(model.filters, function(index, filter){	%>
-					<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
-<%				})
-			}	%>			
-<%		}	%>
+	<div class="row">
+		<div class="col-md-9">
+			<h3>Search products</h3>
+			<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="70" />
+			<div id="divProductCountByCategory">
+		<%		if (model) {	%>
+					<span>Category: <%=model.categoryId%></span> &nbsp; <a id="aClearCategory">Clear</a>
+					| <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
+					| <span>Found: <%=model.resultCount%></span>
+					<br>
+		<%			if (model.filters.length > 0){	%>
+						<span>Filter:</span>
+		<%				$.each(model.filters, function(index, filter){	%>
+							<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
+		<%				})
+					}	%>			
+		<%		}	%>
+			</div>
+			
+			<!-- Product count by categories -->
+			<!-- input: productCountByCategories -->
+			<div>
+				<br><span><strong>Products count by category</strong></span>
+			<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
+					_.each( productCountByCategories, function (productCountByCategory) {		%>	
+						<br><span>
+			<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
+							<%=categoryName%>>
+			<%			}); %>
+						</span> 
+						<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+							(<%=productCountByCategory.productCount%>)
+			<%		});		
+				} else {	%>
+					<br><span>Not found</span>
+			<%	}	%>
+			</div>
+			<!-- end of Product count by categories -->	
+		</div>
+		<div class="call-md-3">
+			<div id="divEmbeddedCart">
+				<h4>Embedded Cart</h4>
+			</div>
+		</div>
 	</div>
-	
-	<!-- Product count by categories -->
-	<!-- input: productCountByCategories -->
-	<div>
-		<br><span><strong>Products count by category</strong></span>
-	<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
-			_.each( productCountByCategories, function (productCountByCategory) {		%>	
-				<br><span>
-	<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
-					<%=categoryName%>>
-	<%			}); %>
-				</span> 
-				<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
-					(<%=productCountByCategory.productCount%>)
-	<%		});		
-		} else {	%>
-			<br><span>Not found</span>
-	<%	}	%>
-	</div>
-	<!-- end of Product count by categories -->
 
 	<br>
 	<!-- list all attributes -->

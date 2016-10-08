@@ -16,16 +16,16 @@ define([
         'configuration',
         'app/views/desktop/product-page',
         'app/views/desktop/product-pagination',
+        'app/views/desktop/cart-embedded',
         'text!../../../../templates/desktop/product-search.html',
-//        'text!../../../../templates/desktop/product-search-attribute.html',
         ], function (utilities,
         		jquery,
         		bootstrap,
         		config,
         		ProductPageView,
         		ProductPaginationView,
+        		EmbeddedCart,
         		productSearchTemplate
-//        		attributeTemplate
         		) {
 
 	var ProductSearchView = Backbone.View.extend({
@@ -148,6 +148,11 @@ define([
 //				pagination
 				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 				self.productPaginationView.render();
+				
+//				embedded cart
+				self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
+				self.embeddedCart.render();
+				
 			});
 
 //			get attribute of product found

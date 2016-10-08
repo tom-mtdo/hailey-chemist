@@ -17,7 +17,7 @@ define([
     var EmbeddedCartView = Backbone.View.extend({
 		initialize: function(){
 			var eventBus=utilities.getEventBus();
-			this.listenTo(eventBus, 'listenMe', this.catch_event);
+			this.listenTo(eventBus, 'cartAdded', this.response_event);
 		},
 		
     	events: {
@@ -35,7 +35,7 @@ define([
         	utilities.applyTemplate($(this.el), embeddedCartTemplate,{cart:aCart});
         },
         
-        catch_event:function(){
+        response_event:function(){
         	this.render();
 //        	alert("Cart-embedded caught event listenMe!");
         }

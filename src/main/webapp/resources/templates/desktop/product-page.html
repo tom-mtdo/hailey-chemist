@@ -24,7 +24,8 @@
 								}
 		%>						
 								<br><input type="number" id="quantity<%=product.id%>" placeholder="Quantity" style="width: 4em"/>
-								<button name="addToCart" class="btn btn-primary btn-xs">Cart</button>			
+								<button name="addToCart" class="btn btn-primary btn-xs" 
+									data-product-id="<%=product.id%>" data-product-name="<%=product.name%>">Cart</button>			
 							</td>
 		<%							
 						})

@@ -1,9 +1,10 @@
 define(['underscore', 'backbone'], function (_, Backbone) {
 
-    var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    
+	var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
-
+    var event_bus = _.extend(Backbone.Events);
 
     Date.prototype.toPrettyString = function () {
         return dayNames[this.getDay()] + " " +
@@ -170,6 +171,10 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             isHasPreviousPage:function(pageNo){
             	return parseInt( pageNo ) > 0;
             }
+        },
+        
+        getEventBus:function(){
+        	return event_bus;
         }
 
     };

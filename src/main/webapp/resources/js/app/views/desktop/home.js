@@ -17,7 +17,29 @@ define([
 		EmbeddedCartView,
 		homeTemplate		) {
 
+//	<script type="text/javascript">
+// 	//Create an object 'myVal' and 'myVal1' and extend them using Backbone.Events method
+//    var myVal = _.extend({name:'Hello..'}, Backbone.Events);
+//    var myVal1 = _.extend({name:'Welcome to TutorialsPoint!!!'}, Backbone.Events);
+//
+//   //create the 'listenMe' callback function and invoke when one object listens to particular event on another object
+//    var listenMe = function(){
+//       document.write("The value is: ");
+//       document.write(this.name);
+//    };
+//  //The object 'myVal1' listens once for the 'listenMe' event triggered on object 'myVal'
+//   myVal1.listenTo(myVal, 'listenMe', listenMe);
+//
+//   //The 'myVal' has no listenMe event and displays the value of 'myVal1'
+//   myVal.trigger('listenMe');
+// </script>
+// 
+//	var event_bus = _({}).extend(Backbone.Events);
+	
+	
+	
     var HomeView = Backbone.View.extend({
+    	
     	events: {
     		"click #quickSearchLink":"searchProducts"
     	},
@@ -49,10 +71,13 @@ define([
         },
         
         searchProducts: function () {
-        	var value = this.$("#quickSearchInputHome").val().trim();
-//        	working on this , navigate to search page
-//        	require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
-        	require("router").navigate('/product-search/-1/' + value, true);
+        	var event_bus = utilities.getEventBus();
+        	event_bus.trigger('listenMe');
+        	
+//        	var value = this.$("#quickSearchInputHome").val().trim();
+////        	working on this , navigate to search page
+////        	require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
+//        	require("router").navigate('/product-search/-1/' + value, true);
         }
     });
 

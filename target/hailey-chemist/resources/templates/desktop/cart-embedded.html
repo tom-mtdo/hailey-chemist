@@ -1,3 +1,11 @@
 <div>
 	<h4>Embedded Cart</h4>
+	<%	if (cart && (cart.length > 0) ){ %>
+<%		_.each(cart, function(line){	%>
+			<br><span>Product: <%=line.productName%>, quantity <%=line.quantity%></span>
+<%		});
+	} else { %>
+		<span>Cart is empty</span>
+<%	} %>
+	<br><button name="checkout" class="btn btn-primary btn-xs">Checkout</button>
 </div>

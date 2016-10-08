@@ -71,13 +71,13 @@ define([
         },
         
         searchProducts: function () {
-        	var event_bus = utilities.getEventBus();
-        	event_bus.trigger('listenMe');
+//        	var event_bus = utilities.getEventBus();
+//        	event_bus.trigger('listenMe');
         	
-//        	var value = this.$("#quickSearchInputHome").val().trim();
-////        	working on this , navigate to search page
-////        	require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
-//        	require("router").navigate('/product-search/-1/' + value, true);
+        	var value = this.$("#quickSearchInputHome").val().trim();
+//        	working on this , navigate to search page
+//        	require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
+        	require("router").navigate('/product-search/-1/' + value, true);
         }
     });
 

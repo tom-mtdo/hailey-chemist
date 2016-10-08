@@ -25,11 +25,19 @@ define([
     	},
     	
         render:function () {
-        	utilities.applyTemplate($(this.el), embeddedCartTemplate,{});
+            var strCart = utilities.getCookie("cart");
+            if (strCart && (strCart.trim().length>0) ){
+                var aCart = JSON.parse(strCart);            	
+            } else{
+            	var aCart={};
+            }
+            
+        	utilities.applyTemplate($(this.el), embeddedCartTemplate,{cart:aCart});
         },
         
         catch_event:function(){
-        	alert("Cart-embedded caught event listenMe!");
+        	this.render();
+//        	alert("Cart-embedded caught event listenMe!");
         }
     });
     

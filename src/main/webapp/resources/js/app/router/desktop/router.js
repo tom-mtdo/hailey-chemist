@@ -123,8 +123,13 @@ define("router", [
         	utilities.viewManager.showView( productSearchView );
         },
         
-        productSearchByCategory:function(){
+        productSearchByCategory:function(categoryId){
+        	var searchModel = {};
+        	searchModel.keyWord = "";
+        	searchModel.categoryId = categoryId;
         	
+        	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
+        	utilities.viewManager.showView( productSearchView );
         },
         
         categoryAdmin:function(){

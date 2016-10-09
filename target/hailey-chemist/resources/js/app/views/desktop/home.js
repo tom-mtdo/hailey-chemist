@@ -21,6 +21,10 @@ define([
 		) {
 	
 	var CategoryEmbedded = Backbone.View.extend({
+		events:{
+			"click a[class='categoryPath']":"searchProductByCategory"
+		},
+		
 		render:function(){
 			self = this;
 //			get parents of each category, then make unique
@@ -31,19 +35,14 @@ define([
 		            }), false);
 			
 			self.model.categoryParents = parents;
-////			---------
-//			var strParents = "";
-//			_.each(parents, function(parent){
-//				strParents = strParents + parent + ", ";
-//			})
-//			alert(strParents);
-////			---------
-			
-//			_.each( model, function (productCountByCategory) {
-//				self.parentCategory = productCountByCategory.categoryPath[productCountByCategory.categoryPath.length];
-//			});
 			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {model:self.model} );
 			return self;
+		},
+		
+		searchProductByCategory:function(event){
+			var self = this;
+			var catId = $(event.currentTarget).data("category-id");
+        	require("router").navigate('/product-search/' + catId, true);
 		}
 	});
 	

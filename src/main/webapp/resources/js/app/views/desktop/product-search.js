@@ -49,6 +49,7 @@ define([
 	//		"change input[class='checkboxAttributeValue']":"updateFilter"
 			"change :checkbox[class='checkboxAttributeValue']":"updateFilter",
 			"click #btnApplyFilter":"applyFilter",
+			"click #btnClearAllFilters":"clearAllFilters",
 			"click a[class='clearFilter']":"clearFilter",
 			"click a[class='clearFilters']":"clearFilters"
 		},
@@ -327,6 +328,13 @@ define([
 			self.render();
 		},
 		
+		clearAllFilters:function(){
+			this.model.filterAttributes=[];
+			this.model.filters=[];
+			this.model.categoryId = -1;
+			this.model.keyWord = "";
+			this.render();
+		},
 	});
 
 	return ProductSearchView;

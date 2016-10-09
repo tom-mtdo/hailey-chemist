@@ -19,24 +19,11 @@
 			</div>
 			
 			<!-- Product count by categories -->
-			<!-- input: productCountByCategories -->
-			<div>
-				<br><span><strong>Products count by category</strong></span>
-			<% 	if ( productCountByCategories && (productCountByCategories.length>0) ){
-					_.each( productCountByCategories, function (productCountByCategory) {		%>	
-						<br><span>
-			<%			_.each( productCountByCategory.categoryPath, function (categoryName) {	%>
-							<%=categoryName%>>
-			<%			}); %>
-						</span> 
-						<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
-							(<%=productCountByCategory.productCount%>)
-			<%		});		
-				} else {	%>
-					<br><span>Not found</span>
-			<%	}	%>
+			<!-- input: catModel{categoryParents, // list unique parents of all current category  
+						productCountByCategories} // array of product count for each current category [categoryId, categoryName, categoryPath[], count ]-->
+			<div id="divCategoryEmbedded">
+				<h4>Add Category Embedded here</h4>
 			</div>
-			<!-- end of Product count by categories -->	
 		</div>
 		<div class="call-md-3">
 			<div id="divEmbeddedCart">

@@ -18,6 +18,7 @@ define([
         'app/views/desktop/product-pagination',
         'app/views/desktop/cart-embedded',
         'text!../../../../templates/desktop/product-search.html',
+        'text!../../../../templates/desktop/category-embedded.html'
         ], function (utilities,
         		jquery,
         		bootstrap,
@@ -25,7 +26,8 @@ define([
         		ProductPageView,
         		ProductPaginationView,
         		EmbeddedCart,
-        		productSearchTemplate
+        		productSearchTemplate,
+        		categoryEmbeddedTemplate
         		) {
 
 	var ProductSearchView = Backbone.View.extend({
@@ -152,6 +154,19 @@ define([
 //				embedded cart
 				self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
 				self.embeddedCart.render();
+				
+//				products by category
+				self.catModel={};
+				var parents = _.uniq(
+			            _.map(productCountByCategories, function(productCountByCategory){
+			            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+			                return productCountByCategory.categoryPath[parentIndex];
+			            }), false);
+				
+				self.catModel.categoryParents = parents;
+				self.catModel.productCountByCategories = productCountByCategories;
+				utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
+				
 				
 			});
 

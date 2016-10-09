@@ -281,7 +281,6 @@ define([
 			}
 		},
 		
-
 		applyFilter:function(){
 			var self=this;
 			

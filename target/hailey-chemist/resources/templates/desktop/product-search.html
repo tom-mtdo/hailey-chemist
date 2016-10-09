@@ -2,10 +2,18 @@
 	<div class="col-md-9">
 		<div  class="well">	
 			<h3>Search products</h3>
-			<button id="btnResetSearch">Reset Search</button>
-			<br>
 			<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="70" />
-			<div id="divProductCountByCategory">
+			<!-- Product count by categories -->
+			<!-- input: catModel{categoryParents, // list unique parents of all current category  
+						productCountByCategories} // array of product count for each current category [categoryId, categoryName, categoryPath[], count ]-->
+			<div id="divCategoryEmbedded">
+				<h4>Add Category Embedded here</h4>
+			</div>
+			<!-- <div id="divProductCountByCategory"> -->
+			<div>			
+				<span>-------------------------------------------------------</span>
+				<br>
+				<button id="btnResetSearch">Reset Search</button>
 		<%		if (model) {	%>
 					<span>Category: <%=model.categoryId%></span> &nbsp; <a id="aClearCategory">Clear</a>
 					| <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
@@ -13,12 +21,7 @@
 					<br>
 		<%		}	%>
 			</div>
-			<!-- Product count by categories -->
-			<!-- input: catModel{categoryParents, // list unique parents of all current category  
-						productCountByCategories} // array of product count for each current category [categoryId, categoryName, categoryPath[], count ]-->
-			<div id="divCategoryEmbedded">
-				<h4>Add Category Embedded here</h4>
-			</div>
+			
 		</div>
 	</div>
 	<div class="col-md-3 nopadding-left">

@@ -2,6 +2,8 @@
 	<div class="col-md-9">
 		<div  class="well">	
 			<h3>Search products</h3>
+			<button id="btnResetSearch">Reset Search</button>
+			<br>
 			<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="70" />
 			<div id="divProductCountByCategory">
 		<%		if (model) {	%>
@@ -9,12 +11,6 @@
 					| <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
 					| <span>Found: <%=model.resultCount%></span>
 					<br>
-		<%			if (model.filters.length > 0){	%>
-						<span>Filter:</span>
-		<%				$.each(model.filters, function(index, filter){	%>
-							<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
-		<%				})
-					}	%>			
 		<%		}	%>
 			</div>
 			<!-- Product count by categories -->
@@ -65,6 +61,16 @@
 			<%	}	%>
 			</div>
 			<div class="row">
+			
+		<%		if (model) {	%>
+		<%			if (model.filters.length > 0){	%>
+						<span>Filter:</span>
+		<%				$.each(model.filters, function(index, filter){	%>
+							<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
+		<%				})
+					}	%>			
+		<%		}	%>
+				<br>
 				<button id="btnApplyFilter">Apply Filter</button>
 				<button id="btnClearAllFilters">Clear All Filters</button>
 			</div>

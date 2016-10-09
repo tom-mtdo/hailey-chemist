@@ -50,6 +50,7 @@ define([
 			"change :checkbox[class='checkboxAttributeValue']":"updateFilter",
 			"click #btnApplyFilter":"applyFilter",
 			"click #btnClearAllFilters":"clearAllFilters",
+			"click #btnResetSearch":"resetSearch",
 			"click a[class='clearFilter']":"clearFilter",
 			"click a[class='clearFilters']":"clearFilters"
 		},
@@ -331,10 +332,19 @@ define([
 		clearAllFilters:function(){
 			this.model.filterAttributes=[];
 			this.model.filters=[];
+//			this.model.categoryId = -1;
+//			this.model.keyWord = "";
+			this.render();
+		},
+		
+		resetSearch:function(){
+			this.model.filterAttributes=[];
+			this.model.filters=[];
 			this.model.categoryId = -1;
 			this.model.keyWord = "";
 			this.render();
 		},
+		
 	});
 
 	return ProductSearchView;

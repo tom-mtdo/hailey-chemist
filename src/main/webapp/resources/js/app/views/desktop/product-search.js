@@ -306,10 +306,12 @@ define([
 			var attrId = $target.data("attribute-id");
 			var attrValue = $target.data("attribute-value");
 			
-			self.model.filters = _.reject(self.model.filters, function(filter){ 
+			var tmp = _.reject(self.model.filters, function(filter){ 
 				return ( (filter.attributeId==attrId)  && (filter.attributeValue==attrValue) ); 
 			});
 			
+			self.model.filters = tmp;
+			 
 //			var index = self.model.filters.indexOf(filter);
 //			self.model.filters.splice(index, 1);
 			self.render();

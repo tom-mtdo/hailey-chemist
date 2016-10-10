@@ -1,77 +1,84 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="well">
-			<div class="row"  style="border-bottom: 1px solid #ccc; margin-bottom:10px; padding-bottom:10px;">
-				<div  class="col-md-7  nopadding-right">
-					<h4>Search products</h4>		
+			<div class="row">
+				<div class="col-md-10">
+					<strong>Search</strong>
 					<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
-					<br>
-			<%		if (model) {	%>
-						<br> <span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
-						<br> <span>Found: <%=model.resultCount%></span>
-						<br> <button id="btnResetSearch">Reset Search</button>
+			<%		if (model && model.keyWord && (model.keyWord.length>0) ) {	%>
+						<span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
+						|
 			<%		}	%>
-				</div>
-				<div class="col-md-5" style="border-left: 1px solid #ccc;">
 			<%		if (model && model.categoryName && (model.categoryName.length>0) ) {	%>
 						<span>Category: <%=model.categoryName%></span> &nbsp; <a id="aClearCategory">Clear</a>
-			<%      } else {	%>				
-						<!-- Product count by categories -->
-						<!-- input: catModel{categoryParents, // list unique parents of all current category  
-									productCountByCategories} // array of product count for each current category [categoryId, categoryName, categoryPath[], count ]-->
-						<div id="divCategoryEmbedded">
-							<h4>Add Category Embedded here</h4>
-						</div>
-						<!-- <div id="divProductCountByCategory"> -->
-			<%		}	%>
+			<%      } 	%>				
+				</div>
+				<div class="col-md-2">
+					<span>Found: <%=model.resultCount%></span>
+					<button id="btnResetSearch">Reset</button>									
 				</div>
 			</div>
 
-			<!-- list all attributes -->
-			<div class="row">
-				<div class="col-md-12 nopadding-bottom">
-				<% 	if ( model.listAttributeValues && (model.listAttributeValues.length>0) ){
-					_.each( model.listAttributeValues, function (attributeValues) {		%>
-					<!-- WORKING HERE  -->
-						<!-- each property is in a column -->
-						<div class="col-md-1 nopadding border-left" style="border-left: 1px solid #ccc;">
-						<!-- if attributed was used to filter data then display clear & clear all buttons, 
-						else display check box -->
-			<%					if ( attributeValues.filtered ) {	%>
-									<span><%=attributeValues.name%></span>
-									<a class="clearFilters" data-attribute-id="<%=attributeValues.id%>">Clear</a></span>
-						<%  		_.each( attributeValues.values, function(value){	%>
-										<br><span><%=value%> <a class="clearFilter" data-attribute-id="<%=attributeValues.id%>" data-attribute-value="<%=value%>"> Clear</a></span>
-						<%			});				
-								} else {	%>				
-			<!-- 							<span style="display:none;">id: <%//=attributeValues.id%>, </span> -->
-								<span><%=attributeValues.name%></span>
-					<%  		_.each( attributeValues.values, function(value){	%>
-									<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" data-attribute-name="<%=attributeValues.name%>" value="<%=value%>"/><%=value%></span>
-					<%			});				
-							}		%>
-						</div>
-				<%		});		
-					} else {	%>
-					<%		if (model) {	%>
-				<%			if (model.filters.length > 0){	%>
-								<span>Filter:</span>
-				<%				$.each(model.filters, function(index, filter){	%>
-									<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
-				<%				})
-							}	%>			
-				<%		} else{	%>
-							<br><span>No attribute</span>
-				<%		}	
-					}	%>
+			<!-- Product count by categories -->
+			<!-- input: catModel{categoryParents, // list unique parents of all current category  
+						productCountByCategories} // array of product count for each current category [categoryId, categoryName, categoryPath[], count ]-->
+	<%		if (!model || !model.categoryName || (model.categoryName.length<1) ) {	%>
+				<div class="row" style="border-top: 1px solid #ccc;">
+					<div class="col-md-5">
+							<div id="divCategoryEmbedded">
+								<h4>Add Category Embedded here</h4>
+							</div>
+							<!-- <div id="divProductCountByCategory"> -->
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<button id="btnApplyFilter">Apply Filter</button>
-					<button id="btnClearAllFilters">Clear All Filters</button>
+	<%		}	%>			
+		</div>
+	</div>
+</div>
+
+<!-- list all attributes -->
+<div class="well">
+	<div class="row">
+		<div class="col-md-12 nopadding-bottom">
+		<% 	if ( model.listAttributeValues && (model.listAttributeValues.length>0) ){
+				_.each( model.listAttributeValues, function (attributeValues) {		%>
+					<!-- each property is in a column -->
+					<div class="col-md-1 nopadding border-left" style="border-left: 1px solid #ccc;">
+					<!-- if attributed was used to filter data then display clear & clear all buttons, 
+					else display check box -->
+	<%					if ( attributeValues.filtered ) {	%>
+							<span><%=attributeValues.name%></span>
+							<a class="clearFilters" data-attribute-id="<%=attributeValues.id%>">Clear</a></span>
+				<%  		_.each( attributeValues.values, function(value){	%>
+								<br><span><%=value%> <a class="clearFilter" data-attribute-id="<%=attributeValues.id%>" data-attribute-value="<%=value%>"> Clear</a></span>
+				<%			});				
+						} else {	%>				
+						<span><%=attributeValues.name%></span>
+			<%  		_.each( attributeValues.values, function(value){	%>
+							<br><span><input type="checkbox" class="checkboxAttributeValue" data-attribute-id="<%=attributeValues.id%>" data-attribute-name="<%=attributeValues.name%>" value="<%=value%>"/><%=value%></span>
+			<%			});				
+					}		%>
 				</div>
-			</div>
+		<%		});		
+			} else {	%>
+			<%		if (model) {	%>
+		<%			if (model.filters.length > 0){	%>
+						<span>Filter:</span>
+		<%				$.each(model.filters, function(index, filter){	%>
+							<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
+		<%				})
+					}	%>			
+		<%		} else{	%>
+					<br><span>No attribute</span>
+		<%		}	
+			}	%>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<button id="btnApplyFilter">Apply Filter</button>
+			<button id="btnClearAllFilters">Clear All Filters</button>
 		</div>
 	</div>
 </div>

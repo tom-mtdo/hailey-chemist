@@ -6,11 +6,20 @@
 					<strong>Search</strong>
 					<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
 			<%		if (model && model.keyWord && (model.keyWord.length>0) ) {	%>
-						<span>Keyword: <%=model.keyWord%></span> &nbsp; <a id="aClearKeyWord">Clear</a>
+						| 
+						<span>Keyword: <%=model.keyWord%></span> 
+						<a id="aClearKeyWord">
+							<span class="glyphicon glyphicon-remove plyphicon-delete"></span>							
+						</a>
 						|
 			<%		}	%>
 			<%		if (model && model.categoryName && (model.categoryName.length>0) ) {	%>
-						<span>Category: <%=model.categoryName%></span> &nbsp; <a id="aClearCategory">Clear</a>
+						|
+						<span>Category: <%=model.categoryName%></span>
+						<a id="aClearCategory">
+							<span class="glyphicon glyphicon-remove plyphicon-delete"></span>
+						</a>
+						|
 			<%      } 	%>				
 				</div>
 				<div class="col-md-2">

@@ -40,17 +40,25 @@
 <div class="well">
 	<div class="row">
 		<div class="col-md-12 nopadding-bottom">
+		
 		<% 	if ( model.listAttributeValues && (model.listAttributeValues.length>0) ){
 				_.each( model.listAttributeValues, function (attributeValues) {		%>
+					<!-- if search gave result, display search condition then -->
 					<!-- each property is in a column -->
 					<div class="col-md-1 nopadding border-left" style="border-left: 1px solid #ccc;">
 					<!-- if attributed was used to filter data then display clear & clear all buttons, 
 					else display check box -->
 	<%					if ( attributeValues.filtered ) {	%>
+							<a class="clearFilters" data-attribute-id="<%=attributeValues.id%>">
+								<span class="glyphicon glyphicon-remove plyphicon-delete"></span>
+							</a>
 							<span><%=attributeValues.name%></span>
-							<a class="clearFilters" data-attribute-id="<%=attributeValues.id%>">Clear</a></span>
 				<%  		_.each( attributeValues.values, function(value){	%>
-								<br><span><%=value%> <a class="clearFilter" data-attribute-id="<%=attributeValues.id%>" data-attribute-value="<%=value%>"> Clear</a></span>
+								<br>
+								<a class="clearFilter" data-attribute-id="<%=attributeValues.id%>" data-attribute-value="<%=value%>">
+									<span class="glyphicon glyphicon-minus plyphicon-delete"></span>
+								</a> 
+								<span><%=value%></span>
 				<%			});				
 						} else {	%>				
 						<span><%=attributeValues.name%></span>
@@ -61,11 +69,15 @@
 				</div>
 		<%		});		
 			} else {	%>
-			<%		if (model) {	%>
+				<!-- if search gave no result, display search condition  -->			
+		<%		if (model) {	%>    
 		<%			if (model.filters.length > 0){	%>
-						<span>Filter:</span>
+						<span>Filter: | </span>
 		<%				$.each(model.filters, function(index, filter){	%>
-							<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> &nbsp; <a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">Clear</a> |
+							<a class="clearFilter" data-attribute-id="<%=filter.attributeId%>" data-attribute-value="<%=filter.attributeValue%>">
+								<span class="glyphicon glyphicon-remove plyphicon-delete"></span>
+							</a>
+							<span><%=filter.attributeName%>=<%=filter.attributeValue%></span> |
 		<%				})
 					}	%>			
 		<%		} else{	%>

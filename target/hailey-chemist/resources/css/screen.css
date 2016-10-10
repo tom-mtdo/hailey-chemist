@@ -30,6 +30,14 @@ IMG.displayed {
   padding: 0;
 }
 
+.border-left{
+	border-left: 1px solid #ccc;
+}
+
+.border-bottom{
+	border-bottom: 1px solid #ccc;
+}
+
 .carousel-caption h5 {
     color: #ce4240;
     font-size: 22px;
@@ -60,6 +68,10 @@ IMG.displayed {
    padding-right: 0 !important;
    margin-right: 0 !important;
 }
+.nopadding-bottom {
+   padding-bottom: 0 !important;
+   margin-bottom: 0 !important;
+}
 /* .carousel-img {
     padding: 0px;
     position: relative;
@@ -85,6 +97,7 @@ IMG.displayed {
 	padding-left: 15px;
 	padding-right: 15px;
 }
+
 /* =================== End Tom added ==================*/
 
 

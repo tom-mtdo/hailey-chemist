@@ -83,7 +83,7 @@ define([
         		var categoryEmbedded = new CategoryEmbedded({model:catModel, el:$("#divCategoryEmbedded") });
             	categoryEmbedded.render();
 			});
-        	
+
             return self;
         },
         

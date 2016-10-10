@@ -236,12 +236,15 @@ define([
 		showProductByCategory:function(event){
 			var self = this;
 			var catId = $(event.currentTarget).data("category-id");
+			var catName = $(event.currentTarget).data("category-name");
 			self.model.categoryId = catId;
+			self.model.categoryName = catName;
 			self.render();
 		},
 
 		clearCategory:function(){
 			this.model.categoryId = -1;
+			this.model.categoryName = "";
 			this.render();
 		},
 

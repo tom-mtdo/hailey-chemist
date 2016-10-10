@@ -11,7 +11,7 @@
 				var parentIndex = (productCountByCategory.categoryPath.length-1);
 				<!-- // if this category belong to current  parent category then display -->
 				if ( productCountByCategory.categoryPath[parentIndex] == parent ) {		%>
-					<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" > <%=productCountByCategory.categoryName%></a>
+					<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" data-category-name="<%=productCountByCategory.categoryName%>" > <%=productCountByCategory.categoryName%></a>
 					(<%=productCountByCategory.productCount%>)
 					<br>
 <%				}

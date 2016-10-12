@@ -4,11 +4,12 @@
 			<div class="row">
 				<div class="col-md-12">
 <!-- 					<strong></strong> -->
-					<span>Found: <%=model.resultCount%></span>
-					&nbsp; 
-					<button id="btnResetSearch" class="btn btn-primary btn-sm">Reset</button>
+					<button id="btnResetSearch" class="btn btn-primary btn-sm">Reset</button>					
 					&nbsp;
-					<button id="btnSearch" class="btn btn-primary btn-sm">Search</button>
+					<span>Found: <%=model.resultCount%></span>
+					&nbsp;
+					<button id="btnSearch" class="btn btn-primary btn-sm">Search</button> 
+					&nbsp;
 					<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
 			<%		var hasKeyword=false;
 					if (model && model.keyWord && (model.keyWord.length>0) ) {	
@@ -107,8 +108,9 @@
 	<br>
 	<div class="row">
 		<div class="col-md-12">
-			<button id="btnApplyFilter">Apply Filter</button>
-			<button id="btnClearAllFilters">Clear All Filters</button>
+			<button id="btnApplyFilter" class="btn btn-primary btn-sm">Apply Filter</button>
+			&nbsp;
+			<button id="btnClearAllFilters" class="btn btn-primary btn-sm">Clear All Filters</button>
 		</div>
 	</div>
 </div>

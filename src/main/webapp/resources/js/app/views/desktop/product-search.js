@@ -69,7 +69,8 @@ define([
 //			self.gotCategories = false;
 			self.gotAttributes = false;
 			
-			$(self.el).empty();
+//			if want to make sure then uncomment following line
+//			$(self.el).empty();
 
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
@@ -138,7 +139,8 @@ define([
 //						if got all data then render
 						self.gotCount = true;
 						if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories, } );
+							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model} );
+//							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories, } );
 //							pagination
 							self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 							self.productPaginationView.render();
@@ -170,7 +172,8 @@ define([
 				self.model.productCountByCategories = productCountByCategories;
 				self.gotCategoryCount = true;
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model} );
+//					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
 //					pagination
 					self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 					self.productPaginationView.render();
@@ -233,7 +236,8 @@ define([
 //				if got all data then render
 				self.gotAttributes = true;
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model} );
+//					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
 //					pagination
 					self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
 					self.productPaginationView.render();
@@ -410,11 +414,12 @@ define([
 		searchKeyword:function(){
 //			this.resetModel();
 			var self = this;
-			self.model.filterAttributes=[];
-			self.model.filters=[];
-			self.model.categoryId = -1;
-			self.model.categoryName = "";
-			self.model.keyWord = "";			
+//			if want to make sure then uncomment following lines
+//			self.model.filterAttributes=[];
+//			self.model.filters=[];
+//			self.model.categoryId = -1;
+//			self.model.categoryName = "";
+//			self.model.keyWord = "";			
 			
 			var value = self.$("#txtSearchKeyWord").val().trim();
 			if(value) {

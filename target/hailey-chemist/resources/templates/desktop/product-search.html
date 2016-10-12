@@ -2,8 +2,12 @@
 	<div class="col-md-12">
 		<div class="well">
 			<div class="row">
-				<div class="col-md-9">
+				<div class="col-md-12">
 <!-- 					<strong></strong> -->
+					<span>Found: <%=model.resultCount%></span>
+					&nbsp; 
+					<button id="btnResetSearch" class="btn btn-primary btn-sm">Reset</button>
+					&nbsp;
 					<button id="btnSearch" class="btn btn-primary btn-sm">Search</button>
 					<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
 			<%		var hasKeyword=false;
@@ -24,18 +28,19 @@
 						</a>
 			<%      } 	%>				
 				</div>
-				<div class="col-md-3 nopadding">
-					<span>Found: <%=model.resultCount%></span>
+<!-- 				<div class="col-md-3 nopadding">
+					<span>Found: <%//=model.resultCount%></span>
 					&nbsp; 
 					<button id="btnResetSearch" class="btn btn-primary btn-sm">Reset</button>									
 				</div>
-			</div>
+ -->			</div>
 
 			<!-- Product count by categories -->
 			<!-- input: catModel{categoryParents, // list unique parents of all current category  
 						productCountByCategories} // array of product count for each current category [categoryId, categoryName, categoryPath[], count ]-->
-	<%		if (!model || !model.categoryName || (model.categoryName.length<1) ) {	%>
-				<div class="row" style="border-top: 1px solid #ccc;">
+			<!-- if display all category and found products -->
+	<%		if (model.categoryId && (model.categoryId == -1) &&  (model.resultCount > 0)) {	 %>
+ 				<div class="row" style="border-top: 1px solid #ccc;"> 
 					<div class="col-md-5">
 							<div id="divCategoryEmbedded">
 								<h4>Add Category Embedded here</h4>

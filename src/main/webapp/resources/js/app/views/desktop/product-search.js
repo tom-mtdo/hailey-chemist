@@ -1,5 +1,5 @@
 /**
- * input: productSearchModel{categoryId,  and query paras: keyword, categoryId, resultCount}
+ * input: productSearchModel{categoryId,  and query paras: keyword, categoryId, resultCount, productCountByCategories}
  * This view will add to model: 
  * resultCount: Number of product found
  * categories: list of all category to fill in the category select for search
@@ -41,6 +41,7 @@ define([
 		},
 
 		events:{
+			"click #btnSearch":"searchKeyword",
 			"keypress #txtSearchKeyWord":"updateOnEnter",
 			"click a[class='categoryPath']":"showProductByCategory",
 			"click #aClearCategory":"clearCategory",
@@ -64,8 +65,11 @@ define([
 			self.paginationModel.pageSize = 3;
 			self.gotCount = false;
 			self.gotCategoryCount = false;
-			self.gotCategories = false;
+			self.gotCategories = true;
+//			self.gotCategories = false;
 			self.gotAttributes = false;
+			
+			$(self.el).empty();
 
 			if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 				self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim();
@@ -114,27 +118,46 @@ define([
 			}
 
 			
-//			get all categories, always to choose to search, currently not in use
-			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
-			$.getJSON( strCatUrl, function(categories){
-				self.gotCategories = true;
-				self.model.categories = categories;
-//				alert("No of category: " + self.model.categories.length);
-				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
-				}
-			});
+////			get all categories, always to choose to search, currently not in use
+//			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
+//			$.getJSON( strCatUrl, function(categories){
+//				self.model.categories = categories;
+////				alert("No of category: " + self.model.categories.length);
+//				self.gotCategories = true;
+//				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
+//					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
+//				}
+//			});
 
 			//			update count number of product found
 			//        	var strUrl = self.model.dataSourceCount; //config.baseUrl + "rest/products/count";
 			$.getJSON(self.paginationModel.dataSourceCount, function(result){
-				self.gotCount = true;
 				$.each( result, function( key, val ) {
 					if(key == "count"){
 						self.model.resultCount = val;
-//						if got all data then render        				
+//						if got all data then render
+						self.gotCount = true;
 						if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories, } );
+							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories, } );
+//							pagination
+							self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
+							self.productPaginationView.render();
+							
+//							embedded cart
+							self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
+							self.embeddedCart.render();
+							
+//							products by category
+							self.catModel={};
+							var parents = _.uniq(
+						            _.map(self.model.productCountByCategories, function(productCountByCategory){
+						            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+						                return productCountByCategory.categoryPath[parentIndex];
+						            }), false);
+							
+							self.catModel.categoryParents = parents;
+							self.catModel.productCountByCategories = self.model.productCountByCategories;
+							utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
 						}
 					}
 				});
@@ -143,38 +166,36 @@ define([
 //			count product found by category
 			$.getJSON(self.strUrl, function( productCountByCategories ){
 //				show categories and number of its products
-				self.gotCategoryCount = true;
-
 //				if got all data then render
+				self.model.productCountByCategories = productCountByCategories;
+				self.gotCategoryCount = true;
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
-				}
-//				pagination
-				self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
-				self.productPaginationView.render();
-				
-//				embedded cart
-				self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
-				self.embeddedCart.render();
-				
-//				products by category
-				self.catModel={};
-				var parents = _.uniq(
-			            _.map(productCountByCategories, function(productCountByCategory){
-			            	var parentIndex = (productCountByCategory.categoryPath.length-1);
-			                return productCountByCategory.categoryPath[parentIndex];
-			            }), false);
-				
-				self.catModel.categoryParents = parents;
-				self.catModel.productCountByCategories = productCountByCategories;
-				utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
-				
-				
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
+//					pagination
+					self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
+					self.productPaginationView.render();
+					
+//					embedded cart
+					self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
+					self.embeddedCart.render();
+					
+//					products by category
+					self.catModel={};
+					var parents = _.uniq(
+				            _.map(self.model.productCountByCategories, function(productCountByCategory){
+				            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+				                return productCountByCategory.categoryPath[parentIndex];
+				            }), false);
+					
+					self.catModel.categoryParents = parents;
+					self.catModel.productCountByCategories = self.model.productCountByCategories;
+					utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
+
+				}				
 			});
 
 //			get attribute of product found
 			$.getJSON(self.strUrlAttr, function( listAttributeValues ){
-				self.gotAttributes = true;
 //				self.model.listAttributeValues = [
 //  					{"id":1, "name":"Total Weight", "type":"int", "values":["500","1000"] },
 //  					{"id":2, "name":"Content Weight", "type":"int", "values":["1000","500"] },
@@ -210,29 +231,57 @@ define([
 				});
 				
 //				if got all data then render
+				self.gotAttributes = true;
 				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:productCountByCategories} );
+					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
+//					pagination
+					self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
+					self.productPaginationView.render();
+					
+//					embedded cart
+					self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
+					self.embeddedCart.render();
+					
+//					products by category
+					self.catModel={};
+					var parents = _.uniq(
+				            _.map(self.model.productCountByCategories, function(productCountByCategory){
+				            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+				                return productCountByCategory.categoryPath[parentIndex];
+				            }), false);
+					
+					self.catModel.categoryParents = parents;
+					self.catModel.productCountByCategories = self.model.productCountByCategories;
+					utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
+
 				}
 			});
 			
 			return self;
 		},
 
-		updateModel:function(){
-			var value = this.$("#txtSearchKeyWord").val().trim();
-			if(value) {
-				this.model.keyWord = value;
-//				need to change to use event listener to render
-				this.render();
-			}
+		showSubViews:function(self){
+//			pagination
+			self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
+			self.productPaginationView.render();
+			
+//			embedded cart
+			self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
+			self.embeddedCart.render();
+			
+//			products by category
+			self.catModel={};
+			var parents = _.uniq(
+		            _.map(self.model.productCountByCategories, function(productCountByCategory){
+		            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+		                return productCountByCategory.categoryPath[parentIndex];
+		            }), false);
+			
+			self.catModel.categoryParents = parents;
+			self.catModel.productCountByCategories = self.model.productCountByCategories;
+			utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
 		},
-
-		updateOnEnter:function(event){
-			if ( event.which == 13 ) {
-				this.updateModel();
-			}
-		},
-
+		
 		showProductByCategory:function(event){
 			var self = this;
 			var catId = $(event.currentTarget).data("category-id");
@@ -302,6 +351,14 @@ define([
 			self.render();
 		},
 		
+		resetModel:function(){
+			this.model.filterAttributes=[];
+			this.model.filters=[];
+			this.model.categoryId = -1;
+			this.model.categoryName = "";
+			this.model.keyWord = "";			
+		},
+		
 		clearFilter:function(event){
 			var self = this;
 			var $target = $(event.currentTarget);
@@ -345,9 +402,34 @@ define([
 			this.model.filterAttributes=[];
 			this.model.filters=[];
 			this.model.categoryId = -1;
+			this.model.categoryName = "";
 			this.model.keyWord = "";
 			this.render();
 		},
+		
+		searchKeyword:function(){
+//			this.resetModel();
+			var self = this;
+			self.model.filterAttributes=[];
+			self.model.filters=[];
+			self.model.categoryId = -1;
+			self.model.categoryName = "";
+			self.model.keyWord = "";			
+			
+			var value = self.$("#txtSearchKeyWord").val().trim();
+			if(value) {
+				self.model.keyWord = value;
+//				need to change to use event listener to render
+				self.render();
+			}
+		},
+
+		updateOnEnter:function(event){
+			if ( event.which == 13 ) {
+				this.searchKeyword();
+			}
+		},
+
 		
 	});
 

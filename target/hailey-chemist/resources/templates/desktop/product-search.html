@@ -2,29 +2,32 @@
 	<div class="col-md-12">
 		<div class="well">
 			<div class="row">
-				<div class="col-md-10">
-					<strong>Search</strong>
+				<div class="col-md-9">
+<!-- 					<strong></strong> -->
+					<button id="btnSearch" class="btn btn-primary btn-sm">Search</button>
 					<input id="txtSearchKeyWord" placeholder="Search part no, keyword" size="40" />
-			<%		if (model && model.keyWord && (model.keyWord.length>0) ) {	%>
-						| 
-						<span>Keyword: <%=model.keyWord%></span> 
+			<%		var hasKeyword=false;
+					if (model && model.keyWord && (model.keyWord.length>0) ) {	
+						hasKeyword=true;										%>
+						<span>Keyword: <%=model.keyWord%></span>
 						<a id="aClearKeyWord">
 							<span class="glyphicon glyphicon-remove plyphicon-delete"></span>							
 						</a>
-						|
-			<%		}	%>
+			<%		}							%>
 			<%		if (model && model.categoryName && (model.categoryName.length>0) ) {	%>
-						|
+				<%		if (hasKeyword){			%>
+							, &nbsp;
+				<%		}							%>
 						<span>Category: <%=model.categoryName%></span>
 						<a id="aClearCategory">
 							<span class="glyphicon glyphicon-remove plyphicon-delete"></span>
 						</a>
-						|
 			<%      } 	%>				
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-3 nopadding">
 					<span>Found: <%=model.resultCount%></span>
-					<button id="btnResetSearch">Reset</button>									
+					&nbsp; 
+					<button id="btnResetSearch" class="btn btn-primary btn-sm">Reset</button>									
 				</div>
 			</div>
 
@@ -46,6 +49,7 @@
 </div>
 
 <!-- list all attributes -->
+<%	if ( (model.filters.length>0) || (model.listAttributeValues.length>0) ) {	%>
 <div class="well">
 	<div class="row">
 		<div class="col-md-12 nopadding-bottom">
@@ -117,3 +121,4 @@
 		</div>
 	</div>
 </div> 
+<%	}	%>

@@ -1,39 +1,39 @@
 <table class="table">
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
 <!-- 	<caption><span>Products</span></caption> -->
 	<tbody>
-		<% 	var gridProducts = [];
+<%		 	var gridProducts = [];
 			while(products.length){
-				gridProducts.push(products.splice(0,3));
+				gridProducts.push(products.splice(0,4));
 			}
 		
 			if (gridProducts.length > 0) {
-				_.each(gridProducts, function(lineProducts){
-		%>
+				_.each(gridProducts, function(lineProducts){			%>
 					<tr>
-		<%			
-						_.each(lineProducts, function(product){
-		%>
+<%						_.each(lineProducts, function(product){		%>
 							<td>
-								<a href="#products/<%=product.id%>"><%=product.name%></a>						
-			<%					if(product.medias.length > 0){
-			%>
-									<div>
+								<div class="product-brief-title">
+									<a href="#products/<%=product.id%>"><%=product.name%></a>
+								</div>						
+<%								if(product.medias.length > 0){												%>
+									<div class="product-brief-img">
 										<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">
 									</div>
-			<%								
-								}
-		%>						
-								<br><input type="number" id="quantity<%=product.id%>" placeholder="Quantity" style="width: 4em"/>
-								<button name="addToCart" class="btn btn-primary btn-xs" 
-									data-product-id="<%=product.id%>" data-product-name="<%=product.name%>">Cart</button>			
+<%								}			%>
+								<div class="product-brief-price">
+								</div>
+								<div class="product-brief-control">
+									<input type="number" id="quantity<%=product.id%>" placeholder="Quantity" style="width: 4em"/>
+									<button name="addToCart" class="btn btn-primary btn-xs" 
+										data-product-id="<%=product.id%>" data-product-name="<%=product.name%>">Cart</button>
+								</div>			
 							</td>
-		<%							
-						})
-		%>
+<%						})		%>
 					</tr>
-		<%
-				})	
-			}
-		%>
+<%				})	
+			}					%>
 	</tbody>
 </table>

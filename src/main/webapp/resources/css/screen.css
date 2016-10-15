@@ -110,6 +110,38 @@ IMG.displayed {
 	font-size: 11px;
 }
 
+.product-brief-title {
+	height: 40px;
+	max-height: 40px;
+	display: block;
+	text-align: center;
+	margin: auto;
+}
+
+.product-brief-img {
+	height: 110px;
+	max-height: 110px;
+	display: block;
+	text-align: center;
+	margin: auto;
+}
+
+.product-brief-price {
+	height: 40px;
+	max-height: 40px;
+	display: block;
+	text-align: center;
+	margin: auto;
+}
+
+.product-brief-control {
+	height: 30px;
+	max-height: 30px;
+	display: block;
+	text-align: center;
+	margin: auto;
+}
+
 /* =================== End Tom added ==================*/
 
 /* Core styles for the page */

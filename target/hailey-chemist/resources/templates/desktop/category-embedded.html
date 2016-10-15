@@ -6,7 +6,7 @@
 		&& model.categoryParents && (model.categoryParents.length>0) ){
 		<!-- // each parent category -->
 		_.each( model.categoryParents, function(parent){	%>
-			<h6><%=parent%></h6>
+			<strong><%=parent%></strong>
 <%			_.each( model.productCountByCategories, function (productCountByCategory) {		
 				var parentIndex = (productCountByCategory.categoryPath.length-1);
 				<!-- // if this category belong to current  parent category then display -->

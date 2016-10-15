@@ -1,10 +1,29 @@
-<div>
+<div class="embedded-text">
 	<h4>Embedded Cart</h4>
-	<%	if (cart && (cart.length > 0) ){ %>
+<%	if (cart && (cart.length > 0) ){ %>
+		<table class="table table-condensed">
+		    <col width="70%">
+  		    <col width="10%">
+  		    <col width="20%">
+		    <tr>
+		  		<th>Product</th>
+		  		<th align="right">QTy</th>
+		  		<th align="right">Price</th>
+		    </tr>
 <%		_.each(cart, function(line){	%>
-			<br><span>Product: <%=line.productName%>, quantity <%=line.quantity%></span>
-<%		});
-	} else { %>
+			<tr>
+				<td><%=line.productName%></td>
+				<td align="right"><%=line.quantity%></td>
+				<td></td>
+			</tr>
+<%		});							%>
+			<tr>
+				<td><strong>Total</strong></td>
+				<td></td>
+				<td align="right"><strong>$$$$$</strong></td>
+			</tr>
+		</table>
+<%	} else { 						%>
 		<span>Cart is empty</span>
 <%	} %>
 	<br><button name="checkout" class="btn btn-primary btn-xs">Checkout</button>

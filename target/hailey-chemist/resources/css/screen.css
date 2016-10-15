@@ -2,17 +2,17 @@
 
 /* =================== Tom added ======================*/
 
-/* not in used */
+/* set the same height with styles: homeSlideItemImg, content-row-1 */
 .homeSlideItem {
 	width: auto;
-	height: 260px;
-	max-height: 260px;
+	height: 300px;
+	max-height: 300px;
 }
 
 .homeSlideItem img{
 	width: auto;
-	height: 260px;
-	max-height: 260px;
+	height: 300px;
+	max-height: 300px;
 	margin: auto;
 }
 
@@ -86,10 +86,11 @@ IMG.displayed {
 	z-index: 999;
 }
 
+ /* set the same height with style homeSlideItemImg, homeSlideItem */
 .content-row-1{
 	width: auto;
-	height: 260px;
-	max-height: 260px;
+	height: 300px;
+	max-height: 300px;
 }
 
 .carousel-wrapper{
@@ -238,11 +239,13 @@ footer {
 
 #logo .wrap {
 /*     background: url(../img/banner.png) no-repeat scroll 0 0 transparent; */
-    height: 50px;
+    height: 30px;
+    max-height: 30px;
     margin: 0 auto 0px;
     padding: 0;
     text-align: center;
 }
+/* height: 50px; */
 
 #logo h1 {
     display: none;

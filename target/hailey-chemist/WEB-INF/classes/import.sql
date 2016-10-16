@@ -66,8 +66,13 @@ insert into media (type, url, product_id) values('image', './resources/img/produ
 insert into media (type, url, product_id) values('image', './resources/img/product/grape-seed.png', 5)
 
 -- sale
-insert into sale (product_id, price, start_date, end_date) values(1, 19.99, '2016-07-24 19:00:00', '2016-08-24 19:00:00')
-insert into sale (product_id, price, start_date, end_date) values(2, 15.27, '2016-07-24 19:00:00', '2016-08-24 19:00:00')
+insert into sale (product_id, price, start_date, end_date, description) values(1, 19.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (product_id, price, start_date, end_date, description) values(2, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (product_id, price, start_date, end_date, description) values(3, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (product_id, price, start_date, end_date, description) values(4, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (product_id, price, start_date, end_date, description) values(5, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (product_id, price, start_date, end_date, description) values(6, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+
 -- customers
 insert into customer (first_name, last_name, email, phone) values('Tom', 'Do', 'tom.mtdo@gmail.com', '1111111')
 insert into customer (first_name, last_name, email, phone) values('John', 'Smith', 'john.smith@gmail.com', '2222222')

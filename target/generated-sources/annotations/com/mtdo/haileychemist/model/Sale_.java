@@ -14,6 +14,7 @@ public abstract class Sale_ {
 	public static volatile SingularAttribute<Sale, Date> endDate;
 	public static volatile SingularAttribute<Sale, BigDecimal> price;
 	public static volatile SingularAttribute<Sale, String> itemSerialNo;
+	public static volatile SingularAttribute<Sale, String> description;
 	public static volatile SingularAttribute<Sale, Integer> id;
 	public static volatile SingularAttribute<Sale, Date> startDate;
 

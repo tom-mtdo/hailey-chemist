@@ -41,6 +41,17 @@ public class Sale implements Serializable {
 	//bi-directional many-to-one association to Product
 	@ManyToOne
 	private Product product;
+	
+	@Column(name="description")
+	private String description;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public Sale() {
 	}

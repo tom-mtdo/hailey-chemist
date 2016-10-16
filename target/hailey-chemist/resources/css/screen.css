@@ -149,6 +149,15 @@ IMG.displayed {
 /* 	position: absolute;
     right: 0px;
  */
+ 
+.salePrice{
+	color: red;
+	font-weight: bold;
+}
+
+.saleDescription{
+	/* font-weight: bold; */
+}
 
 /* =================== End Tom added ==================*/
 

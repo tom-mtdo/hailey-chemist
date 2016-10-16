@@ -49,7 +49,7 @@ define("router", [
             "products/:pageNo/:pageSize":"productPagination",
             "product-search":"productSearch",
             "product-search/:categoryId/:keyWord":"productSearchKeyWord",
-            "product-search/:categoryId":"productSearchByCategory", // not in use?
+            "product-search/:categoryId":"productSearchByCategory", // for link from home page
             "cart":"cart",
             "search/:keyWord":"search", // not in use ?
             "category-admin":"categoryAdmin",

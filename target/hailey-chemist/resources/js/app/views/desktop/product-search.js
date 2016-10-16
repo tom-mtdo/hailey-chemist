@@ -6,6 +6,9 @@
  * attributeValues: list all values of product found group by each attribute, for advanced search 
  * Main view: product-search.html
  * 
+ * categoryId: always has value: -1 means all
+ * keyWord: always has value: empty string "" means no keyword
+ * 
  * 
  */
 
@@ -66,6 +69,7 @@ define([
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = true;
+			self.gotCategoryName = false;
 //			self.gotCategories = false;
 			self.gotAttributes = false;
 			
@@ -118,6 +122,19 @@ define([
 				});
 			}
 
+//		get category name from id, used when navigate to from home page
+			if ( self.model.categoryId > -1 ){
+				var catUrl = "http://localhost:8080/hailey-chemist/rest/categories/" + self.model.categoryId;
+				$.getJSON(catUrl, function(category){
+					self.model.categoryName = category.name;
+					self.gotCategoryName = true;
+					if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes && self.gotCategoryName) {
+						self.showViews(self);							
+					}
+				});
+			} else {
+				self.gotCategoryName = true;
+			}
 			
 ////			get all categories, always to choose to search, currently not in use
 //			var strCatUrl = "http://localhost:8080/hailey-chemist/rest/categories";
@@ -139,30 +156,8 @@ define([
 						self.model.resultCount = val;
 //						if got all data then render
 						self.gotCount = true;
-						if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-//							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model} );
-//							utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories, } );
-
+						if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes  && self.gotCategoryName) {
 							self.showViews(self);							
-////							pagination
-//							self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
-//							self.productPaginationView.render();
-//							
-////							embedded cart
-//							self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
-//							self.embeddedCart.render();
-//							
-////							products by category
-//							self.catModel={};
-//							var parents = _.uniq(
-//						            _.map(self.model.productCountByCategories, function(productCountByCategory){
-//						            	var parentIndex = (productCountByCategory.categoryPath.length-1);
-//						                return productCountByCategory.categoryPath[parentIndex];
-//						            }), false);
-//							
-//							self.catModel.categoryParents = parents;
-//							self.catModel.productCountByCategories = self.model.productCountByCategories;
-//							utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
 						}
 					}
 				});
@@ -174,31 +169,8 @@ define([
 //				if got all data then render
 				self.model.productCountByCategories = productCountByCategories;
 				self.gotCategoryCount = true;
-				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-//					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model} );
-//					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model, productCountByCategories:self.model.productCountByCategories} );
-
+				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes  && self.gotCategoryName) {
 					self.showViews(self);
-////					pagination
-//					self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
-//					self.productPaginationView.render();
-//					
-////					embedded cart
-//					self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
-//					self.embeddedCart.render();
-//					
-////					products by category
-//					self.catModel={};
-//					var parents = _.uniq(
-//				            _.map(self.model.productCountByCategories, function(productCountByCategory){
-//				            	var parentIndex = (productCountByCategory.categoryPath.length-1);
-//				                return productCountByCategory.categoryPath[parentIndex];
-//				            }), false);
-//					
-//					self.catModel.categoryParents = parents;
-//					self.catModel.productCountByCategories = self.model.productCountByCategories;
-//					utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
-
 				}				
 			});
 
@@ -240,29 +212,8 @@ define([
 				
 //				if got all data then render
 				self.gotAttributes = true;
-				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes ) {
-//					utilities.applyTemplate( $(self.el), productSearchTemplate, {model:self.model} );
+				if ( self.gotCount && self.gotCategoryCount && self.gotCategories && self.gotAttributes  && self.gotCategoryName) {
 					self.showViews(self);
-////					pagination
-//					self.productPaginationView = new ProductPaginationView( {model:self.paginationModel, el:$("#divSearchProductPagination")} );	        	
-//					self.productPaginationView.render();
-//					
-////					embedded cart
-//					self.embeddedCart = new EmbeddedCart( {el:$("#divEmbeddedCart")} );	        	
-//					self.embeddedCart.render();
-//					
-////					products by category
-//					self.catModel={};
-//					var parents = _.uniq(
-//				            _.map(self.model.productCountByCategories, function(productCountByCategory){
-//				            	var parentIndex = (productCountByCategory.categoryPath.length-1);
-//				                return productCountByCategory.categoryPath[parentIndex];
-//				            }), false);
-//					
-//					self.catModel.categoryParents = parents;
-//					self.catModel.productCountByCategories = self.model.productCountByCategories;
-//					utilities.applyTemplate( $("#divCategoryEmbedded"), categoryEmbeddedTemplate, {model:self.catModel} );
-
 				}
 			});
 			

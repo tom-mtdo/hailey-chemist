@@ -36,14 +36,36 @@ INSERT INTO category (id, lft, name, rgt) VALUES(7,	15,	'HairCare',			16)
 --INSERT INTO category (id, name, lft, rgt) VALUES(18,'CoconutSoap',19)
 --INSERT INTO category (id, name, lft, rgt) VALUES(22,'VitaminEConditioner',23)
 
+-- sale
+insert into sale (id, price, start_date, end_date, description) values(1, 19.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(2, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(3, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(4, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(5, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(6, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+
+--insert into sale (product_id, price, start_date, end_date, description) values(1, 19.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+--insert into sale (product_id, price, start_date, end_date, description) values(2, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+--insert into sale (product_id, price, start_date, end_date, description) values(3, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+--insert into sale (product_id, price, start_date, end_date, description) values(4, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+--insert into sale (product_id, price, start_date, end_date, description) values(5, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+--insert into sale (product_id, price, start_date, end_date, description) values(6, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+		
 -- products
+--insert into product (id, category_id, product_no, name, description, rrp) values(1, 9, 'PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)
+--insert into product (id, category_id, product_no, name, description, rrp) values(2, 4, 'PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27)
+--insert into product (id, category_id, product_no, name, description, rrp) values(3, 7, 'PRD003', 'Aloe Shampo', 'Aloe vera cream', 13.27)
+--insert into product (id, category_id, product_no, name, description, rrp) values(4, 5, 'PRD004', 'Women Swisse Cranberry', 'Swisse Cranberry', 36.95)
+--insert into product (id, category_id, product_no, name, description, rrp) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99)
+--insert into product (id, category_id, product_no, name, description, rrp) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35)
+
 --insert into product (product_no, name, description, rrp) values('PRD003', 'Swisse Women''s Ultivite 120 Tablets', 'Swisse Women''s Ultivite Formula 1 contains 50 premium quality vitamins, minerals, antioxidants and herbs to help support women''s nutritional needs and maintain general wellbeing.', 69.95)
-insert into product (id, category_id, product_no, name, description, rrp) values(1, 9, 'PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99)
-insert into product (id, category_id, product_no, name, description, rrp) values(2, 4, 'PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27)
-insert into product (id, category_id, product_no, name, description, rrp) values(3, 7, 'PRD003', 'Aloe Shampo', 'Aloe vera cream', 13.27)
-insert into product (id, category_id, product_no, name, description, rrp) values(4, 5, 'PRD004', 'Women Swisse Cranberry', 'Swisse Cranberry', 36.95)
-insert into product (id, category_id, product_no, name, description, rrp) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99)
-insert into product (id, category_id, product_no, name, description, rrp) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(1, 9, 'PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99, 1)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(2, 4, 'PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27, 2)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(3, 7, 'PRD003', 'Aloe Shampo', 'Aloe vera cream', 13.27, 3)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(4, 5, 'PRD004', 'Women Swisse Cranberry', 'Swisse Cranberry', 36.95, 4)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99, 5)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35, 6)
 
 -- Attribute
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'Total Weight',	'Total package weight in gram',	'int', 'gr')
@@ -64,14 +86,6 @@ insert into media (type, url, product_id) values('image', './resources/img/produ
 insert into media (type, url, product_id) values('image', './resources/img/product/aloe.png', 3)
 insert into media (type, url, product_id) values('image', './resources/img/product/swisse-cranberry.png', 4)
 insert into media (type, url, product_id) values('image', './resources/img/product/grape-seed.png', 5)
-
--- sale
-insert into sale (product_id, price, start_date, end_date, description) values(1, 19.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
-insert into sale (product_id, price, start_date, end_date, description) values(2, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
-insert into sale (product_id, price, start_date, end_date, description) values(3, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
-insert into sale (product_id, price, start_date, end_date, description) values(4, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
-insert into sale (product_id, price, start_date, end_date, description) values(5, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
-insert into sale (product_id, price, start_date, end_date, description) values(6, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
 
 -- customers
 insert into customer (first_name, last_name, email, phone) values('Tom', 'Do', 'tom.mtdo@gmail.com', '1111111')

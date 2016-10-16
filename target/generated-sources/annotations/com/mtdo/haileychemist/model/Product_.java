@@ -12,13 +12,13 @@ public abstract class Product_ {
 
 	public static volatile SingularAttribute<Product, BigDecimal> rrp;
 	public static volatile ListAttribute<Product, Media> medias;
+	public static volatile SingularAttribute<Product, Sale> sale;
 	public static volatile ListAttribute<Product, ProductAttribute> productAttributes;
 	public static volatile SingularAttribute<Product, String> name;
 	public static volatile SingularAttribute<Product, String> description;
 	public static volatile SingularAttribute<Product, Integer> id;
 	public static volatile SingularAttribute<Product, Category> category;
 	public static volatile SingularAttribute<Product, String> productNo;
-	public static volatile ListAttribute<Product, Sale> sales;
 
 }
 

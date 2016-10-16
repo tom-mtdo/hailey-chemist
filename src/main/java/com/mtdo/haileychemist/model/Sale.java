@@ -29,8 +29,8 @@ public class Sale implements Serializable {
 	@Column(name="end_date")
 	private Date endDate;
 
-	@Column(name="item_serial_no")
-	private String itemSerialNo;
+//	@Column(name="item_serial_no")
+//	private String itemSerialNo;
 
 	private BigDecimal price;
 
@@ -38,9 +38,9 @@ public class Sale implements Serializable {
 	@Column(name="start_date")
 	private Date startDate;
 
-	//bi-directional many-to-one association to Product
-	@ManyToOne
-	private Product product;
+//	//bi-directional many-to-one association to Product
+//	@ManyToOne
+//	private Product product;
 	
 	@Column(name="description")
 	private String description;
@@ -72,13 +72,13 @@ public class Sale implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public String getItemSerialNo() {
-		return this.itemSerialNo;
-	}
-
-	public void setItemSerialNo(String itemSerialNo) {
-		this.itemSerialNo = itemSerialNo;
-	}
+//	public String getItemSerialNo() {
+//		return this.itemSerialNo;
+//	}
+//
+//	public void setItemSerialNo(String itemSerialNo) {
+//		this.itemSerialNo = itemSerialNo;
+//	}
 
 	public BigDecimal getPrice() {
 		return this.price;
@@ -96,12 +96,12 @@ public class Sale implements Serializable {
 		this.startDate = startDate;
 	}
 
-	public Product getProduct() {
-		return this.product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
+//	public Product getProduct() {
+//		return this.product;
+//	}
+//
+//	public void setProduct(Product product) {
+//		this.product = product;
+//	}
 
 }

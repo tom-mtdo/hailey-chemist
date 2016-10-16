@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * The persistent class for the product database table.
@@ -48,8 +49,12 @@ public class Product implements Serializable {
 	private List<Media> medias = new ArrayList<Media>();
 
 	//bi-directional many-to-one association to Sale
-	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
-	private List<Sale> sales = new ArrayList<Sale>();
+//	@OneToMany(cascade = ALL, fetch = EAGER, mappedBy="product")
+//	private List<Sale> sales = new ArrayList<Sale>();
+
+	//bi-directional one-to-one association to Sale
+	@OneToOne
+	private Sale sale;
 
 	//one-directional many-to-one association to Product
 	@ManyToOne
@@ -64,6 +69,14 @@ public class Product implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Sale getSale() {
+		return sale;
+	}
+
+	public void setSale(Sale sale) {
+		this.sale = sale;
 	}
 
 	public String getDescription() {
@@ -120,27 +133,27 @@ public class Product implements Serializable {
 		return media;
 	}
 
-	public List<Sale> getSales() {
-		return this.sales;
-	}
-
-	public void setSales(List<Sale> sales) {
-		this.sales = sales;
-	}
-
-	public Sale addSale(Sale sale) {
-		getSales().add(sale);
-		sale.setProduct(this);
-
-		return sale;
-	}
-
-	public Sale removeSale(Sale sale) {
-		getSales().remove(sale);
-		sale.setProduct(null);
-		
-		return sale;
-	}
+//	public List<Sale> getSales() {
+//		return this.sales;
+//	}
+//
+//	public void setSales(List<Sale> sales) {
+//		this.sales = sales;
+//	}
+//
+//	public Sale addSale(Sale sale) {
+//		getSales().add(sale);
+//		sale.setProduct(this);
+//
+//		return sale;
+//	}
+//
+//	public Sale removeSale(Sale sale) {
+//		getSales().remove(sale);
+//		sale.setProduct(null);
+//		
+//		return sale;
+//	}
 
 	public Category getCategory() {
 		return category;

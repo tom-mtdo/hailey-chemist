@@ -442,7 +442,6 @@ define([
 				this.searchKeyword();
 			}
 		},
-
 		
 	});
 

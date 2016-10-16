@@ -50,8 +50,9 @@ define([
     	
     	events: {
     		"click #quickSearchLink":"searchProducts",
-			"keypress #quickSearchInputHome":"updateOnEnter"
+    		"keypress #txtSearchHome":"updateOnEnter"
     	},
+
     	
         render:function () {
         	var self = this;
@@ -89,16 +90,19 @@ define([
         },
         
         searchProducts: function () {
+        	var self = this;
 //        	var event_bus = utilities.getEventBus();
 //        	event_bus.trigger('listenMe');
         	
-        	var value = this.$("#quickSearchInputHome").val().trim();
-//        	working on this , navigate to search page
-//        	require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
-        	require("router").navigate('/product-search/-1/' + value, true);
+        	var value = self.$("#txtSearchHome").val().trim();
+			if(value) {
+//        	navigate to search page
+//        		require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
+				require("router").navigate('/product-search/-1/' + value, true);
+			}
         },
-        
-		updateOnEnter:function(event){
+
+    	updateOnEnter:function(event){
 			if ( event.which == 13 ) {
 				this.searchProducts();
 			}

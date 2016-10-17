@@ -19,7 +19,8 @@ define([
 //	input model: products
     var ProductPageView = Backbone.View.extend({
     	events:{
-    		"click button[name='addToCart']":"addToCart"
+    		"click button[name='addToCart']":"addToCart",
+    		"change input[name='txtQty']":"validateQty"    		
     	},
     	
     	initialize: function(){
@@ -49,8 +50,20 @@ define([
         	$("#quantity"+ productId).val('');
         	
     		alert(productName + ' added to cart!');
-    	}
-
+    	},
+    	
+    	validateQty:function(event){
+			var $target = $(event.currentTarget);
+    		var qty = $target.val();
+    		
+    		if ( qty < 1){
+    			$target.val(1);
+        	} else if ( qty > 999999 ) {
+        		$target.val(999999);
+        	} 
+//        	this.render();
+        }
+    	
     });
 
     return ProductPageView;

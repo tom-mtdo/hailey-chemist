@@ -33,6 +33,14 @@ define([
             }
             
         	utilities.applyTemplate($(this.el), embeddedCartTemplate,{cart:aCart});
+        	
+        	if ( aCart && (aCart.length > 0)) {
+        		alert("Cart");
+				$("#btnCheckout").attr('disabled', true);
+			} else {
+				alert("Cart empty");
+				$("#btnCheckout").removeAttr('disabled');
+			}
         },
         
         response_event:function(){

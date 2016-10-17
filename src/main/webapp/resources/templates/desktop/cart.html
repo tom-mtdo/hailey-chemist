@@ -1,15 +1,49 @@
 <h3>Shopping cart</h3>
 <div class="well">
 
-<%	if (cart && (cart.length > 0) ){ 
-%>
-		<span>Cart Details</span>
+<%	if (cart && (cart.length > 0) ){ %>
+<%		var cartSum=0;					%>
+<%		var subSum=0;					%>
+		<table class="table table-condensed">
+		    <col width="70%">
+  		    <col width="10%">
+  		    <col width="20%">
+		    <tr>
+		  		<th>Product</th>
+		  		<th align="right">QTy</th>
+		  		<th align="right">Price</th>
+		    </tr>
 <%		_.each(cart, function(line){	%>
-			<br><span>Product: <%=line.productName%>, quantity <%=line.quantity%></span>
-<%		});
-	} else { %>
+<%			subSum = parseFloat(line.price*line.quantity).toFixed(2);%>
+<%			cartSum = (parseFloat(cartSum) + parseFloat(subSum)).toFixed(2);		%>
+			<tr>
+				<td><%=line.productName%></td>
+				<td align="right"><%=line.quantity%></td>
+				<td align="right"><%=subSum%></td>
+			</tr>
+<%		});							%>
+			<tr>
+				<td><strong>Total</strong></td>
+				<td colspan="2" align="right"><strong>$<%=cartSum%></strong></td>
+			</tr>
+		</table>
+<%	} else { 						%>
 		<span>Cart is empty</span>
 <%	} %>
-	<br><input id="email" type="email" placeholder="Email" required/>
+
+
+
+<!-- <%	//if (cart && (cart.length > 0) ){ 
+%>
+		<span>Cart Details</span>
+<%		//_.each(cart, function(line){	%>
+			<br><span>Product: <%//=line.productName%>, quantity <%//=line.quantity%></span>
+<%	//	});
+	//} else { %>
+		<span>Cart is empty</span>
+<%	//} %>
+ -->
+ 	<br><input id="email" type="email" placeholder="Email" required/>
+ 	<br>
 	<br><button name="checkout" class="btn btn-primary">Checkout</button>
 </div>

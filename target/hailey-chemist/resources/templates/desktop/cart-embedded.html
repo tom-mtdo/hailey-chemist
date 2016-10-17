@@ -4,12 +4,14 @@
 			<h4 class="nopadding">Your Cart</h4>
 		</div>
 		<div class="col-md-5">
-			<button name="checkout" class="btn btn-primary btn-xs">Checkout</button>		
+			<button id="btnCheckout" class="btn btn-primary btn-xs">Checkout</button>		
 		</div>
 	</div>
 	<br>
 	<br>
 <%	if (cart && (cart.length > 0) ){ %>
+<%		var cartSum=0;					%>
+<%		var subSum=0;					%>
 		<table class="table table-condensed">
 		    <col width="70%">
   		    <col width="10%">
@@ -20,16 +22,17 @@
 		  		<th align="right">Price</th>
 		    </tr>
 <%		_.each(cart, function(line){	%>
+<%			subSum = parseFloat(line.price*line.quantity).toFixed(2);%>
+<%			cartSum = (parseFloat(cartSum) + parseFloat(subSum)).toFixed(2);		%>
 			<tr>
 				<td><%=line.productName%></td>
 				<td align="right"><%=line.quantity%></td>
-				<td></td>
+				<td align="right"><%=subSum%></td>
 			</tr>
 <%		});							%>
 			<tr>
 				<td><strong>Total</strong></td>
-				<td></td>
-				<td align="right"><strong>$$$$$</strong></td>
+				<td colspan="2" align="right"><strong>$<%=cartSum%></strong></td>
 			</tr>
 		</table>
 <%	} else { 						%>

@@ -48,6 +48,7 @@ public class PurchaseService extends BaseEntityService<Purchase>{
 			orderDetail.setProduct(product);
 			orderDetail.setQuantity(orderDetailRequest.getQuantity());
 			orderDetail.setPurchase(purchase);
+			orderDetail.setPricePerUnit(product.getSale().getPrice());
 
 			// add to purchase
 			purchase.getOrderDetails().add(orderDetail);

@@ -35,11 +35,12 @@ define([
 			var $target = $(event.currentTarget);
 			var productId = $target.data("product-id");
 			var productName = $target.data("product-name");
+			var price = $target.data("product-price");
 
     		// a line in cart
     		var quantity = $("#quantity"+ productId).val();   
     		
-    		var cartLine = {"productId":productId, "productName":productName, "quantity":quantity};
+    		var cartLine = {"productId":productId, "productName":productName, "quantity":quantity, "price":price};
     		utilities.addToCart(cartLine);    		
 
         	var event_bus = utilities.getEventBus();

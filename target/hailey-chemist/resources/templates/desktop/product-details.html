@@ -1,18 +1,36 @@
-<h3>Product details</h3>
-<div class="well">
 
+<div class="well">
+	<h4>Product details</h4>
 <%	if (product){ %>
-		<br><span><%=product.get("id")%></span>
-		<br><span><%=product.get("name")%></span>
-<% 		if ( product.get('medias').length>0 ) {%>		
-			<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" />
-<% 		} %>
-		<br><span><%=product.get("description")%></span>
-		<br><input type="number" name="quantity" placeholder="Quantity"/>
-		<br><button name="addToCart" class="btn btn-primary">Add To Cart</button>
+		<div class="row">
+			<div class="col-md-12">
+				<br><span><strong><%=product.get("name")%></strong></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5">
+		<% 		if ( product.get('medias').length>0 ) {%>		
+					<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" width="350"/>
+		<% 		} %>
+			</div>
+			<div class="col-md-5">			
+				<br>
+				<strong>Price:</strong> &nbsp;
+				<span class="salePrice2">$<%=product.get("sale").price%></span>
+				<br><br>
+				<strong>Description:</strong>
+				<br>
+				<span><%=product.get("description")%></span>
+				<br><br>
+				<input type="number" id="txtQtyInDetail" name="quantity" min="1" max="999999" 
+					placeholder="Quantity" style="width: 5em"/>
+				<button name="addToCart" class="btn btn-primary">Add To Cart</button>
+			</div>
+		</div>
 <%	} else { %>
 		<span>No product selected</span>
 <%	} %>
+	<br>
 	<div style="padding-bottom:30px;">
 	    <a href="#">Home</a>
 	</div>

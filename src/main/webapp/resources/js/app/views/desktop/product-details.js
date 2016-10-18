@@ -17,7 +17,8 @@ define([
 
     var ProductDetailView = Backbone.View.extend({
     	events:{
-    		"click button[name='addToCart']":"addToCart"
+    		"click button[name='addToCart']":"addToCart",
+			"change #txtQtyInDetail":"validate"
     	},
     	
         render:function () {
@@ -57,6 +58,22 @@ define([
 //    		$.cookie.raw = true;
 //    		$.cookie( "pId", this.model.get("id"), {expires:10, path: "/"} );
 //    		$.cookie( "pquantity", 1, {expires:10, path: "/"} );
+    	},
+    	
+    	validate:function(event){
+    		var self=this;
+    		var $target=$(event.currentTarget);
+    		var quantity = $target.val();
+
+    		if ( quantity < 1){
+    			quantity = 1;
+        	} else if ( quantity > 999999 ) {
+        		quantity = 999999;
+        	} 
+    		
+    		$target.val(quantity);
+//    		self.render();
+
     	}
     
     });

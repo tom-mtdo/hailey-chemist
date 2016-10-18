@@ -20,7 +20,9 @@
 								</div>						
 <%								if(product.medias.length > 0){												%>
 									<div class="product-brief-img">
-										<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">
+										<a href="#products/<%=product.id%>">
+											<img src='<%=product.medias[0].url%>', alt="Product's media" width="110">
+										</a>
 									</div>
 <%								}			%>
 								<div class="product-brief-price">

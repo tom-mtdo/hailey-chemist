@@ -150,7 +150,13 @@ IMG.displayed {
     right: 0px;
  */
  
-.salePrice{
+.salePrice {
+	color: red;
+	font-weight: bold;
+}
+
+.salePrice2 {
+	font-size: 18px;
 	color: red;
 	font-weight: bold;
 }

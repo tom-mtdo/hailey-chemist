@@ -10,8 +10,8 @@
   		    <col width="20%">
 		    <tr>
 		  		<th>Product</th>
-		  		<th align="right">QTy</th>
-		  		<th align="right">Price</th>
+		  		<th style="text-align:right">QTy</th>
+		  		<th style="text-align:right">Price</th>
 		    </tr>
 <%		_.each(cart, function(line){	%>
 <%			subSum = parseFloat(line.price*line.quantity).toFixed(2);%>

@@ -35,11 +35,9 @@ define([
         	utilities.applyTemplate($(this.el), embeddedCartTemplate,{cart:aCart});
         	
         	if ( aCart && (aCart.length > 0)) {
-        		alert("Cart");
-				$("#btnCheckout").attr('disabled', true);
+        		$("#btnCheckout").removeAttr('disabled');
 			} else {
-				alert("Cart empty");
-				$("#btnCheckout").removeAttr('disabled');
+				$("#btnCheckout").attr('disabled', true);
 			}
         },
         

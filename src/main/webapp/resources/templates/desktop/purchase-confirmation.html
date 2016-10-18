@@ -1,18 +1,33 @@
 
 <div class="well">
-	<h4>Purchase confirmation</h4>
-	<% if(purchase){ %> <% var cartSum=0; %> <% var subSum=0; %> <span>purchase
-		id: <%=purchase.id%></span> <br>
-	<span>customer email: <%=purchase.customer.email%></span>
-
-	<table class="table table-condensed">
-		<col width="70%">
-		<col width="10%">
+	<h4>Purchase Confirmation</h4>
+	<% if(purchase){ %> <% var cartSum=0; %> <% var subSum=0; %>
+	<table class="table-condensed">
 		<col width="20%">
+		<col width="40%">
+		<col width="40%">
+		<tr>
+			<td>Transaction id:</td>
+			<td><strong><%=purchase.id%></strong></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Customer email:</td>
+			<td><strong><%=purchase.customer.email%></strong></td>
+			<td></td>
+		</tr>
+	</table>
+	<br>
+	<table class="table table-condensed">
+		<col width="60%">
+		<col width="10%">
+		<col width="10%">
+		<col width="10%">
 		<tr>
 			<th>Product</th>
-			<th align="right">Quantity</th>
-			<th align="right">Price</th>
+			<th style="text-align:right">Quantity</th>
+			<th style="text-align:right">Unit Price</th>
+			<th style="text-align:right">Price</th>
 		</tr>
 
 		<% $.each( purchase.orderDetails, function(i, orderDetail){ %> <%
@@ -21,13 +36,14 @@
 		<% cartSum = (parseFloat(cartSum) + parseFloat(subSum)).toFixed(2); %>
 		<tr>
 			<td><%=orderDetail.product.name%></td>
-			<td><%=orderDetail.quantity%></td>
-			<td><%=subSum%></td>
+			<td style="text-align:right"><%=orderDetail.quantity%></td>
+			<td align="right"><%=orderDetail.pricePerUnit.toFixed(2)%></td>
+			<td style="text-align:right"><%=subSum%></td>
 		</tr>
 		<% } ); %>
 		<tr>
 			<td><strong>Total</strong></td>
-			<td colspan="2" align="right"><strong>$<%=cartSum%></strong></td>
+			<td colspan="3" style="text-align:right"><strong>$<%=cartSum%></strong></td>
 		</tr>
 	</table>
 	<% } else { %> <span>System error</span> <% } %>

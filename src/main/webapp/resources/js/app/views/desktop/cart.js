@@ -84,7 +84,7 @@ define([
 //                	clear cart in cookie       
                 	utilities.clearCookie("cart");
                 	utilities.applyTemplate($(self.el), purchaseConfirmationTemplate, {purchase:purchase});
-                	alert("checkout success!");
+//                	alert("checkout success!");
                 }}).error(function (error) {
                 	alert("checkout error");
                 })

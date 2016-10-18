@@ -17,8 +17,10 @@ define([
 
     var CartView = Backbone.View.extend({
     	events: {
-    		"click button[name='checkout']" : "save",
+    		"click #btnCheckout1" : "save",
+    		"click #btnCheckout2" : "save",
     		"click a[class='removeItemInCart']":"removeItem",
+    		"change input[class='custumberEmail']":"synEmail",    		
     		"change input[class='txtCartQty']":"updateQtyInCart"
     	},
     	
@@ -70,7 +72,7 @@ define([
 
 //    		purchaseRequest.orderDetailRequests.push({productId: 1, quantity: 3});
 //			User email
-    		purchaseRequest.email = $("#email").val();
+    		purchaseRequest.email = $("#txtEmail1").val();
     		
             $.ajax({url: (config.baseUrl + "rest/purchases"),
                 data:JSON.stringify(purchaseRequest),
@@ -104,17 +106,21 @@ define([
 
     		if ( quantity < 1){
     			quantity = 1;
-//    			$target.val(quantity);
         	} else if ( quantity > 999999 ) {
         		quantity = 999999;
-//        		$target.val(quantity);
         	} 
-//    		$target.val(quantity);
     		
     		var cartLine = {"productId":productId, "productName":"", "quantity":quantity, "price":""};    		
     		utilities.updateCart(cartLine);
     		self.render();
-    	}
+    	},
+    	
+    	synEmail:function(event){
+    		var cusEmail = $(event.currentTarget).val();
+    		$("#txtEmail1").val(cusEmail);
+    		$("#txtEmail2").val(cusEmail);
+    	},
+    	
     });
 
     return CartView;

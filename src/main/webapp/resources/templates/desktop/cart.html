@@ -1,9 +1,16 @@
 
 <div class="well">
 	<h4>Shopping cart</h4>
+		<div style="text-align:right; border-bottom: 1px solid #ccc;">
+			<input id="txtEmail1" class="custumberEmail" type="email" placeholder="Email" required/>
+			<button id="btnCheckout1" class="btn btn-primary btn-sm">Checkout</button>
+			<br><br>
+		</div>
+
 <%	if (cart && (cart.length > 0) ){ %>
 <%		var cartSum=0;					%>
 <%		var subSum=0;					%>
+
 		<table class="table table-condensed">
 		    <col width="50%">
   		    <col width="10%">
@@ -40,23 +47,15 @@
 				<td colspan="3" align="right"><strong>$<%=cartSum%></strong></td>
 			</tr>
 		</table>
+		
+		<div style="text-align:right; border-top: 1px solid #ccc;">
+			<br>
+			<input id="txtEmail2" class="custumberEmail" type="email" placeholder="Email" required/>
+			<button id="btnCheckout2" class="btn btn-primary btn-sm">Checkout</button>
+		</div>
+		
 <%	} else { 						%>
 		<span>Cart is empty</span>
 <%	} %>
 
-
-
-<!-- <%	//if (cart && (cart.length > 0) ){ 
-%>
-		<span>Cart Details</span>
-<%		//_.each(cart, function(line){	%>
-			<br><span>Product: <%//=line.productName%>, quantity <%//=line.quantity%></span>
-<%	//	});
-	//} else { %>
-		<span>Cart is empty</span>
-<%	//} %>
- -->
- 	<br><input id="email" type="email" placeholder="Email" required/>
- 	<br>
-	<br><button name="checkout" class="btn btn-primary">Checkout</button>
 </div>

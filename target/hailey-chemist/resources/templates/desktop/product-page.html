@@ -29,7 +29,8 @@
 									<span class="salePrice">$<%=product.sale.price%></span>
 								</div>
 								<div class="product-brief-control">
-									<input type="number" name="txtQty" id="quantity<%=product.id%>" min="1" step="1" placeholder="Qty" style="width: 4em"/>
+									<input type="number" name="txtQty" id="quantity<%=product.id%>" 
+										min="1" step="1" placeholder="Qty" style="width: 4em"/>
 									<button name="addToCart" class="btn btn-default btn-sm" 
 										data-product-id="<%=product.id%>" data-product-name="<%=product.name%>"
 										data-product-price="<%=product.sale.price%>">

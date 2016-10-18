@@ -118,12 +118,14 @@ define(['underscore', 'backbone'], function (_, Backbone) {
         addToCart:function(cartLine){
 //        	get cart from cookie
         	var strCart = this.getCookie("cart");
+        	var cart = [];
+        	
 //        	if cart is null or empty then init cart with cartLine (input)
             if(!strCart){
             	cart = [cartLine];
             } else{
 //            	convert to array of objects
-                var cart = JSON.parse(strCart);                
+                cart = JSON.parse(strCart);                
 //        	if cart is not empty then            
 //        		check if product exit in cart
                 var found = false;
@@ -141,9 +143,56 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             }
               
 //    		convert cart to string to put to cookie
-            var strCart = JSON.stringify(cart);
+            strCart = JSON.stringify(cart);
 //        	alert("new cart:" + strCart);
     		this.setCookie( "cart", strCart, 10);
+        },
+        
+        removeFromCart:function(productId){
+//        	get cart from cookie
+        	var strCart = this.getCookie("cart");
+        	var aCart = [];
+        	var newCart = []; 
+        	
+//        	if cart is not empty then
+            if(strCart && (strCart.trim().length>0) ){
+//            	convert to array of objects
+                aCart = JSON.parse(strCart);
+//                remove item from cart
+                newCart = aCart.filter(function(element){
+                	return element.productId !== productId;
+                });
+//              store update cart to cookie:
+//        		convert cart to string to put to cookie
+                strCart = JSON.stringify(newCart);
+//            	alert("new cart:" + strCart);
+        		this.setCookie( "cart", strCart, 10);
+            }
+        },
+        
+        updateCart:function(cartLine){
+//        	get cart from cookie
+        	var strCart = this.getCookie("cart");
+        	var aCart = [];
+        	
+//        	if cart is not empty then
+            if(strCart && (strCart.trim().length>0) ){
+//            	convert to array of objects
+                aCart = JSON.parse(strCart);                
+            
+//        		check if product exit in cart
+            	_.each(aCart, function(line){
+//        		if exist then update quantity
+            		if ( line.productId == cartLine.productId ){
+            			line.quantity = cartLine.quantity;
+            		}
+            	});            		
+//        		convert cart to string to put to cookie
+                strCart = JSON.stringify(aCart);
+//            	alert("new cart:" + strCart);
+        		this.setCookie( "cart", strCart, 10);        	
+
+            }
         },
         
         pagination:{

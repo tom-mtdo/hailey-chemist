@@ -159,6 +159,11 @@ IMG.displayed {
 	/* font-weight: bold; */
 }
 
+.txtCartQty{
+	text-align:right;	
+}
+
+
 /* =================== End Tom added ==================*/
 
 /* Core styles for the page */

@@ -17,7 +17,9 @@ define([
 
     var CartView = Backbone.View.extend({
     	events: {
-    		"click button[name='checkout']" : "save"
+    		"click button[name='checkout']" : "save",
+    		"click a[class='removeItemInCart']":"removeItem",
+    		"change input[class='txtCartQty']":"updateQtyInCart"
     	},
     	
         render:function () {
@@ -84,6 +86,34 @@ define([
                 }}).error(function (error) {
                 	alert("checkout error");
                 })
+    	},
+    	
+    	removeItem:function(event){
+			var self = this;
+			var $target = $(event.currentTarget);
+    		var productId = $target.data("product-id");
+    		utilities.removeFromCart(productId);
+    		self.render();
+    	},
+    	
+    	updateQtyInCart:function(event){
+    		var self=this;
+    		var $target=$(event.currentTarget);
+    		var productId = $target.data("product-id");
+    		var quantity = $target.val();
+
+    		if ( quantity < 1){
+    			quantity = 1;
+//    			$target.val(quantity);
+        	} else if ( quantity > 999999 ) {
+        		quantity = 999999;
+//        		$target.val(quantity);
+        	} 
+//    		$target.val(quantity);
+    		
+    		var cartLine = {"productId":productId, "productName":"", "quantity":quantity, "price":""};    		
+    		utilities.updateCart(cartLine);
+    		self.render();
     	}
     });
 

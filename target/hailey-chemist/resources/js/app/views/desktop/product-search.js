@@ -56,8 +56,8 @@ define([
 			"click #btnClearAllFilters":"clearAllFilters",
 			"click #btnResetSearch":"resetSearch",
 			"click a[class='clearFilter']":"clearFilter",
-			"click a[class='clearFilters']":"clearFilters",
-			"click #btnCheckout":"showCart"
+			"click a[class='clearFilters']":"clearFilters"
+//			"click #btnCheckout":"showCart"
 		},
 
 		render:function(){
@@ -395,9 +395,9 @@ define([
 			}
 		},
 		
-		showCart:function(){
-			require("router").navigate('/cart', true);
-		}
+//		showCart:function(){
+//			require("router").navigate('/cart', true);
+//		}
 	
 	});
 

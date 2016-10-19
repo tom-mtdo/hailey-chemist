@@ -21,7 +21,7 @@ define([
 		},
 		
     	events: {
-//    		"click button[name='checkout']" : "save"
+    		"click #btnCheckout" : "showCart"
     	},
     	
         render:function () {
@@ -44,7 +44,12 @@ define([
         response_event:function(){
         	this.render();
 //        	alert("Cart-embedded caught event listenMe!");
-        }
+        },
+        
+		showCart:function(){
+			require("router").navigate('/cart', true);
+		}
+
     });
     
     return EmbeddedCartView 

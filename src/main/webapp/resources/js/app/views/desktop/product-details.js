@@ -7,12 +7,14 @@ define([
     'jquerycookie',
     'bootstrap',
     'configuration',
+    'app/views/desktop/cart-embedded',
     'text!../../../../templates/desktop/product-details.html'
 ], function (utilities,
 		jquery,
 		jquerycookie,
 		bootstrap,
 		config,
+		EmbeddedCartView,
 		productDetailTemplate) {
 
     var ProductDetailView = Backbone.View.extend({
@@ -45,7 +47,9 @@ define([
             	$("#btnAddToCart").attr('disabled', true);
             }
             
-            
+            // embedded cart
+            var embeddedCart = new EmbeddedCartView({ el:$("#divEmbeddedCart") });
+            embeddedCart.render();
             
             return this;
         },

@@ -50,8 +50,8 @@ define([
     	
     	events: {
     		"click #quickSearchLink":"searchProducts",
-    		"keypress #txtSearchHome":"updateOnEnter",
-    		"click #btnCheckout":"showCart"
+    		"keypress #txtSearchHome":"updateOnEnter"
+//    		"click #btnCheckout":"showCart"
     	},
 
     	
@@ -109,9 +109,9 @@ define([
 			}
 		},
 		
-		showCart:function(){
-			require("router").navigate('/cart', true);
-		}
+//		showCart:function(){
+//			require("router").navigate('/cart', true);
+//		}
 
     });
 

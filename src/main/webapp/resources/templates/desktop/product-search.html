@@ -46,7 +46,7 @@
 		<%		if (model.categoryId && (model.categoryId == -1) &&  (model.resultCount > 0)) {	 %>
 	 				<div class="row" style="border-bottom: 1px solid #ccc;"> 
 						<div class="col-md-5">
-								<div id="divCategoryEmbedded">
+								<div id="divCategoryEmbedded" style="overflow-y: scroll; max-height:800px;">
 									<h4>Add Category Embedded here</h4>
 								</div>
 								<!-- <div id="divProductCountByCategory"> -->
@@ -67,7 +67,7 @@
 				_.each( model.listAttributeValues, function (attributeValues) {		%>
 					<!-- if search gave result, display search condition then -->
 					<!-- each property is in a column -->
-					<div class="col-md-1 nopadding border-left" style="border-left: 1px solid #ccc;">
+					<div class="col-md-1 nopadding border-left" style="border-left: 1px solid #ccc;" style="overflow-y: scroll; max-height:400px;">
 					<!-- if attributed was used to filter data then display clear & clear all buttons, 
 					else display check box -->
 	<%					if ( attributeValues.filtered ) {	%>

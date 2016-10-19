@@ -1,15 +1,15 @@
 
 <div class="well">
 	<h4>Shopping cart</h4>
+
+<%	if (cart && (cart.length > 0) ){ %>
+<%		var cartSum=0;					%>
+<%		var subSum=0;					%>
 		<div style="text-align:right; border-bottom: 1px solid #ccc;">
 			<input id="txtEmail1" class="custumberEmail" type="email" placeholder="Email" required/>
 			<button id="btnCheckout1" class="btn btn-primary btn-sm">Checkout</button>
 			<br><br>
 		</div>
-
-<%	if (cart && (cart.length > 0) ){ %>
-<%		var cartSum=0;					%>
-<%		var subSum=0;					%>
 
 		<table class="table table-condensed">
 		    <col width="50%">

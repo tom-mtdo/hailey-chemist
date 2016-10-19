@@ -37,27 +37,33 @@ define([
 //            $.getJSON(config.baseUrl + "rest/products", function(products){
 //            	utilities.applyTemplate($('#featuredProducts'), productGrid, {products:products})
 //            })            
+            var qty = $("#txtQtyInDetail").val();
+            
+            if ( qty && (Number(qty) > 0) ){
+            	$("#btnAddToCart").removeAttr('disabled');	
+            } else {
+            	$("#btnAddToCart").attr('disabled', true);
+            }
+            
+            
+            
             return this;
         },
     	
     	addToCart:function(){
-//    		cart is an array of id, name, quantity    		
+			var self = this;
 
+			// a line in cart
 //    		var quantity = $("input[name='quantity']").val();
-//    		var cart = [[this.model.get("id"), this.model.get("name"), quantity],
-//    		            [3, "Multiple Vitamin", 1]];
-//    		var strCart = JSON.stringify(cart);
-//    		utilities.setCookie( "cart", strCart, 10);
-
-    		// a line in cart
-    		var quantity = $("input[name='quantity']").val();    		
-    		var cartLine = {"productId":this.model.get("id"), "productName":this.model.get("name"), "quantity":quantity};
+    		var quantity = $("#txtQtyInDetail").val();
+    		var cartLine = {"productId":self.model.get("id"), "productName":self.model.get("name"), "quantity":quantity, "price":self.model.get("sale").price };
     		utilities.addToCart(cartLine);    		
     		alert('Added to cart!');
-    		
-//    		$.cookie.raw = true;
-//    		$.cookie( "pId", this.model.get("id"), {expires:10, path: "/"} );
-//    		$.cookie( "pquantity", 1, {expires:10, path: "/"} );
+
+        	var event_bus = utilities.getEventBus();
+        	event_bus.trigger('cartAdded');
+        	
+        	$("#txtQtyInDetail").val('');
     	},
     	
     	validate:function(event){
@@ -71,7 +77,13 @@ define([
         		quantity = 999999;
         	} 
     		
-    		$target.val(quantity);
+        	if ( quantity > 0) {
+        		$("#btnAddToCart").removeAttr('disabled');
+			} else {
+				$("#btnAddToCart").attr('disabled', true);
+			}
+        	
+        	$target.val(quantity);    		
 //    		self.render();
 
     	}

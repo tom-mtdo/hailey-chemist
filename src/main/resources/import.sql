@@ -43,6 +43,11 @@ insert into sale (id, price, start_date, end_date, description) values(3, 25.95,
 insert into sale (id, price, start_date, end_date, description) values(4, 17.31, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
 insert into sale (id, price, start_date, end_date, description) values(5, 9.3, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
 insert into sale (id, price, start_date, end_date, description) values(6, 12.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(7, 32.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(8, 14.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(9, 71.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(10, 53.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
+insert into sale (id, price, start_date, end_date, description) values(11, 49.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
 
 --insert into sale (product_id, price, start_date, end_date, description) values(1, 19.99, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
 --insert into sale (product_id, price, start_date, end_date, description) values(2, 15.27, '2016-07-24 19:00:00', '9999-08-24 19:00:00', 'Xmas sale')
@@ -62,10 +67,16 @@ insert into sale (id, price, start_date, end_date, description) values(6, 12.99,
 --insert into product (product_no, name, description, rrp) values('PRD003', 'Swisse Women''s Ultivite 120 Tablets', 'Swisse Women''s Ultivite Formula 1 contains 50 premium quality vitamins, minerals, antioxidants and herbs to help support women''s nutritional needs and maintain general wellbeing.', 69.95)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(1, 9, 'PRD001', 'Fish oil', 'Black more oidless fish oil, 400 caples, 1000mg', 29.99, 1)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(2, 4, 'PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27, 2)
-insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(3, 7, 'PRD003', 'Aloe Shampo', 'Aloe vera cream', 13.27, 3)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(3, 7, 'PRD003', 'Aloe Shampoo', 'Aloe vera cream', 13.27, 3)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(4, 5, 'PRD004', 'Women Swisse Cranberry', 'Swisse Cranberry', 36.95, 4)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99, 5)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35, 6)
+
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(7, 7, 'PRD006', 'Lux shampoo', 'The choice of profesional hair dresser', 35.35, 7)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(8, 4, 'PRD006', 'Lynx body spray', 'Lynx ordorant, protect 48h', 15.35, 8)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(9, 9, 'PRD006', 'Sun cream', 'Protect from UV and sun burn', 5.35, 9)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(10, 6, 'PRD006', 'Palmolive Soap', 'Delux soap with vitamin E to moisture skin', 5.35, 10)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(11, 5, 'PRD006', 'Nature Own Woman 50+ multiple vitamin', 'Provide essential vitamins for women over 50', 5.35, 11)
 
 -- Attribute
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'Total Weight',	'Total package weight in gram',	'int', 'gr')

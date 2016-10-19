@@ -173,6 +173,18 @@ IMG.displayed {
 	 width: 250px;
 }
 
+/* ----------- use and test after populating sample data */
+.scroll{
+	overflow-y: scroll;
+/* 	max-height:400px; */
+}
+
+.embeddedCategoryCount{
+	overflow-y: scroll;
+ 	max-height:700px; 
+}
+/* ----------- use and test after populating sample data */
+
 /* =================== End Tom added ==================*/
 
 /* Core styles for the page */

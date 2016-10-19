@@ -66,7 +66,7 @@ define([
 			self.strUrlAttr = "";
 			self.paginationModel={};
 			self.paginationModel.pageNo = 0;
-			self.paginationModel.pageSize = 3;
+			self.paginationModel.pageSize = 4;
 			self.gotCount = false;
 			self.gotCategoryCount = false;
 			self.gotCategories = true;

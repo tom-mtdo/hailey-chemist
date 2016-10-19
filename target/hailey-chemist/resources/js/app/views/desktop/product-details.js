@@ -62,7 +62,7 @@ define([
     		var quantity = $("#txtQtyInDetail").val();
     		var cartLine = {"productId":self.model.get("id"), "productName":self.model.get("name"), "quantity":quantity, "price":self.model.get("sale").price };
     		utilities.addToCart(cartLine);    		
-    		alert('Added to cart!');
+//    		alert('Added to cart!');
 
         	var event_bus = utilities.getEventBus();
         	event_bus.trigger('cartAdded');

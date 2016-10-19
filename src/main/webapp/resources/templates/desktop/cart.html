@@ -1,7 +1,11 @@
 
 <div class="well">
-	<h4>Shopping cart</h4>
-
+	<div class="row" style="border-bottom: 1px solid #ccc;">
+		<div class="col-md-12">
+			<h4>Shopping cart</h4>
+		</div>
+	</div>
+	<br>
 <%	if (cart && (cart.length > 0) ){ %>
 <%		var cartSum=0;					%>
 <%		var subSum=0;					%>
@@ -20,9 +24,9 @@
 		    <tr>
 		  		<th>Product</th>
 		  		<th style="text-align:right">QTy</th>
+		  		<th style="text-align:center">Remove</th>		  		
 		  		<th style="text-align:right">Unit Price</th>
 		  		<th style="text-align:right">Price</th>
-		  		<th style="text-align:center">Remove</th>
 		    </tr>
 <%		_.each(cart, function(line){	%>
 <%			subSum = parseFloat(line.price*line.quantity).toFixed(2);%>
@@ -33,18 +37,18 @@
 					<input class="txtCartQty" type="number" data-product-id="<%=line.productId%>" 
 						min="1" value="<%=line.quantity%>" style="width: 7em">
 				</td>
-				<td align="right"><%=line.price.toFixed(2)%></td>
-				<td align="right"><%=subSum%></td>
 				<td align="center">
 					<a class="removeItemInCart" data-product-id="<%=line.productId%>">
 						<span class="glyphicon glyphicon-remove plyphicon-delete"></span>
 					</a>
 				</td>
+				<td align="right"><%=line.price.toFixed(2)%></td>
+				<td align="right"><%=subSum%></td>
 			</tr>
 <%		});							%>
 			<tr>
 				<td><strong>Total</strong></td>
-				<td colspan="3" align="right"><strong>$<%=cartSum%></strong></td>
+				<td colspan="4" align="right"><strong>$<%=cartSum%></strong></td>
 			</tr>
 		</table>
 		

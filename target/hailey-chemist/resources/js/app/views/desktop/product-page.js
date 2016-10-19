@@ -49,7 +49,7 @@ define([
         	
         	$("#quantity"+ productId).val('');
         	
-    		alert(productName + ' added to cart!');
+//    		alert(productName + ' added to cart!');
     	},
     	
     	validateQty:function(event){

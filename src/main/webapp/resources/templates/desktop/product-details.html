@@ -1,37 +1,46 @@
 
-<div class="well">
-	<h4>Product details</h4>
-<%	if (product){ %>
-		<div class="row">
-			<div class="col-md-12">
-				<br><span><strong><%=product.get("name")%></strong></span>
-			</div>
+
+	
+<div class=row>
+		<div class="col-md-9">
+			<div class="well">
+ 			<h4>Product details</h4>	
+			<%	if (product){ %>
+				<div class="row">
+					<div class="col-md-12">
+						<br><span><strong><%=product.get("name")%></strong></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+				<% 		if ( product.get('medias').length>0 ) {%>		
+							<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" width="350"/>
+				<% 		} %>
+					</div>
+					<div class="col-md-5">			
+						<br>
+						<strong>Price:</strong> &nbsp;
+						<span class="salePrice2">$<%=product.get("sale").price%></span>
+						<br><br>
+						<strong>Description:</strong>
+						<br>
+						<span><%=product.get("description")%></span>
+						<br><br>
+						<input type="number" id="txtQtyInDetail" name="quantity" min="1" max="999999" 
+							placeholder="Quantity" style="width: 5em"/>
+						<button id="btnAddToCart" name="addToCart" class="btn btn-primary">Add To Cart</button>
+					</div>
+				</div>
+			<%	} else { %>
+				<span>No product selected</span>
+			<%	} %>
 		</div>
-		<div class="row">
-			<div class="col-md-5">
-		<% 		if ( product.get('medias').length>0 ) {%>		
-					<br><img alt="Product photo" src="<%=product.get('medias')[0].url%>" width="350"/>
-		<% 		} %>
-			</div>
-			<div class="col-md-5">			
-				<br>
-				<strong>Price:</strong> &nbsp;
-				<span class="salePrice2">$<%=product.get("sale").price%></span>
-				<br><br>
-				<strong>Description:</strong>
-				<br>
-				<span><%=product.get("description")%></span>
-				<br><br>
-				<input type="number" id="txtQtyInDetail" name="quantity" min="1" max="999999" 
-					placeholder="Quantity" style="width: 5em"/>
-				<button id="btnAddToCart" name="addToCart" class="btn btn-primary">Add To Cart</button>
-			</div>
-		</div>
-<%	} else { %>
-		<span>No product selected</span>
-<%	} %>
-	<br>
-	<div style="padding-bottom:30px;">
-	    <a href="#">Home</a>
 	</div>
+	<div class="col-md-3 nopadding-left">
+		<div id="divEmbeddedCart" class="well">Embedded Cart</div>
+	</div>
+</div>
+<br>
+<div style="padding-bottom:30px;">
+   <a href="#">Home</a>
 </div>

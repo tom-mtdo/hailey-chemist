@@ -121,12 +121,15 @@ IMG.displayed {
 	margin: auto;
 }
 
-.product-brief-img {
-	height: 110px;
-	max-height: 110px;
+.product-brief-img{
+	padding-top:15px;
+	height: 130px;
+	max-height: 130px;
 	display: block;
 	text-align: center;
 	margin: auto;
+	float: none;
+	overflow: hidden;
 }
 
 .product-brief-price {
@@ -183,7 +186,7 @@ IMG.displayed {
 }
 
 .embeddedCategoryCount{
-	overflow-y: scroll;
+	overflow: scroll;
  	max-height:700px; 
 }
 /* ----------- use and test after populating sample data */

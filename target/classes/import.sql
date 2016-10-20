@@ -69,7 +69,7 @@ insert into product (id, category_id, product_no, name, description, rrp, sale_i
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(2, 4, 'PRD002', 'Men multiple vitamin', 'Nature own multiple vitamin, 300 caples', 25.27, 2)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(3, 7, 'PRD003', 'Aloe Shampoo', 'Aloe vera cream', 13.27, 3)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(4, 5, 'PRD004', 'Women Swisse Cranberry', 'Swisse Cranberry', 36.95, 4)
-insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract 12000 Gold Jar 300 Capsules', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99, 5)
+insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(5, 9, 'PRD005', 'Healthy Care Grape Seed Extract', 'Assists in the maintenance of blood flow in the hands, feet and legs. ', 25.99, 5)
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(6, 6, 'PRD006', 'Dove body wash', 'Dove body wash innovative', 5.35, 6)
 
 insert into product (id, category_id, product_no, name, description, rrp, sale_id) values(7, 7, 'PRD006', 'Lux shampoo', 'The choice of profesional hair dresser', 35.35, 7)

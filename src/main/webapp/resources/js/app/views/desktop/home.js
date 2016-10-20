@@ -73,7 +73,7 @@ define([
             
             // pagination            
             // http://localhost:8080/hailey-chemist/rest/products/:first/:maxResults            
-        	var paginationModel = {"pageNo":0, "pageSize":4};
+        	var paginationModel = {"pageNo":0, "pageSize":12};
         	paginationModel.dataSource=config.baseUrl + "rest/products/";
         	paginationModel.dataSourceCount=config.baseUrl + "rest/products/count";
         	var productPaginationView = new ProductPaginationView( {model:paginationModel, el:$("#featuredProducts")} );

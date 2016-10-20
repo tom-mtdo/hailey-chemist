@@ -1,5 +1,6 @@
 /**
  * input: productSearchModel{categoryId,  and query paras: keyword, categoryId, resultCount, productCountByCategories}
+ * 		filters = [];	// filter by attribute value
  * This view will add to model: 
  * resultCount: Number of product found
  * categories: list of all category to fill in the category select for search
@@ -38,7 +39,7 @@ define([
 			var self = this;
 			self.model.resultCount = 0;
 //			for clear filter of 1 value of 1 attribute
-			self.model.filters=[]; //[{ attributeId: attrId, attributeName: attrName, attributeValue:attrValue }]
+//			self.model.filters=[]; //[{ attributeId: attrId, attributeName: attrName, attributeValue:attrValue }]
 //			for clear filter of all value of 1 attribute
 			self.model.filterAttributes=[]; // [{attributeId, attributeName}] no double value
 		},

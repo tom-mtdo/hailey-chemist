@@ -48,8 +48,9 @@ define("router", [
             "products/:id":"productDetail",
             "products/:pageNo/:pageSize":"productPagination",
             "product-search":"productSearch",
-            "product-search/:categoryId/:keyWord":"productSearchKeyWord",
             "product-search/:categoryId":"productSearchByCategory", // for link from home page
+            "product-search/:categoryId/:keyWord":"productSearchKeyWord",
+            "product-search/bybrand/brandname/:brandname":"productSearchByBrand", // to avoid same url pattern with other product search request
             "cart":"cart",
             "search/:keyWord":"search", // not in use ?
             "category-admin":"categoryAdmin",
@@ -101,6 +102,7 @@ define("router", [
         search:function (keyWord) {
         	var searchModel = {};
         	searchModel.keyWord = keyWord;
+        	searchModel.filters = [];
         	searchView = new SearchView( {model:searchModel, el:$("#content")} )
         	utilities.viewManager.showView( searchView );
         },
@@ -109,6 +111,7 @@ define("router", [
         	var searchModel = {};
         	searchModel.keyWord = "";
         	searchModel.categoryId = "-1";
+        	searchModel.filters = [];
         	
         	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
         	utilities.viewManager.showView( productSearchView );
@@ -118,6 +121,7 @@ define("router", [
         	var searchModel = {};
         	searchModel.keyWord = keyWord;
         	searchModel.categoryId = categoryId;
+        	searchModel.filters = [];
         	
         	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
         	utilities.viewManager.showView( productSearchView );
@@ -127,6 +131,7 @@ define("router", [
         	var searchModel = {};
         	searchModel.keyWord = "";
         	searchModel.categoryId = categoryId;
+        	searchModel.filters = [];
         	
         	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
         	utilities.viewManager.showView( productSearchView );
@@ -135,6 +140,19 @@ define("router", [
         categoryAdmin:function(){
         	var categoryAdminView = new CategoryAdminView({ el:$("#content") });
         	utilities.viewManager.showView( categoryAdminView );
+        },
+        
+        productSearchByBrand:function(brandname){
+        	var searchModel = {};
+        	searchModel.keyWord = "";
+        	searchModel.categoryId = "-1";
+//        	alert("Got brand: " + brandname);
+        	searchModel.filters=[];
+        	var filter = { attributeId: "5", attributeName: "Brand", attributeValue:brandname };
+        	searchModel.filters.push(filter);
+        	
+        	var productSearchView = new ProductSearchView({ model:searchModel, el:$("#content") });
+        	utilities.viewManager.showView( productSearchView );
         }
         
     });

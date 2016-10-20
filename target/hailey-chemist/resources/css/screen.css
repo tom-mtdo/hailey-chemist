@@ -5,21 +5,31 @@
 /* set the same height with styles: homeSlideItemImg, content-row-1 */
 .homeSlideItem {
 	width: auto;
-	height: 300px;
+/* 	height: 300px;
 	max-height: 300px;
+ */
 }
 
 .homeSlideItem img {
 	width: auto;
-	height: 300px;
+/* 	height: 300px;
 	max-height: 300px;
-	margin: auto;
+ */	margin: auto;
 }
 
 IMG.displayed {
 	display: block;
 	margin-left: auto;
-	margin-right: auto
+	margin-right: auto;
+	width:100%;
+}
+
+/* set the same height with style homeSlideItemImg, homeSlideItem */
+.content-row-1 {
+	width: auto;
+	height: 300px;
+	max-height: 300px;
+	overflow: hidden;	
 }
 
 .border1 {
@@ -87,13 +97,6 @@ IMG.displayed {
 } */
 .z999 {
 	z-index: 999;
-}
-
-/* set the same height with style homeSlideItemImg, homeSlideItem */
-.content-row-1 {
-	width: auto;
-	height: 300px;
-	max-height: 300px;
 }
 
 .carousel-wrapper {
@@ -175,7 +178,7 @@ IMG.displayed {
 
 /* ----------- use and test after populating sample data */
 .scroll{
-	overflow-y: scroll;
+	overflow: scroll;
 /* 	max-height:400px; */
 }
 

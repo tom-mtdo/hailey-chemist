@@ -50,7 +50,8 @@ define([
     	
     	events: {
     		"click #quickSearchLink":"searchProducts",
-    		"keypress #txtSearchHome":"updateOnEnter"
+    		"keypress #txtSearchHome":"updateOnEnter",
+    		"click a[class='slideImg']":"searchProductsBySlide",
 //    		"click #btnCheckout":"showCart"
     	},
 
@@ -101,6 +102,13 @@ define([
 //        		require("router").navigate('/book/' + $("#venueSelector option:selected").val() + '/' + $("#performanceTimes").val(), true)
 				require("router").navigate('/product-search/-1/' + value, true);
 			}
+        },
+        
+        searchProductsBySlide:function(event){
+        	var self = this;
+        	var brand = $(event.currentTarget).data("brand");
+//        	alert("Brand: " + brand);
+        	require("router").navigate('/product-search/bybrand/brandname/' + brand, true);
         },
 
     	updateOnEnter:function(event){

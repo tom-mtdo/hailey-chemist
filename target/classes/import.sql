@@ -83,13 +83,26 @@ INSERT INTO attribute (id, name, description, data_type, unit) VALUES(1, 'Total 
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(2, 'Content Weight',	'Weight of each content unit in miligram',	'int', 'mg')
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(3, 'Content Quantity', 'Quantity of content in capsale',	'int', 'Capsale')
 INSERT INTO attribute (id, name, description, data_type, unit) VALUES(4, 'Content Volume',	'Volume of content in mililitle',	'int', 'ml')
+INSERT INTO attribute (id, name, description, data_type, unit) VALUES(5, 'Brand',	'Company who make products',	'String', '')
 
 -- product_attribute
 INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(1, 1,	1,	500)
 INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(2, 1,	2,	1000)
 INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(3, 1,	3,	400)
-INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(4, 2,	3,	300)
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(4, 1,	5,	'Blackmore')
 
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(5, 2,	3,	300)
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(6, 2,	5,	'NatureOwn')
+
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(7, 3,	5,	'Swisse')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(8, 4,	5,	'Blackmore')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(9, 5,	5,	'Blackmore')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(10, 6,	5,	'Swisse')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(11, 7,	5,	'NatureOwn')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(12, 8,	5,	'NatureOwn')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(13, 9,	5,	'Swisse')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(14, 10,	5,	'Swisse')
+INSERT INTO product_attribute (id, product_id, attribute_id, attribute_value) VALUES(15, 11,	5,	'Swisse')
 
 -- media
 insert into media (type, url, product_id) values('image', './resources/img/product/fish-oil.png', 1)

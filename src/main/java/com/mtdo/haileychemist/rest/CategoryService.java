@@ -47,11 +47,17 @@ public class CategoryService extends BaseEntityService<Category>{
 	@Produces(MediaType.APPLICATION_JSON)
 	//	public Map<Integer, String> getPath(@PathParam("categoryId") int categoryId){
 	public Map<Integer, List<String>> getPath(@PathParam("categoryId") int categoryId){
+		EntityManager em = getEntityManager();
+		Map<Integer, List<String>> result = getCategoryPath(categoryId, em);
+		return result;
+	}
+	
+	public static Map<Integer, List<String>> getCategoryPath(int categoryId, EntityManager em){
 
 		//		List<Predicate> lstPredicates = new ArrayList<Predicate>();
 
 		//		get entity manager
-		EntityManager em = getEntityManager();
+//		EntityManager em = getEntityManager();
 		//		get criteia builder
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		//		create query helper which allow select only few columns of a table - using tuple
@@ -103,6 +109,7 @@ public class CategoryService extends BaseEntityService<Category>{
 
 		return result;
 	}
+ 
 
 	//	need test
 	//	input: newCategoryName,newCategoryDescription,parentCategoryId

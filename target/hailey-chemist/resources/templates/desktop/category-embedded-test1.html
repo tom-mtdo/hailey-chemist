@@ -1,0 +1,11 @@
+<div>
+	<h4>Category Embedded 22222222222</h4>
+<%	if ( model.countByCats ) {		%>
+		<span>Found <%=model.countByCats.length%> product</span>
+<%		_.each( model.countByCats, function( countByACat ){	%>
+			<br><%=countByACat%>
+<%		})	%>
+<%	} else {		%>
+		<span>No product found</span>
+<%	}		%>
+</div>

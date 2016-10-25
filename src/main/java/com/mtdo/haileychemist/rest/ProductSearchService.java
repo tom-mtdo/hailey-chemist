@@ -46,7 +46,8 @@ import com.mtdo.haileychemist.model.ProductAttribute;
 public class ProductSearchService {
 	@Inject
 	private EntityManager entityManager;
-
+//	@Inject
+//	private CategoryService categoryService;
 
 //	=============================================================================================================================
 //	works
@@ -258,16 +259,16 @@ public class ProductSearchService {
 	@Path("/{categoryId}/pathCount")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
+	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		queryParameters.add("categoryId", "" + categoryId);
 
-		List<String> result = searchCategoryPathCount( queryParameters );
+		List<ProductCountByCategory> result = searchCategoryPathCount( queryParameters );
 		return result;
 	}
 	
-	public List<String> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
-		List<String> result = new ArrayList<String>();
+	public List<ProductCountByCategory> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
+		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
 		Set<Integer> setProductId = productFilter(queryParameters);
 
 //		if( (setProductId==null) || (setProductId.size()<1) ){
@@ -302,17 +303,24 @@ public class ProductSearchService {
 		int intCategoryId = -1;
 		String strCategoryName = "";
 		int intPCount = 0;
+		List<String> lstPath = new ArrayList<String>();
 		
-//		ProductCountByCategory pCount = null;
+		ProductCountByCategory pCount = null;
 		for (Tuple tuple: lstTuple){
 			intCategoryId = tuple.get(0, Integer.class);
 			strCategoryName = tuple.get(1, String.class);
 			intPCount = tuple.get(2, Long.class).intValue();
-			String str = "CategoryId=" + intCategoryId + ", CategoryName=" + strCategoryName + ", count=" + intPCount;
-			result.add(str);			
+			lstPath = getCategoryPath( intCategoryId );
+
+			pCount = new ProductCountByCategory();
+			pCount.setCategoryId( intCategoryId );
+			pCount.setCategoryName( strCategoryName );
+			pCount.setCategoryPath( lstPath );
+			pCount.setProductCount( intPCount );
+			result.add(pCount);
 		}
 
-//
+//	
 //		//		convert to return format
 //		int intCategoryId = -1;
 //		ProductCountByCategory pCount = null;
@@ -491,25 +499,39 @@ public class ProductSearchService {
 
 	//	get path from service:
 	//	http://localhost:8080/hailey-chemist/rest/categories/path/3
+	
 	public List<String> getCategoryPath( int categoryId ){
-		List<String> result = new ArrayList<>();
-
-		Client client = ClientBuilder.newClient();
-		//		client.property doesnt work
-		String strUrl = "";
+		List<String> result = new ArrayList<String>();
+		
+		Map<Integer, List<String>> cPath = new HashMap<Integer, List<String>>();
 		if (categoryId > 0) {
-			strUrl = "http://localhost:8080/hailey-chemist/rest/categories/path/" + categoryId;
-			Map<Integer, List<String>> cPath =
-					client.target(strUrl)
-					.request(MediaType.APPLICATION_JSON)
-					.get(new GenericType<Map<Integer, List<String>>>() {
-					});
+			cPath = CategoryService.getCategoryPath(categoryId, entityManager);
 			if ( cPath.containsKey(categoryId) ){
 				result = cPath.get(categoryId);
 			}
 		} 
 		return result;
 	}
+	
+//	public List<String> getCategoryPath( int categoryId ){
+//		List<String> result = new ArrayList<>();
+//
+//		Client client = ClientBuilder.newClient();
+//		//		client.property doesnt work
+//		String strUrl = "";
+//		if (categoryId > 0) {
+//			strUrl = "http://localhost:8080/hailey-chemist/rest/categories/path/" + categoryId;
+//			Map<Integer, List<String>> cPath =
+//					client.target(strUrl)
+//					.request(MediaType.APPLICATION_JSON)
+//					.get(new GenericType<Map<Integer, List<String>>>() {
+//					});
+//			if ( cPath.containsKey(categoryId) ){
+//				result = cPath.get(categoryId);
+//			}
+//		} 
+//		return result;
+//	}
 
 	public String getCategoryName( int categoryId ){
 		String result = "";

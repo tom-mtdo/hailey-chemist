@@ -41,4 +41,3 @@ com/mtdo/haileychemist/rest/PurchaseRequest.class
 com/mtdo/haileychemist/controller/MemberController.class
 com/mtdo/haileychemist/model/Customer.class
 com/mtdo/haileychemist/rest/OrderDetailRequest.class
-com/mtdo/haileychemist/rest/ProductSearchService$2.class

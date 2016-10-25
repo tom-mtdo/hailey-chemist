@@ -20,40 +20,41 @@ define([
 		categoryEmbeddedTemplate
 		) {
 	
-	var CategoryEmbedded = Backbone.View.extend({
-		render:function(){
-			self = this;
-			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {model:self.model} );
-			return self;
-		},
-		
-	});
-
 //	var CategoryEmbedded = Backbone.View.extend({
-//		events:{
-//			"click a[class='categoryPath']":"searchProductByCategory"
-//		},
-//		
 //		render:function(){
 //			self = this;
-////			get parents of each category, then make unique
-//			var parents = _.uniq(
-//		            _.map(this.model.productCountByCategories, function(productCountByCategory){
-//		            	var parentIndex = (productCountByCategory.categoryPath.length-1);
-//		                return productCountByCategory.categoryPath[parentIndex];
-//		            }), false);
-//			
-//			self.model.categoryParents = parents;
 //			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {model:self.model} );
 //			return self;
 //		},
 //		
-//		searchProductByCategory:function(event){
-//			var self = this;
-//			var catId = $(event.currentTarget).data("category-id");
-//        	require("router").navigate('/product-search/' + catId, true);
-//		}
 //	});
+
+	var CategoryEmbedded = Backbone.View.extend({
+		events:{
+			"click a[class='categoryPath']":"searchProductByCategory"
+		},
+		
+		render:function(){
+			self = this;
+//			get parents of each category, then make unique
+			var parents = _.uniq(
+		            _.map(this.model.productCountByCategories, function(productCountByCategory){
+//		            	var parentIndex = (productCountByCategory.path.length-1);
+		            	var parentIndex = (productCountByCategory.categoryPath.length-1);
+		                return productCountByCategory.categoryPath[parentIndex];
+		            }), false);
+			
+			self.model.categoryParents = parents;
+			utilities.applyTemplate( $(self.el), categoryEmbeddedTemplate, {model:self.model} );
+			return self;
+		},
+		
+		searchProductByCategory:function(event){
+			var self = this;
+			var catId = $(event.currentTarget).data("category-id");
+        	require("router").navigate('/product-search/' + catId, true);
+		}
+	});
 
     var HomeView = Backbone.View.extend({
     	
@@ -88,23 +89,23 @@ define([
         	var productPaginationView = new ProductPaginationView( {model:paginationModel, el:$("#featuredProducts")} );
         	productPaginationView.render();
 
-//        	//	product found by category
-        	var catModel={};
-			self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount";
-        	$.getJSON(self.strUrl, function( countByCats ){
-            	catModel.countByCats = countByCats;
-        		var categoryEmbedded = new CategoryEmbedded({ model:catModel, el:$("#divCategoryEmbedded") });
-            	categoryEmbedded.render();
-			});
-        	
-        	
+////        	//	product found by category
 //        	var catModel={};
 //			self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount";
-//        	$.getJSON(self.strUrl, function( productCountByCategories ){
-//            	catModel.productCountByCategories = productCountByCategories;
-//        		var categoryEmbedded = new CategoryEmbedded({model:catModel, el:$("#divCategoryEmbedded") });
+//        	$.getJSON(self.strUrl, function( countByCats ){
+//            	catModel.countByCats = countByCats;
+//        		var categoryEmbedded = new CategoryEmbedded({ model:catModel, el:$("#divCategoryEmbedded") });
 //            	categoryEmbedded.render();
 //			});
+        	
+        	
+        	var catModel={};
+			self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount";
+        	$.getJSON(self.strUrl, function( productCountByCategories ){
+            	catModel.productCountByCategories = productCountByCategories;
+        		var categoryEmbedded = new CategoryEmbedded({model:catModel, el:$("#divCategoryEmbedded") });
+            	categoryEmbedded.render();
+			});
 
             return self;
         },

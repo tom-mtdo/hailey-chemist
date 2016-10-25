@@ -11,6 +11,7 @@
  * keyWord: always has value: empty string "" means no keyword
  * 
  * 
+ * 
  */
 
 define([
@@ -108,7 +109,7 @@ define([
 //					strFilter = strFilter + flt + "&";
 //				});
 				
-//				add to url
+//				add to url NEED LOOP $.EACH ?????
 				$.each(self.model.filters, function(index, flt){
 					if ( self.model.keyWord && (self.model.keyWord.trim().length>0) ) {
 						self.strUrl="http://localhost:8080/hailey-chemist/rest/product-search/" + self.model.categoryId + "/pathCount" + "?keyWord=" + self.model.keyWord.trim() + "&" + strFilter;

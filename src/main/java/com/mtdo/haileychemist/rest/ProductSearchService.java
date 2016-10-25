@@ -47,7 +47,12 @@ public class ProductSearchService {
 	@Inject
 	private EntityManager entityManager;
 
+
+//	=============================================================================================================================
+//	works
+//	=============================================================================================================================	
 	//	get products belong to a category
+	//	if categoryId = -1 the all category
 	//	http://localhost:8080/hailey-chemist/rest/product-search/-1/pathCount
 	@Path("/{categoryId}")
 	@GET
@@ -87,21 +92,8 @@ public class ProductSearchService {
 
 		return result;
 	}
-
-	//	return product count by category: 
-	//	a list of categoryId, categoryName, categoryPath, productCount 
-	@Path("/{categoryId}/pathCount")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
-		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-		queryParameters.add("categoryId", "" + categoryId);
-
-		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
-		result = searchCategoryPathCount( queryParameters );
-		return result;
-	}
-
+	
+	//	count product found: used for pagination, search page
 	@Path("/{categoryId}/count")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -121,7 +113,284 @@ public class ProductSearchService {
 		return result;
 	}
 
+	/*
+	 * Main filter function
+	 * input: all query and filter parameters: 
+	 * 		: MultivaluedMap<String, String> queryParameters including:
+	 * 		: - categoryId (-1 means all category), 
+	 * 		: - keyWord="",
+	 * 		: - list<attr[attributeId]=value>
+	 * output:
+	 * 		: list<productId> found
+	 */
+	public Set<Integer> productFilter( MultivaluedMap<String, String> queryParameters  ){
+		Set<Integer> result = new HashSet<Integer>();		
 
+		List<Tuple> lstTupleProductId = new ArrayList<Tuple>();
+		int numberOfAttribute = 0;
+		int attrId = -1;
+		List<String> attrValues = new ArrayList<String>();
+		Iterator<String> it = queryParameters.keySet().iterator();
+		while ( it.hasNext() ){
+			String theKey = (String)it.next();
+			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
+				numberOfAttribute++;
+				//				which attribute
+				attrId = Integer.parseInt(theKey.substring(4));
+				attrValues = queryParameters.get(theKey);
+				List<Tuple> lstTupleTmp = filterSingleAttribute(queryParameters, attrId, attrValues);
+				lstTupleProductId.addAll(lstTupleTmp);
+			}
+		}
+
+		if ( numberOfAttribute > 0 ){
+			//	convert List<Tuple> to List<Integer> of productId
+			if( lstTupleProductId.size()>0 ){
+				int productId = -1;
+				List<Integer> lstAllProductIdFound = new ArrayList<Integer>();
+				for (Tuple tuple: lstTupleProductId) {
+					productId = tuple.get(0, Integer.class);
+					lstAllProductIdFound.add(productId);
+				}
+				//	find product has all attributes match
+				Set<Integer> setUniqueProductIdFound = new HashSet<Integer>(lstAllProductIdFound);	
+				for(Integer pId: setUniqueProductIdFound){
+					if ( Collections.frequency(lstAllProductIdFound,pId) == numberOfAttribute ){
+						result.add(pId);
+					}
+				}
+			}
+		}
+
+		//	if no attribute, then query with other parameter (attributeId, keyWord .etc)		
+		if ( numberOfAttribute <= 0 ){
+			List<Tuple> lstTupleTmp = filterNoAttribute(queryParameters);
+			if( lstTupleTmp.size() > 0 ){
+				int productId = -1;
+				for (Tuple tuple: lstTupleTmp) {
+					productId = tuple.get(0, Integer.class);
+					result.add(productId);
+				}
+			}
+		}
+
+		return result;
+	}
+	
+	//	Filter product by single attribute
+	//	input: predicates which contains: categoryId, keyWord
+	//		 : attributeId
+	//		 : set of values
+	public List<Tuple> filterSingleAttribute(MultivaluedMap<String, String> queryParameters, int attributeId, List<String> attributeValues ){
+		List<Tuple> result = new ArrayList<Tuple>();
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//		FROM
+		Root<Product> product = cq.from(Product.class);
+		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
+		//		SELECT
+		cq.multiselect( product.get("id") );
+		cq.groupBy( product.get("id") );
+		// 		ORDER BY
+		Order order = cb.asc( product.get("id") );
+		cq.orderBy( order );
+		//	WHERE		
+		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
+		//	query by attributes	which are from url parameters
+		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
+
+		Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attributeId );
+		Predicate predicateAttrValue = productAttribute.get("attribute_value").in(attributeValues);
+		//				remove old attribute predicate
+		if (lstPredicate.contains(predicateAttrId)) {
+			lstPredicate.remove(predicateAttrId);
+		}
+		if (lstPredicate.contains(predicateAttrValue)) {
+			lstPredicate.remove(predicateAttrValue);
+		}
+
+		lstPredicate.add(predicateAttrId);
+		lstPredicate.add(predicateAttrValue);
+
+		// convert to array to put in where clause
+		Predicate[] newPredicates = new Predicate[lstPredicate.size()];
+		lstPredicate.toArray(newPredicates);
+		cq.where(newPredicates);
+
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		result = tq.getResultList();
+
+		return result;
+	}	
+
+	//	query product with categoryId, keyWord (and maybe other criteria) which are stored in queryParameters
+	//	 but no attributes
+	public List<Tuple> filterNoAttribute(MultivaluedMap<String, String> queryParameters ){
+		List<Tuple> result = new ArrayList<Tuple>();
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//		FROM
+		Root<Product> product = cq.from(Product.class);
+		//		SELECT
+		cq.multiselect( product.get("id") );
+		cq.groupBy( product.get("id") );
+		// 		ORDER BY
+		Order order = cb.asc( product.get("id") );
+		cq.orderBy( order );
+		//	WHERE		
+		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
+		cq.where(predicates);
+
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		result = tq.getResultList();
+
+		return result;		
+	}	
+	
+//	=============================================================================================================================
+//	end of works
+//	=============================================================================================================================	
+
+	//	return product count by category: 
+	//	a list of categoryId, categoryName, categoryPath, productCount 
+	@Path("/{categoryId}/pathCount")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
+		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		queryParameters.add("categoryId", "" + categoryId);
+
+		List<String> result = searchCategoryPathCount( queryParameters );
+		return result;
+	}
+	
+	public List<String> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
+		List<String> result = new ArrayList<String>();
+		Set<Integer> setProductId = productFilter(queryParameters);
+
+//		if( (setProductId==null) || (setProductId.size()<1) ){
+//			return result;
+//		}
+
+		//	get categoryId and count
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+		//	FROM
+		Root<Product> product = cq.from(Product.class);
+		// 	ORDER BY
+		Order order = cb.asc(product.get("category").get("id"));
+		cq.orderBy(order);
+		// GROUP BY		
+		cq.groupBy( product.get("category").get("id") );
+		//	SELECT
+		//		cb.count(product);
+		cq.multiselect(
+				product.get("category").get("id"),
+				product.get("category").get("name"),
+				cb.count(product)
+				);
+		//	WHERE
+		Predicate predicate = product.get("id").in(setProductId);
+		cq.where(predicate);
+
+		//	perform query		
+		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+		List<Tuple> lstTuple = tq.getResultList();
+
+		int intCategoryId = -1;
+		String strCategoryName = "";
+		int intPCount = 0;
+		
+//		ProductCountByCategory pCount = null;
+		for (Tuple tuple: lstTuple){
+			intCategoryId = tuple.get(0, Integer.class);
+			strCategoryName = tuple.get(1, String.class);
+			intPCount = tuple.get(2, Long.class).intValue();
+			String str = "CategoryId=" + intCategoryId + ", CategoryName=" + strCategoryName + ", count=" + intPCount;
+			result.add(str);			
+		}
+
+//
+//		//		convert to return format
+//		int intCategoryId = -1;
+//		ProductCountByCategory pCount = null;
+//		for (Tuple tuple: lstTuple){
+//			intCategoryId = tuple.get(0, Integer.class);
+//
+//			pCount = new ProductCountByCategory();
+//			pCount.setCategoryId( intCategoryId );
+//			pCount.setCategoryName( getCategoryName( intCategoryId ) );
+//			pCount.setCategoryPath( getCategoryPath( intCategoryId ) );
+//			pCount.setProductCount( tuple.get(1, Long.class).intValue() );
+//			result.add(pCount);
+//		}
+		
+		return result;
+	}
+	
+	
+//	@Path("/{categoryId}/pathCount")
+//	@GET
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<ProductCountByCategory> getCategoryPathAndProductCount(  @PathParam("categoryId") int categoryId, @Context UriInfo uriInfo ){
+//		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+//		queryParameters.add("categoryId", "" + categoryId);
+//
+//		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
+//		result = searchCategoryPathCount( queryParameters );
+//		return result;
+//	}
+	
+
+//	public List<ProductCountByCategory> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
+//		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
+//		Set<Integer> setProductId = productFilter(queryParameters);
+//		if( (setProductId==null) || (setProductId.size()<1) ){
+//			return result;
+//		}
+//
+//		//	get categoryId and count
+//		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+//		//	FROM
+//		Root<Product> product = cq.from(Product.class);
+//		// 	ORDER BY
+//		Order order = cb.asc(product.get("category").get("id"));
+//		cq.orderBy(order);
+//		// GROUP BY		
+//		cq.groupBy( product.get("category").get("id") );
+//		//	SELECT
+//		//		cb.count(product);
+//		cq.multiselect(
+//				product.get("category").get("id"),
+//				cb.count(product)
+//				);
+//		//	WHERE
+//		Predicate predicate = product.get("id").in(setProductId);
+//		cq.where(predicate);
+//
+//		//	perform query		
+//		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
+//		List<Tuple> lstTuple = tq.getResultList();
+//
+//		//		convert to return format
+//		int intCategoryId = -1;
+//		ProductCountByCategory pCount = null;
+//		for (Tuple tuple: lstTuple){
+//			intCategoryId = tuple.get(0, Integer.class);
+//
+//			pCount = new ProductCountByCategory();
+//			pCount.setCategoryId( intCategoryId );
+//			pCount.setCategoryName( getCategoryName( intCategoryId ) );
+//			pCount.setCategoryPath( getCategoryPath( intCategoryId ) );
+//			pCount.setProductCount( tuple.get(1, Long.class).intValue() );
+//			result.add(pCount);
+//		}
+//		return result;
+//	}
+	
 	//	Get all value of each attribute of all products found
 	//	URL parameters: url?keyWork=""&attr[id1]="value1"&attr[id1]="value2"&attr[id2]="value21"
 	//	Return a Map<attributeId, List<attributeValue>> for all products found
@@ -200,189 +469,6 @@ public class ProductSearchService {
 		return result;
 	}
 
-	/*
-	 * Main filter function
-	 * input: all query and filter parameters: 
-	 * 		: MultivaluedMap<String, String> queryParameters including:
-	 * 		: - categoryId (-1 means all category), 
-	 * 		: - keyWord="",
-	 * 		: - list<attr[attributeId]=value>
-	 * output:
-	 * 		: list<productId> found
-	 */
-	public Set<Integer> productFilter( MultivaluedMap<String, String> queryParameters  ){
-		Set<Integer> result = new HashSet<Integer>();		
-
-		List<Tuple> lstTupleProductId = new ArrayList<Tuple>();
-		int numberOfAttribute = 0;
-		int attrId = -1;
-		List<String> attrValues = new ArrayList<String>();
-		Iterator<String> it = queryParameters.keySet().iterator();
-		while ( it.hasNext() ){
-			String theKey = (String)it.next();
-			if( (theKey.length()>4) && (theKey.substring(0,4).contentEquals("attr")) ){
-				numberOfAttribute++;
-				//				which attribute
-				attrId = Integer.parseInt(theKey.substring(4));
-				attrValues = queryParameters.get(theKey);
-				List<Tuple> lstTupleTmp = filterSingleAttribute(queryParameters, attrId, attrValues);
-				lstTupleProductId.addAll(lstTupleTmp);
-			}
-		}
-		
-		if ( numberOfAttribute > 0 ){
-			//	convert List<Tuple> to List<Integer> of productId
-			if( lstTupleProductId.size()>0 ){
-				int productId = -1;
-				List<Integer> lstAllProductIdFound = new ArrayList<Integer>();
-				for (Tuple tuple: lstTupleProductId) {
-					productId = tuple.get(0, Integer.class);
-					lstAllProductIdFound.add(productId);
-				}
-				//	find product has all attributes match
-				Set<Integer> setUniqueProductIdFound = new HashSet<Integer>(lstAllProductIdFound);	
-				for(Integer pId: setUniqueProductIdFound){
-					if ( Collections.frequency(lstAllProductIdFound,pId) == numberOfAttribute ){
-						result.add(pId);
-					}
-				}
-			}
-		}
-		
-		//	if no attribute, then query with other parameter (attributeId, keyWord .etc)		
-		if ( numberOfAttribute <= 0 ){
-			List<Tuple> lstTupleTmp = filterNoAttribute(queryParameters);
-			if( lstTupleTmp.size() > 0 ){
-				int productId = -1;
-				for (Tuple tuple: lstTupleTmp) {
-					productId = tuple.get(0, Integer.class);
-					result.add(productId);
-				}
-			}
-		}
-
-		return result;
-	}
-
-	//	query product with categoryId, keyWord (and maybe other criteria) which are stored in queryParameters
-	public List<Tuple> filterNoAttribute(MultivaluedMap<String, String> queryParameters ){
-		List<Tuple> result = new ArrayList<Tuple>();
-		
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-		//		FROM
-		Root<Product> product = cq.from(Product.class);
-		//		SELECT
-		cq.multiselect( product.get("id") );
-		cq.groupBy( product.get("id") );
-		// 		ORDER BY
-		Order order = cb.asc( product.get("id") );
-		cq.orderBy( order );
-		//	WHERE		
-		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
-		cq.where(predicates);
-
-		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
-		result = tq.getResultList();
-		
-		return result;		
-	}	
-	
-//	Filter product by single attribute
-//	input: predicates which contains: categoryId, keyWord
-//		 : attributeId
-//		 : set of values
-	public List<Tuple> filterSingleAttribute(MultivaluedMap<String, String> queryParameters, int attributeId, List<String> attributeValues ){
-		List<Tuple> result = new ArrayList<Tuple>();
-		
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-		//		FROM
-		Root<Product> product = cq.from(Product.class);
-		Join<Product, ProductAttribute> productAttribute = product.join("productAttributes");
-		//		SELECT
-		cq.multiselect( product.get("id") );
-		cq.groupBy( product.get("id") );
-		// 		ORDER BY
-		Order order = cb.asc( product.get("id") );
-		cq.orderBy( order );
-		//	WHERE		
-		Predicate[] predicates = ProductService.extractPredicatesImpl(queryParameters, cb, product);		
-		//	query by attributes	which are from url parameters
-		List<Predicate> lstPredicate = new ArrayList<Predicate>(Arrays.asList(predicates));
-
-		Predicate predicateAttrId = cb.equal( productAttribute.get("attribute").get("id"), attributeId );
-		Predicate predicateAttrValue = productAttribute.get("attribute_value").in(attributeValues);
-		//				remove old attribute predicate
-		if (lstPredicate.contains(predicateAttrId)) {
-			lstPredicate.remove(predicateAttrId);
-		}
-		if (lstPredicate.contains(predicateAttrValue)) {
-			lstPredicate.remove(predicateAttrValue);
-		}
-
-		lstPredicate.add(predicateAttrId);
-		lstPredicate.add(predicateAttrValue);
-
-		// convert to array to put in where clause
-		Predicate[] newPredicates = new Predicate[lstPredicate.size()];
-		lstPredicate.toArray(newPredicates);
-		cq.where(newPredicates);
-
-		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
-		result = tq.getResultList();
-		
-		return result;
-	}
-	
-	
-
-	public List<ProductCountByCategory> searchCategoryPathCount( MultivaluedMap<String, String> queryParameters ){
-		List<ProductCountByCategory> result = new ArrayList<ProductCountByCategory>();
-		Set<Integer> setProductId = productFilter(queryParameters);
-		if( (setProductId==null) || (setProductId.size()<1) ){
-			return result;
-		}
-
-		//	get categoryId and count
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-		//	FROM
-		Root<Product> product = cq.from(Product.class);
-		// 	ORDER BY
-		Order order = cb.asc(product.get("category").get("id"));
-		cq.orderBy(order);
-		// GROUP BY		
-		cq.groupBy( product.get("category").get("id") );
-		//	SELECT
-		//		cb.count(product);
-		cq.multiselect(
-				product.get("category").get("id"),
-				cb.count(product)
-				);
-		//	WHERE
-		Predicate predicate = product.get("id").in(setProductId);
-		cq.where(predicate);
-
-		//	perform query		
-		TypedQuery<Tuple> tq = entityManager.createQuery(cq);
-		List<Tuple> lstTuple = tq.getResultList();
-
-		//		convert to return format
-		int intCategoryId = -1;
-		ProductCountByCategory pCount = null;
-		for (Tuple tuple: lstTuple){
-			intCategoryId = tuple.get(0, Integer.class);
-
-			pCount = new ProductCountByCategory();
-			pCount.setCategoryId( intCategoryId );
-			pCount.setCategoryName( getCategoryName( intCategoryId ) );
-			pCount.setCategoryPath( getCategoryPath( intCategoryId ) );
-			pCount.setProductCount( tuple.get(1, Long.class).intValue() );
-			result.add(pCount);
-		}
-		return result;
-	}
 
 	//	public String buildUriParameter( MultivaluedMap<String, String> queryParameters ) {
 	//		String result = "";
@@ -422,7 +508,6 @@ public class ProductSearchService {
 				result = cPath.get(categoryId);
 			}
 		} 
-
 		return result;
 	}
 

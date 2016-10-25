@@ -1,33 +1,11 @@
-<!-- Product count by categories -->
-<!-- input: model:{categoryParents, productCountByCategories} -->
 <div>
-<!-- 	<br><span><strong>Products by Category</strong></span> -->
-<% 	if ( model.productCountByCategories && (model.productCountByCategories.length>0) 
-		&& model.categoryParents && (model.categoryParents.length>0) ){
-		<!-- // each parent category -->
-		var count = 0;
-		_.each( model.categoryParents, function(parent){
-			<!-- // generate space -->	
-			if (count == 0) {		%>
-				<br>
-<%				count = count + 1;	%>
-<%			} else {	%>
-				<br><br>
-<%			}			%>
-			
-			<strong><%=parent%></strong>
-<%			_.each( model.productCountByCategories, function (productCountByCategory) {		
-				var parentIndex = (productCountByCategory.categoryPath.length-1);
-				<!-- // if this category belong to current  parent category then display -->
-				if ( productCountByCategory.categoryPath[parentIndex] == parent ) {		%>
-					<br>
-					<a class="categoryPath" data-category-id="<%=productCountByCategory.categoryId%>" data-category-name="<%=productCountByCategory.categoryName%>" > <%=productCountByCategory.categoryName%></a>
-					(<%=productCountByCategory.productCount%>)
-<%				}
-			});		
-		})
-	} else {	%>
-<!-- 		<br><span>Not found</span> -->
-<%	}	%>
+	<h4>Category Embedded 22222222222</h4>
+<%	if ( model.countByCats ) {		%>
+		<span>Found <%=model.countByCats.length%> product</span>
+<%		_.each( model.countByCats, function( countByACat ){	%>
+			<br><%=countByACat%>
+<%		})	%>
+<%	} else {		%>
+		<span>No product found</span>
+<%	}		%>
 </div>
-<!-- end of Product count by categories -->	

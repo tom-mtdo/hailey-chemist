@@ -208,6 +208,7 @@ footer {
 	font-size: 0.85em;
 }
 
+/* 
 a {
 	color: #27240F;
 	text-decoration: none;
@@ -216,7 +217,8 @@ a {
 a:hover {
 	color: #000;
 	text-decoration: none;
-}
+} 
+*/
 
 .btn:focus, a:focus {
 	/* Remove outlines from buttons and anchors */

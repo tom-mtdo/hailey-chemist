@@ -24,6 +24,15 @@ IMG.displayed {
 	width:100%;
 }
 
+IMG.displayedLogo {
+     display: inline;
+     float:left;
+/*    margin-left: auto;
+    margin-right: auto;
+ */    
+ 	padding: 2px;
+}
+    
 /* set the same height with style homeSlideItemImg, homeSlideItem */
 .content-row-1 {
 	width: auto;
@@ -310,21 +319,23 @@ footer {
 
 @media ( min-width : 992px) {
 	#logo {
-		padding-left: 20%;
+		padding-left: 25px;
+/* 		padding-left: 20%; */
 	}
 }
 
 #logo .wrap {
 	/*     background: url(../img/banner.png) no-repeat scroll 0 0 transparent; */
-	height: 30px;
-	max-height: 30px;
+	height: 60px;
+	max-height: 60px;
 	margin: 0 auto 0px;
 	padding: 0;
-	text-align: center;
+	text-align: left;
 }
+/* text-align: center; */
 /* height: 50px; */
 #logo h1 {
-	display: none;
+	/* display: none; */
 }
 
 #container {
@@ -347,6 +358,7 @@ footer {
 
 @media ( min-width : 992px) {
 	#menu {
+		/* padding-left: 115px; */
 		padding-left: 20%;
 	}
 }
